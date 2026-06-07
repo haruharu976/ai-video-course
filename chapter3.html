@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>CH.03 After Effects ハンズオン | AI VIDEO MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060810;--card:#0c1020;--accent:#ff6b35;--accent-b:#00d4ff;--gold:#f5c518;--green:#00e676;--text:#f0f2f8;--muted:#a8b4cc;--border:rgba(255,107,53,.18);}
+  html{background:#060810;color-scheme:dark;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg)!important;color:var(--text)!important;font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,107,53,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,53,.03) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+  header{position:sticky;top:0;z-index:100;padding:14px 24px;background:rgba(6,8,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);}
+  .logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-b);letter-spacing:3px;text-decoration:none;}
+  .bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+  .bc span{color:var(--accent);}
+  .hbtns{display:flex;gap:8px;}
+  .hbtn{padding:6px 14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
+  .hbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .hbtn.nx{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+  .hbtn.nx:hover{background:#e55a25;}
+  .prog{height:3px;background:rgba(255,107,53,.08);}
+  .prog-fill{height:100%;width:25%;background:linear-gradient(90deg,var(--accent),var(--gold));}
+  .step-nav{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:28px 24px 0;display:flex;gap:0;}
+  .snav-item{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
+  .snav-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,107,53,.2);background:var(--card);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);transition:all .3s;position:relative;z-index:1;}
+  .snav-item.done .snav-dot{background:var(--green);border-color:var(--green);color:#000;font-weight:700;}
+  .snav-item.active .snav-dot{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;box-shadow:0 0 16px rgba(255,107,53,.4);}
+  .snav-line{position:absolute;top:13px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:rgba(255,107,53,.1);}
+  .snav-item.done .snav-line{background:var(--green);}
+  .snav-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:6px;text-align:center;display:none;}
+  @media(min-width:500px){.snav-label{display:block;}}
+  .snav-item.active .snav-label,.snav-item.done .snav-label{color:var(--accent);}
+  .ch-hero{position:relative;z-index:1;padding:48px 24px 36px;max-width:860px;margin:0 auto;}
+  .ch-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:rgba(255,107,53,.06);padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;margin-bottom:16px;}
+  h1.ch-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,68px);letter-spacing:3px;line-height:1;margin-bottom:14px;}
+  .t-solid{display:block;color:var(--text);}
+  .t-outline{display:block;color:transparent;-webkit-text-stroke:2px var(--accent);}
+  .ch-lead{font-size:14px;color:var(--muted);max-width:560px;line-height:1.9;}
+  .layout{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:32px 24px 80px;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start;}
+  @media(max-width:720px){.layout{grid-template-columns:1fr;}}
+  .step-block{display:none;animation:fadeIn .4s ease;}
+  .step-block.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .step-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .step-badge{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;flex-shrink:0;}
+  .step-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:3px;}
+  h2.step-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);}
+  p.desc{color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:16px;}
+  p.desc strong{color:var(--text);}
+  .cmd{background:#060c18;border:1px solid rgba(255,107,53,.15);border-left:3px solid var(--accent);padding:14px 18px;margin:14px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;transition:border-color .2s;}
+  .cmd:hover{border-color:rgba(255,107,53,.5);}
+  .cmd code{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);word-break:break-all;}
+  .cmd-copy{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);border:1px solid rgba(255,107,53,.2);padding:3px 8px;transition:all .2s;background:transparent;cursor:pointer;white-space:nowrap;}
+  .cmd:hover .cmd-copy{color:var(--accent);border-color:var(--accent);}
+  .cmd-copy.copied{color:var(--green);border-color:var(--green);}
+  .code-block{background:#060c18;border:1px solid rgba(255,107,53,.1);border-top:2px solid var(--accent);padding:18px 20px;margin:14px 0;overflow-x:auto;position:relative;}
+  .code-lbl{position:absolute;top:-1px;right:14px;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;}
+  pre{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#c4cde0;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.st{color:#f1fa8c;}.nm{color:#bd93f9;}.cm{color:#4a5870;font-style:italic;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted);line-height:1.65;cursor:pointer;transition:color .2s;}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li:hover{color:var(--text);}
+  .chk{width:18px;height:18px;flex-shrink:0;border:1.5px solid rgba(255,107,53,.3);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;}
+  .checklist li.checked .chk{background:var(--green);border-color:var(--green);}
+  .checklist li.checked .chk::after{content:'✓';font-size:11px;color:#000;font-weight:700;}
+  .checklist li.checked{color:var(--muted);text-decoration:line-through;opacity:.6;}
+  .info{background:rgba(255,107,53,.04);border:1px solid rgba(255,107,53,.12);padding:14px 16px;margin:14px 0;}
+  .info-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:6px;}
+  .info p{font-size:12px;color:var(--muted);margin:0;line-height:1.7;}
+  .prompt{background:rgba(245,197,24,.04);border:1px solid rgba(245,197,24,.2);border-left:3px solid var(--gold);padding:14px 16px;margin:14px 0;}
+  .prompt-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .prompt-txt{font-size:13px;color:#c8b85a;line-height:1.75;font-style:italic;}
+  .expr-pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:14px 0;}
+  @media(max-width:580px){.expr-pair{grid-template-columns:1fr;}}
+  .expr-box{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:18px;}
+  .expr-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;margin-bottom:10px;}
+  .lbl-in{color:var(--gold);}.lbl-out{color:var(--accent);}
+  .expr-txt{font-size:12px;color:var(--muted);line-height:1.7;font-style:italic;}
+  .expr-code{font-family:'JetBrains Mono',monospace;font-size:11px;color:#c4cde0;line-height:1.7;}
+  .step-footer{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--border);}
+  .sf-btn{padding:10px 22px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;text-decoration:none;}
+  .sf-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .sf-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;}
+  .sf-btn.primary:hover{background:#e55a25;}
+  .sf-btn:disabled{opacity:.3;cursor:default;}
+  .sidebar{display:flex;flex-direction:column;gap:16px;}
+  .sidebar-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:20px;}
+  .sc-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .tracker-steps{display:flex;flex-direction:column;gap:6px;}
+  .tracker-item{display:flex;align-items:center;gap:10px;padding:8px 10px;font-size:12px;color:var(--muted);border:1px solid transparent;cursor:pointer;transition:all .2s;}
+  .tracker-item:hover{border-color:var(--border);color:var(--text);}
+  .tracker-item.active{border-color:rgba(255,107,53,.3);color:var(--text);background:rgba(255,107,53,.04);}
+  .tracker-item.done{color:var(--green);}
+  .tracker-icon{font-size:14px;flex-shrink:0;}
+  .overall-bar{height:6px;background:rgba(255,255,255,.06);margin:10px 0 6px;}
+  .overall-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .4s;}
+  .overall-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);text-align:right;}
+  .goal-box{background:rgba(255,107,53,.03);border:1px solid rgba(255,107,53,.15);margin-top:20px;overflow:hidden;}
+  .goal-row{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(255,107,53,.08);}
+  .goal-row:last-child{border-bottom:none;}
+  .goal-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+  .goal-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:4px;}
+  .goal-text{font-size:13px;color:var(--muted);line-height:1.7;}
+  .goal-text strong{color:var(--text);}
+  .prereq-check{background:rgba(255,107,53,.05);padding:12px 18px;}
+  .pc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;}
+  .pc-items{display:flex;flex-wrap:wrap;gap:6px;}
+  .pc-item{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;}
+  .pc-item.req{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:#ff9970;}
+  .pc-item.opt{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);color:var(--accent-b);}
+  .link-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);text-decoration:none;}
+  .link-item:last-child{border-bottom:none;}
+  .link-item span{font-size:12px;color:var(--muted);}
+  .link-item:hover span{color:var(--accent);}
+  .link-arrow{color:var(--accent);font-size:12px;}
+
+  /* ── AE 画面図解 ── */
+  .ae-screen{background:#0a0e1a;border:1px solid rgba(255,107,53,.15);margin:14px 0;overflow:hidden;}
+  .ae-area{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);}
+  .ae-area-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:1px;margin-bottom:6px;}
+  .ae-menu{background:#111827;}
+  .ae-menu-items{display:flex;gap:14px;flex-wrap:wrap;}
+  .ae-menu-items span{font-size:11px;color:#a8b4cc;padding:2px 6px;cursor:default;}
+  .ae-middle{display:grid;grid-template-columns:1fr 2fr 1fr;}
+  @media(max-width:560px){.ae-middle{grid-template-columns:1fr;}}
+  .ae-project{border-right:1px solid rgba(255,255,255,.05);}
+  .ae-project-item{font-size:11px;color:var(--muted);padding:4px 6px;}
+  .ae-active-item{color:var(--accent-b);background:rgba(0,212,255,.08);}
+  .ae-preview{display:flex;flex-direction:column;}
+  .ae-preview-screen{flex:1;background:#060810;min-height:80px;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(255,255,255,.08);margin:6px;}
+  .ae-info{border-left:1px solid rgba(255,255,255,.05);}
+  .ae-timeline{background:#0d1220;}
+  .ae-tl-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .ae-tl-icon{font-size:10px;color:var(--muted);width:14px;}
+  .ae-tl-name{font-size:11px;color:#a8b4cc;min-width:110px;}
+  .ae-tl-bar{height:8px;border-radius:2px;}
+
+  /* ── 操作ステップ ── */
+  .op-steps{display:flex;flex-direction:column;gap:2px;margin:14px 0;}
+  .op-step{display:flex;gap:14px;background:var(--card);border:1px solid rgba(255,255,255,.05);border-left:3px solid rgba(255,107,53,.3);padding:14px 16px;}
+  .op-step.highlight-step{border-left-color:var(--accent);background:rgba(255,107,53,.04);}
+  .op-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(255,107,53,.5);line-height:1;min-width:22px;flex-shrink:0;}
+  .op-step.highlight-step .op-num{color:var(--accent);}
+  .op-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;}
+  .op-path{font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.6;}
+  .op-alt{font-size:11px;color:rgba(255,255,255,.3);}
+  .arr{color:var(--accent);}
+  kbd{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:3px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text);}
+
+  /* ── 設定ボックス ── */
+  .settings-box{background:#060c18;border:1px solid rgba(255,107,53,.12);margin-top:10px;overflow:hidden;}
+  .setting-row{display:grid;grid-template-columns:120px 1fr;gap:0;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);}
+  .setting-row:last-child{border-bottom:none;}
+  .setting-row.highlight{background:rgba(0,230,118,.05);}
+  .setting-key{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);}
+  .setting-val{font-size:12px;color:var(--text);}
+  .setting-row.highlight .setting-key{color:var(--green);}
+
+  /* ── 警告ボックス ── */
+  .warn-box{display:flex;align-items:flex-start;gap:10px;background:rgba(245,197,24,.05);border:1px solid rgba(245,197,24,.2);border-left:3px solid var(--gold);padding:12px 14px;margin:14px 0;font-size:12px;color:#c8b05a;line-height:1.7;}
+  .warn-icon{flex-shrink:0;font-size:16px;}
+
+  /* 文字切れ防止 */
+  .h1-plain,.h1-outline,.h1-fill,
+  .t-solid,.t-outline,.t-fill {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+  h1.ch-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  /* ─── PROMPT GENERATOR ─── */
+  .pg-wrap{background:rgba(255,107,53,.03);border:1px solid rgba(255,107,53,.18);margin:18px 0;overflow:hidden;}
+  .pg-header{padding:14px 18px;border-bottom:1px solid rgba(255,107,53,.1);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .pg-header-icon{font-size:16px;}
+  .pg-header-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
+  .pg-header-sub{font-size:11px;color:var(--muted);margin-left:auto;}
+  .pg-fields{padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+  .pg-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;}
+  .pg-label span{color:var(--accent);}
+  .pg-input,.pg-select,.pg-textarea{
+    width:100%;background:#060c18;
+    border:1px solid rgba(255,107,53,.15);
+    color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;
+    padding:10px 12px;outline:none;transition:border-color .2s;
+  }
+  .pg-textarea{resize:vertical;min-height:72px;}
+  .pg-input:focus,.pg-select:focus,.pg-textarea:focus{border-color:rgba(255,107,53,.5);}
+  .pg-input::placeholder,.pg-textarea::placeholder{color:rgba(255,255,255,.2);}
+  .pg-select{-webkit-appearance:none;appearance:none;cursor:pointer;}
+  .pg-generate{
+    margin:0 18px 16px;width:calc(100% - 36px);
+    padding:12px;background:var(--accent);color:#fff;
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;
+    border:none;cursor:pointer;transition:background .2s;
+  }
+  .pg-generate:hover{background:#e55a25;}
+  .pg-output{margin:0 18px 16px;display:none;}
+  .pg-output.show{display:block;}
+  .pg-out-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .pg-out-text{
+    background:#070d1a;border:1px solid rgba(245,197,24,.2);
+    border-left:3px solid var(--gold);
+    padding:14px 16px;font-size:13px;color:#d4c47a;
+    line-height:1.8;font-style:italic;white-space:pre-wrap;word-break:keep-all;
+  }
+  .pg-copy-btn{
+    margin-top:8px;padding:7px 16px;
+    border:1px solid rgba(245,197,24,.3);background:transparent;
+    color:var(--gold);font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;
+  }
+  .pg-copy-btn:hover{background:rgba(245,197,24,.1);}
+  .pg-copy-btn.copied{color:var(--green);border-color:var(--green);}
+
+  /* ─── 親サイトリンク ─── */
+  .top-link{
+    display:block;width:100%;
+    background:rgba(99,102,241,.08);
+    border-bottom:1px solid rgba(99,102,241,.2);
+    padding:7px 24px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
+    transition:background .2s;
+  }
+  .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+  .top-link-arrow{margin-right:6px;}
+</style>
+</head>
+<body>
+<a href="index.html" class="top-link"><span class="top-link-arrow">←</span> 動画コース一覧へ戻る</a>
+<header>
+  <a href="index.html" class="logo">AI/VIDEO_MASTER</a>
+  <div class="bc">COURSE <span>/ CH.03 HANDS-ON</span></div>
+  <div class="hbtns">
+    <a href="chapter2.html" class="hbtn">← CH.02</a>
+    <a href="chapter4.html" class="hbtn nx">NEXT CH.04 →</a>
+  </div>
+</header>
+<div class="prog"><div class="prog-fill" id="topProg"></div></div>
+
+<div class="step-nav">
+  <div class="snav-item active" onclick="goStep(0)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot0">1</div><div class="snav-line"></div></div><div class="snav-label">AE確認</div></div>
+  <div class="snav-item" onclick="goStep(1)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot1">2</div><div class="snav-line"></div></div><div class="snav-label">Expression</div></div>
+  <div class="snav-item" onclick="goStep(2)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot2">3</div><div class="snav-line"></div></div><div class="snav-label">実践入力</div></div>
+  <div class="snav-item" onclick="goStep(3)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot3">4</div><div class="snav-line"></div></div><div class="snav-label">ExtendScript</div></div>
+  <div class="snav-item" onclick="goStep(4)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot4">5</div></div><div class="snav-label">応用課題</div></div>
+</div>
+
+<div class="ch-hero">
+  <div class="ch-tag">CHAPTER 03 — HANDS-ON WORK</div>
+  <h1 class="ch-title"><span class="t-solid">After Effects</span><span class="t-outline">知能化</span></h1>
+  <p class="ch-lead">AEのエクスプレッション・ExtendScriptをAIが自動生成。ゼロからアニメーションを動かすまでを一緒にやる。</p>
+  <div class="goal-box">
+    <div class="goal-row">
+      <span class="goal-icon">🎯</span>
+      <div>
+        <div class="goal-label">このセッションのゴール</div>
+        <div class="goal-text">AIに指示するだけでAEのエクスプレッションコードが生成され、<strong>プロパティに貼り付けるだけでアニメーションが動いている状態</strong>にする</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">🛠</span>
+      <div>
+        <div class="goal-label">このセッションでやること（一緒にワーク）</div>
+        <div class="goal-text">AE画面の見方を理解 → 新規コンポジション作成 → テキストレイヤー追加 → エクスプレッション入力欄を開く → AIでコード生成・貼り付け → ExtendScriptで自動化を体験</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">✅</span>
+      <div>
+        <div class="goal-label">これができると何が変わるか</div>
+        <div class="goal-text">AEのコードを自分で書けなくてもOK。「こういう動きにしたい」を言葉で伝えるだけで複雑なアニメーションが実現できる。定型作業もExtendScriptで一括自動化できるようになる</div>
+      </div>
+    </div>
+    <div class="prereq-check">
+      <div class="pc-label">📋 事前確認</div>
+      <div class="pc-items">
+        <span class="pc-item req">After Effects インストール済み</span>
+        <span class="pc-item opt">Codex（コード生成に使用）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="steps-panel">
+
+    <!-- STEP1 -->
+    <div class="step-block active" id="step0">
+      <div class="step-header"><div class="step-badge">1</div><div><div class="step-label">STEP 01</div><h2 class="step-title">AEを初めて起動する</h2></div></div>
+
+      <p class="desc">After Effectsを一度も使ったことがなくても大丈夫。このステップでは<strong>起動→画面の見方→コンポジション作成→レイヤー追加</strong>まで順番に説明する。</p>
+
+      <div class="info"><div class="info-label">💡 料金目安（2026年）</div><p>Adobe Creative Cloud コンプリートプラン：約¥9,878/月<br>After Effects単体プラン：約¥3,280/月<br>学生・教職員プランは大幅割引あり。<br>まずは<strong>7日間無料トライアル</strong>で試せる。</p></div>
+
+      <!-- 画面説明 -->
+      <p class="desc" style="margin-top:20px;"><strong>① After Effectsの画面構成</strong></p>
+      <p class="desc">起動すると4つのエリアに分かれた画面が表示される。</p>
+
+      <div class="ae-screen">
+        <div class="ae-area ae-menu">
+          <div class="ae-area-label">メニューバー</div>
+          <div class="ae-menu-items">
+            <span>ファイル</span><span>編集</span><span>コンポジション</span><span>レイヤー</span><span>エフェクト</span><span>ウィンドウ</span>
+          </div>
+        </div>
+        <div class="ae-middle">
+          <div class="ae-area ae-project">
+            <div class="ae-area-label">① プロジェクトパネル<br><span style="color:var(--muted);font-size:10px;">素材・コンポジションの一覧</span></div>
+            <div class="ae-project-item">📁 マイコンポジション</div>
+            <div class="ae-project-item ae-active-item">🎬 Comp 1</div>
+            <div class="ae-project-item">🖼️ 素材.jpg</div>
+          </div>
+          <div class="ae-area ae-preview">
+            <div class="ae-area-label">② プレビュー画面<br><span style="color:var(--muted);font-size:10px;">動画の見た目を確認するエリア</span></div>
+            <div class="ae-preview-screen">
+              <div style="color:rgba(255,255,255,.15);font-size:11px;text-align:center;padding-top:30px;">ここに動画が表示される</div>
+            </div>
+          </div>
+          <div class="ae-area ae-info">
+            <div class="ae-area-label">③ インフォパネル<br><span style="color:var(--muted);font-size:10px;">各種設定・エフェクト</span></div>
+            <div style="font-size:10px;color:var(--muted);padding:8px 0;">エフェクト&プリセット<br>文字<br>整列</div>
+          </div>
+        </div>
+        <div class="ae-area ae-timeline">
+          <div class="ae-area-label">④ タイムラインパネル<br><span style="color:var(--muted);font-size:10px;">レイヤーの時間管理。ここが作業の中心</span></div>
+          <div class="ae-tl-row"><span class="ae-tl-icon">👁</span><span class="ae-tl-name">テキストレイヤー</span><div class="ae-tl-bar" style="width:70%;background:rgba(0,212,255,.3);"></div></div>
+          <div class="ae-tl-row"><span class="ae-tl-icon">👁</span><span class="ae-tl-name">背景</span><div class="ae-tl-bar" style="width:100%;background:rgba(255,107,53,.2);"></div></div>
+        </div>
+      </div>
+
+      <!-- コンポジション作成 -->
+      <p class="desc" style="margin-top:24px;"><strong>② 新規コンポジションを作成する</strong></p>
+      <p class="desc">コンポジション＝動画1本分の「キャンバス」のこと。サイズとフレームレートをここで決める。</p>
+
+      <div class="op-steps">
+        <div class="op-step">
+          <div class="op-num">1</div>
+          <div class="op-body">
+            <div class="op-title">メニューから作成</div>
+            <div class="op-path">コンポジション <span class="arr">→</span> 新規コンポジション</div>
+            <div class="op-alt">または <kbd>Ctrl</kbd>+<kbd>N</kbd>（Mac: <kbd>⌘</kbd>+<kbd>N</kbd>）</div>
+          </div>
+        </div>
+        <div class="op-step">
+          <div class="op-num">2</div>
+          <div class="op-body">
+            <div class="op-title">設定画面が開く — 以下を入力する</div>
+            <div class="settings-box">
+              <div class="setting-row">
+                <span class="setting-key">プリセット</span>
+                <span class="setting-val">HDTV 1080 29.97 を選択</span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-key">幅 × 高さ</span>
+                <span class="setting-val">1920 × 1080 px <span style="color:var(--muted);font-size:11px;">（自動入力される）</span></span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-key">フレームレート</span>
+                <span class="setting-val">29.97 fps <span style="color:var(--muted);font-size:11px;">（≒30fps。これでOK）</span></span>
+              </div>
+              <div class="setting-row">
+                <span class="setting-key">デュレーション</span>
+                <span class="setting-val">0:00:10:00 <span style="color:var(--muted);font-size:11px;">（10秒の動画）</span></span>
+              </div>
+              <div class="setting-row highlight">
+                <span class="setting-key">✅ OK</span>
+                <span class="setting-val">OKボタンを押して完了</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info"><div class="info-label">💡 フレームレート（fps）とは？</div><p>1秒間に何枚の画像を表示するかの数字。<strong>30fps = 1秒間に30枚</strong>。映像がなめらかに見える基準値。SNS動画は30fpsが一般的。</p></div>
+      <div class="info"><div class="info-label">💡 1920×1080とは？</div><p>画面の横×縦のピクセル数。<strong>フルHD</strong>と呼ばれる標準的なサイズ。YouTubeやInstagramリールに最適。</p></div>
+
+      <!-- テキストレイヤー追加 -->
+      <p class="desc" style="margin-top:24px;"><strong>③ テキストレイヤーを追加する</strong></p>
+
+      <div class="op-steps">
+        <div class="op-step">
+          <div class="op-num">1</div>
+          <div class="op-body">
+            <div class="op-title">ツールバーの「T」ボタンをクリック</div>
+            <div class="op-alt">または <kbd>Ctrl</kbd>+<kbd>T</kbd>（Mac: <kbd>⌘</kbd>+<kbd>T</kbd>）</div>
+          </div>
+        </div>
+        <div class="op-step">
+          <div class="op-num">2</div>
+          <div class="op-body">
+            <div class="op-title">プレビュー画面の中央あたりをクリックして文字を入力</div>
+            <div class="op-path">「Hello AE」と入力 → <kbd>Esc</kbd>キーで確定</div>
+          </div>
+        </div>
+        <div class="op-step">
+          <div class="op-num">3</div>
+          <div class="op-body">
+            <div class="op-title">タイムラインにレイヤーが追加されたことを確認</div>
+            <div class="op-path">下のタイムラインパネルに「Hello AE」という行が現れる</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- エクスプレッション入力欄 -->
+      <p class="desc" style="margin-top:24px;"><strong>④ エクスプレッション入力欄を開く</strong></p>
+      <p class="desc">これが次のステップの準備。タイムラインのプロパティに「式（エクスプレッション）」を入力できる場所を開く。</p>
+
+      <div class="op-steps">
+        <div class="op-step">
+          <div class="op-num">1</div>
+          <div class="op-body">
+            <div class="op-title">タイムラインのレイヤー左の「▶」をクリック</div>
+            <div class="op-path">レイヤー名の左にある三角アイコンを押すとプロパティが展開される</div>
+          </div>
+        </div>
+        <div class="op-step">
+          <div class="op-num">2</div>
+          <div class="op-body">
+            <div class="op-title">「変形」→「不透明度」を探す</div>
+            <div class="op-path">テキスト → 変形 → 不透明度 と階層が続く</div>
+          </div>
+        </div>
+        <div class="op-step highlight-step">
+          <div class="op-num">3</div>
+          <div class="op-body">
+            <div class="op-title">「不透明度」の文字を <kbd>Alt</kbd>+クリック（Mac: <kbd>Option</kbd>+クリック）</div>
+            <div class="op-path">タイムラインにオレンジ色の入力欄が現れる → <strong>これがエクスプレッション入力欄</strong></div>
+            <div class="op-alt" style="color:var(--accent);font-size:12px;">⚡ ここにコードを入力すると動きが制御できる</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <div class="warn-icon">⚠️</div>
+        <div>クリックしただけでは開かない。必ず<strong>Alt（Option）+クリック</strong>。普通にクリックするとキーフレームが打たれるだけなので注意。</div>
+      </div>
+
+      <ul class="checklist" style="margin-top:20px;">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>After Effectsを起動した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>新規コンポジションを作成した（1920×1080、30fps）</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>テキストレイヤー「Hello AE」を追加した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>Alt+クリックでエクスプレッション入力欄を開いた</li>
+      </ul>
+
+      <div class="step-footer"><button class="sf-btn" disabled>← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 1 / 5</span><button class="sf-btn primary" onclick="nextStep(0)">NEXT →</button></div>
+    </div>
+
+    <!-- STEP2 -->
+    <div class="step-block" id="step1">
+      <div class="step-header"><div class="step-badge">2</div><div><div class="step-label">STEP 02</div><h2 class="step-title">Expressionの基礎</h2></div></div>
+      <p class="desc">エクスプレッションはレイヤープロパティに直接書くJavaScript。<strong>Alt+クリック</strong>でプロパティに入力欄が現れる。</p>
+      <div class="code-block"><span class="code-lbl">EXPRESSION BASIC</span>
+<pre><span class="cm">// 現在の時間（秒）を取得</span>
+time
+
+<span class="cm">// フレーム数を取得</span>
+timeToFrames(time)
+
+<span class="cm">// 0〜100の間をループ</span>
+<span class="fn">linear</span>(time % <span class="nm">2</span>, <span class="nm">0</span>, <span class="nm">2</span>, <span class="nm">0</span>, <span class="nm">100</span>)
+
+<span class="cm">// wiggle(周波数, 振れ幅)</span>
+<span class="fn">wiggle</span>(<span class="nm">3</span>, <span class="nm">50</span>)</pre></div>
+      <p class="desc"><strong>最初に試すエクスプレッション：wiggle</strong><br>不透明度プロパティのエクスプレッション欄に入力すると、ランダムに揺れ動くアニメーションができる。</p>
+      <div class="cmd" onclick="copyCmd(this,'wiggle(3, 30)')"><code>wiggle(3, 30)</code><button class="cmd-copy">COPY</button></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>不透明度にwiggleを入力して動きを確認した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>数字を変えて動きの違いを体感した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(1)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 2 / 5</span><button class="sf-btn primary" onclick="nextStep(1)">NEXT →</button></div>
+    </div>
+
+    <!-- STEP3 -->
+    <div class="step-block" id="step2">
+      <div class="step-header"><div class="step-badge">3</div><div><div class="step-label">STEP 03</div><h2 class="step-title">Codexで Expression生成</h2></div></div>
+      <p class="desc">自然言語の指示をCodexに入力すると、複雑なエクスプレッションを自動生成してくれる。</p>
+      <div class="expr-pair">
+        <div class="expr-box"><div class="expr-lbl lbl-in">💬 あなたの指示</div><div class="expr-txt">「ヌルオブジェクトとの距離に応じて不透明度を0〜100で変化。500px以上で完全透明に」</div></div>
+        <div class="expr-box"><div class="expr-lbl lbl-out">⚡ 生成されたコード</div><div class="expr-code"><span class="kw">var</span> n=<span class="fn">thisComp.layer</span>(<span class="st">"Null 1"</span>);<br><span class="kw">var</span> d=<span class="fn">length</span>(<br>&nbsp;&nbsp;n.<span class="fn">toComp</span>([<span class="nm">0</span>,<span class="nm">0</span>]),<br>&nbsp;&nbsp;<span class="fn">toComp</span>([<span class="nm">0</span>,<span class="nm">0</span>])<br>);<br><span class="fn">linear</span>(d,<span class="nm">0</span>,<span class="nm">500</span>,<span class="nm">100</span>,<span class="nm">0</span>)</div></div>
+      </div>
+      <p class="desc">下のフォームに情報を入力すると、<strong>あなたのAEプロジェクト専用のエクスプレッションプロンプト</strong>が生成される。そのままCodexに貼り付けてコードをもらおう。</p>
+
+      <div class="pg-wrap" id="pg-ae">
+        <div class="pg-header">
+          <span class="pg-header-icon">🎬</span>
+          <span class="pg-header-title">AE EXPRESSION GENERATOR</span>
+          <span class="pg-header-sub">入力 → 生成 → AEに貼り付け</span>
+        </div>
+        <div class="pg-fields">
+          <div>
+            <div class="pg-label">どのプロパティを動かしたいか <span>*</span></div>
+            <select class="pg-select" id="ae-prop">
+              <option value="">選択してください</option>
+              <option value="不透明度">不透明度（フェードイン・アウト）</option>
+              <option value="スケール">スケール（拡大・縮小）</option>
+              <option value="位置">位置（移動アニメーション）</option>
+              <option value="回転">回転</option>
+              <option value="カラー">カラー（色の変化）</option>
+            </select>
+          </div>
+          <div>
+            <div class="pg-label">どんな動きにしたいか <span>*</span></div>
+            <input class="pg-input" id="ae-motion" placeholder="例：音楽に合わせてバウンスさせたい、マウスの動きに追従させたい" />
+          </div>
+          <div>
+            <div class="pg-label">数値の範囲（任意）</div>
+            <input class="pg-input" id="ae-range" placeholder="例：0〜100、500px以上で透明、3秒でループ" />
+          </div>
+          <div>
+            <div class="pg-label">レイヤー名・参照オブジェクト（任意）</div>
+            <input class="pg-input" id="ae-layer" placeholder="例：Null 1、テキストレイヤー、オーディオレイヤー" />
+          </div>
+        </div>
+        <button class="pg-generate" onclick="generateAEPrompt()">⚡ エクスプレッションプロンプトを生成</button>
+        <div class="pg-output" id="pg-ae-out">
+          <div class="pg-out-label">💬 生成されたプロンプト（Codexに貼り付け）</div>
+          <div class="pg-out-text" id="pg-ae-text"></div>
+          <button class="pg-copy-btn" id="pg-ae-copy" onclick="copyPrompt('pg-ae-text','pg-ae-copy')">COPY PROMPT</button>
+        </div>
+      </div>
+
+      <div class="info"><div class="info-label">💡 次のステップ</div><p>生成されたプロンプトをCodexに送る → 返ってきたコードをAEのエクスプレッション欄（Alt+クリック）に貼り付ける → エラーが出たらエラーメッセージごとAIに渡して「このエラーを修正して」と伝える。</p></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>フォームに自分のやりたいことを入力してプロンプトを生成した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>生成されたコードをAEに貼り付けた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>動作を確認した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(2)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 3 / 5</span><button class="sf-btn primary" onclick="nextStep(2)">NEXT →</button></div>
+    </div>
+
+    <!-- STEP4 -->
+    <div class="step-block" id="step3">
+      <div class="step-header"><div class="step-badge">4</div><div><div class="step-label">STEP 04</div><h2 class="step-title">ExtendScript 自動化</h2></div></div>
+      <p class="desc">ExtendScriptはAE全体を操作できる自動化スクリプト。<strong>ファイル → スクリプト → スクリプトエディター</strong>から実行できる。</p>
+      <div class="code-block"><span class="code-lbl">EXTENDSCRIPT</span>
+<pre><span class="cm">// 全レイヤーにエフェクト適用 + ファイル名テキスト追加</span>
+<span class="kw">var</span> comp = app.project.activeItem;
+<span class="kw">for</span>(<span class="kw">var</span> i=<span class="nm">1</span>;i&lt;=comp.layers.length;i++){
+  <span class="kw">var</span> l=comp.layers[i];
+  <span class="kw">if</span>(l <span class="kw">instanceof</span> AVLayer){
+    l.Effects.<span class="fn">addProperty</span>(<span class="st">"Brightness & Contrast"</span>);
+    <span class="kw">var</span> t=comp.layers.<span class="fn">addText</span>(l.source.name);
+    t.transform.position.<span class="fn">setValue</span>([comp.width/<span class="nm">2</span>,comp.height/<span class="nm">2</span>]);
+  }
+}</pre></div>
+      <div class="cmd" onclick="copyCmd(this,'var comp=app.project.activeItem;for(var i=1;i<=comp.layers.length;i++){var l=comp.layers[i];if(l instanceof AVLayer){l.Effects.addProperty(\"Brightness & Contrast\");}}')" ><code>コードをコピーしてスクリプトエディターに貼り付け</code><button class="cmd-copy">COPY</button></div>
+      <div class="info"><div class="info-label">💡 スクリプトエディターの開き方</div><p>AE上部メニュー → <strong>ファイル → スクリプト → スクリプトエディター</strong><br>コードを貼り付けて「スクリプトを実行」ボタンを押すだけ。</p></div>
+
+      <p class="desc" style="margin-top:16px;"><strong>② 自分のやりたい自動化プロンプトを作る</strong></p>
+      <div class="pg-wrap" id="pg-es">
+        <div class="pg-header">
+          <span class="pg-header-icon">📜</span>
+          <span class="pg-header-title">EXTENDSCRIPT GENERATOR</span>
+          <span class="pg-header-sub">入力 → 生成 → スクリプトエディターに貼り付け</span>
+        </div>
+        <div class="pg-fields">
+          <div>
+            <div class="pg-label">自動化したいこと <span>*</span></div>
+            <input class="pg-input" id="es-task" placeholder="例：全レイヤーにエフェクトを一括適用、素材に連番テキストを追加" />
+          </div>
+          <div>
+            <div class="pg-label">対象レイヤー・対象範囲</div>
+            <select class="pg-select" id="es-target">
+              <option value="アクティブなコンポジションの全レイヤー">全レイヤー</option>
+              <option value="選択中のレイヤーのみ">選択中のレイヤーのみ</option>
+              <option value="名前に特定の文字列を含むレイヤー">特定の名前のレイヤー</option>
+              <option value="映像レイヤー（AVLayer）のみ">映像レイヤーのみ</option>
+              <option value="テキストレイヤーのみ">テキストレイヤーのみ</option>
+            </select>
+          </div>
+          <div>
+            <div class="pg-label">追加の条件・ルール（任意）</div>
+            <input class="pg-input" id="es-rule" placeholder="例：レイヤー名に_mainが含む場合のみ、3フレームずつ時間をずらす" />
+          </div>
+        </div>
+        <button class="pg-generate" onclick="generateExtendPrompt()">⚡ ExtendScriptプロンプトを生成</button>
+        <div class="pg-output" id="pg-es-out">
+          <div class="pg-out-label">💬 生成されたプロンプト（Codexに貼り付け）</div>
+          <div class="pg-out-text" id="pg-es-text"></div>
+          <button class="pg-copy-btn" id="pg-es-copy" onclick="copyPrompt('pg-es-text','pg-es-copy')">COPY PROMPT</button>
+        </div>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>スクリプトエディターを開いた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>サンプルコードを実行した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>自分のやりたい自動化のプロンプトを生成してコードを作った</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(3)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 4 / 5</span><button class="sf-btn primary" onclick="nextStep(3)">NEXT →</button></div>
+    </div>
+
+    <!-- STEP5 -->
+    <div class="step-block" id="step4">
+      <div class="step-header"><div class="step-badge">5</div><div><div class="step-label">STEP 05</div><h2 class="step-title">応用課題</h2></div></div>
+      <p class="desc">ここまで習得した知識を使って、以下の課題に挑戦しよう。Codexをフル活用してOK。</p>
+      <div class="prompt"><div class="prompt-lbl">🎯 課題1 — オーディオリアクティブ</div><div class="prompt-txt">「音楽レイヤーの振幅に連動して、テキストレイヤーのスケールを100〜150の間でバウンスさせるエクスプレッションを作成する」</div></div>
+      <div class="prompt"><div class="prompt-lbl">🎯 課題2 — データ自動反映</div><div class="prompt-txt">「プロジェクト内の全ソリッドレイヤーに対して、レイヤー名をテキストとして中央表示し、連番でタイムラインに並べるExtendScriptを作成する」</div></div>
+      <div class="prompt"><div class="prompt-lbl">🎯 課題3 — 親子関係の自動化</div><div class="prompt-txt">「レイヤー名に_childが含まれる全レイヤーを、最も近い_parentレイヤーに3フレーム遅延で追従させるエクスプレッションを作成する」</div></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>課題1をクリアした</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>課題2をクリアした</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>課題3をクリアした</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>🎉 CH.03 完了！</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(4)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 5 / 5</span><a href="chapter4.html" class="sf-btn primary" onclick="markComplete('ch3')">第4章へ進む →</a></div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sc-title">// YOUR PROGRESS</div>
+      <div class="overall-bar"><div class="overall-fill" id="overallBar" style="width:0%"></div></div>
+      <div class="overall-pct" id="overallPct">0%</div>
+      <div class="tracker-steps" id="tracker">
+        <div class="tracker-item active" onclick="goStep(0)"><span class="tracker-icon">🎬</span>AE環境確認</div>
+        <div class="tracker-item" onclick="goStep(1)"><span class="tracker-icon">⚡</span>Expression基礎</div>
+        <div class="tracker-item" onclick="goStep(2)"><span class="tracker-icon">🤖</span>Codex生成</div>
+        <div class="tracker-item" onclick="goStep(3)"><span class="tracker-icon">📜</span>ExtendScript</div>
+        <div class="tracker-item" onclick="goStep(4)"><span class="tracker-icon">🏆</span>応用課題</div>
+      </div>
+    </div>
+    <div class="sidebar-card">
+      <div class="sc-title">// QUICK REFS</div>
+      <a href="https://helpx.adobe.com/jp/after-effects/using/expression-basics.html" target="_blank" class="link-item"><span>📖 AE Expression公式</span><span class="link-arrow">↗</span></a>
+      <a href="https://helpx.adobe.com/jp/after-effects/using/scripts.html" target="_blank" class="link-item"><span>📜 ExtendScript公式</span><span class="link-arrow">↗</span></a>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep=0;const TOTAL=5;
+  function goStep(n){document.getElementById('step'+currentStep).classList.remove('active');currentStep=n;document.getElementById('step'+currentStep).classList.add('active');updateNav();window.scrollTo({top:document.querySelector('.ch-hero').offsetTop-80,behavior:'smooth'});}
+  function nextStep(n){if(n<TOTAL-1)goStep(n+1);}
+  function prevStep(n){if(n>0)goStep(n-1);}
+  function updateNav(){
+    const items=document.querySelectorAll('.snav-item');
+    const trackers=document.querySelectorAll('.tracker-item');
+    items.forEach((el,i)=>{el.classList.remove('active','done');if(i<currentStep)el.classList.add('done');if(i===currentStep)el.classList.add('active');});
+    trackers.forEach((el,i)=>{el.classList.remove('active','done');if(i<currentStep)el.classList.add('done');if(i===currentStep)el.classList.add('active');});
+    for(let i=0;i<TOTAL;i++){const d=document.getElementById('dot'+i);d.textContent=i<currentStep?'✓':i+1;}
+    const pct=Math.round((currentStep/(TOTAL-1))*100);
+    document.getElementById('topProg').style.width=(25+pct*0.75)+'%';
+    document.getElementById('overallBar').style.width=pct+'%';
+    document.getElementById('overallPct').textContent=pct+'%';
+  }
+  function toggleCheck(el){el.classList.toggle('checked');}
+  function copyCmd(el,text){const btn=el.querySelector('.cmd-copy');navigator.clipboard.writeText(text).then(()=>{btn.textContent='COPIED!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('copied');},1800);});}
+  function markComplete(ch){const p=JSON.parse(localStorage.getItem('videoCourseProgress')||'{}');p[ch]=true;localStorage.setItem('videoCourseProgress',JSON.stringify(p));}
+
+  function generateAEPrompt() {
+    const prop = document.getElementById('ae-prop').value || 'プロパティ未選択';
+    const motion = document.getElementById('ae-motion').value.trim() || '動きの説明未入力';
+    const range = document.getElementById('ae-range').value.trim();
+    const layer = document.getElementById('ae-layer').value.trim();
+
+    const rangePart = range ? `数値の範囲：${range}。` : '';
+    const layerPart = layer ? `参照するレイヤーやオブジェクト：${layer}。` : '';
+
+    const prompt = `After Effectsのエクスプレッションを書いてください。
+
+【動かしたいプロパティ】
+${prop}
+
+【実現したい動き】
+${motion}
+
+${rangePart}${layerPart}
+
+【要件】
+・After Effectsのエクスプレッション（JavaScript）として記述する
+・エラーが出ないシンプルなコードにする
+・コードのみ出力し、エクスプレッション欄にそのままペーストできる形にする
+・必要に応じてコメントを1行添える
+
+コードを出力してください。`;
+
+    document.getElementById('pg-ae-text').textContent = prompt;
+    const out = document.getElementById('pg-ae-out');
+    out.classList.add('show');
+    out.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function copyPrompt(textId, btnId) {
+    const text = document.getElementById(textId).textContent;
+    const btn = document.getElementById(btnId);
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED! ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'COPY PROMPT'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  function generateExtendPrompt() {
+    const task = document.getElementById('es-task').value.trim() || 'タスク未入力';
+    const target = document.getElementById('es-target').value || '全レイヤー';
+    const rule = document.getElementById('es-rule').value.trim();
+
+    const rulePart = rule ? `ルール・条件：${rule}。` : '';
+
+    const prompt = `After EffectsのExtendScript（JSX）を書いてください。
+
+【やりたいこと】
+${task}
+
+【対象】
+${target}
+
+${rulePart}
+
+【要件】
+・After EffectsのExtendScript（.jsx）として記述する
+・スクリプトエディターにそのまま貼り付けて実行できる形にする
+・エラーハンドリングを入れ、エラー時はalertで内容を表示する
+・コード冒頭に処理内容の説明コメントを入れる
+
+コードを出力してください。`;
+
+    document.getElementById('pg-es-text').textContent = prompt;
+    const out = document.getElementById('pg-es-out');
+    out.classList.add('show');
+    out.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+</script>
+</body>
+</html>

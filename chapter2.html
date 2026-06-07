@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>CH.02 Remotion ハンズオン | AI VIDEO MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#060810; --card:#0c1020; --card2:#101828;
+    --accent:#00d4ff; --accent2:#ff6b35; --gold:#f5c518; --green:#00e676;
+    --text:#f0f2f8; --muted:#a8b4cc;
+    --border:rgba(0,212,255,.15);
+  }
+  html{background:#060810;color-scheme:dark;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg)!important;color:var(--text)!important;
+    font-family:'Noto Sans JP',sans-serif;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;
+    background-image:
+      linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);
+    background-size:56px 56px;pointer-events:none;z-index:0;
+  }
+
+  /* ─── HEADER ─── */
+  header{
+    position:sticky;top:0;z-index:100;
+    padding:14px 24px;background:rgba(6,8,16,.97);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;
+    backdrop-filter:blur(14px);
+  }
+  .logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:3px;text-decoration:none;}
+  .bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
+  .bc span{color:var(--accent);}
+  .hbtns{display:flex;gap:8px;}
+  .hbtn{
+    padding:6px 14px;border:1px solid var(--border);
+    background:transparent;color:var(--muted);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;
+    text-decoration:none;transition:all .2s;cursor:pointer;
+  }
+  .hbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .hbtn.nx{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+  .hbtn.nx:hover{background:#00b8e0;}
+
+  /* ─── PROGRESS BAR ─── */
+  .prog{height:3px;background:rgba(0,212,255,.08);}
+  .prog-fill{height:100%;width:17%;background:linear-gradient(90deg,var(--accent),#00ffcc);transition:width .4s;}
+
+  /* ─── STEP PROGRESS (top) ─── */
+  .step-nav{
+    position:relative;z-index:1;
+    max-width:860px;margin:0 auto;
+    padding:28px 24px 0;
+    display:flex;gap:0;
+  }
+  .snav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    cursor:pointer;
+  }
+  .snav-dot{
+    width:28px;height:28px;border-radius:50%;
+    border:2px solid rgba(0,212,255,.2);
+    background:var(--card);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);
+    transition:all .3s;position:relative;z-index:1;
+  }
+  .snav-item.done .snav-dot{background:var(--green);border-color:var(--green);color:#000;font-weight:700;}
+  .snav-item.active .snav-dot{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700;box-shadow:0 0 16px rgba(0,212,255,.4);}
+  .snav-line{
+    position:absolute;top:13px;left:calc(50% + 14px);
+    width:calc(100% - 28px);height:2px;
+    background:rgba(0,212,255,.1);
+  }
+  .snav-item.done .snav-line{background:var(--green);}
+  .snav-label{
+    font-family:'JetBrains Mono',monospace;font-size:9px;
+    color:var(--muted);letter-spacing:1px;margin-top:6px;text-align:center;
+    display:none;
+  }
+  @media(min-width:500px){.snav-label{display:block;}}
+  .snav-item.active .snav-label,.snav-item.done .snav-label{color:var(--accent);}
+
+  /* ─── CHAPTER HERO ─── */
+  .ch-hero{
+    position:relative;z-index:1;
+    padding:48px 24px 36px;max-width:860px;margin:0 auto;
+  }
+  .ch-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--border);background:rgba(0,212,255,.06);
+    padding:5px 12px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;
+    margin-bottom:16px;
+  }
+  h1.ch-title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(38px,7vw,68px);letter-spacing:3px;line-height:1;margin-bottom:14px;
+  }
+  .t-solid{display:block;color:var(--text);}
+  .t-outline{display:block;color:transparent;-webkit-text-stroke:2px var(--accent);}
+  .ch-lead{font-size:14px;color:var(--muted);max-width:560px;line-height:1.9;}
+
+  /* ─── MAIN LAYOUT ─── */
+  .layout{
+    position:relative;z-index:1;
+    max-width:860px;margin:0 auto;
+    padding:32px 24px 80px;
+    display:grid;grid-template-columns:1fr 280px;gap:24px;
+    align-items:start;
+  }
+  @media(max-width:720px){.layout{grid-template-columns:1fr;}}
+
+  /* ─── STEPS PANEL ─── */
+  .steps-panel{}
+  .step-block{
+    display:none;
+    animation:fadeIn .4s ease;
+  }
+  .step-block.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  .step-header{
+    display:flex;align-items:center;gap:14px;
+    margin-bottom:20px;padding-bottom:14px;
+    border-bottom:1px solid var(--border);
+  }
+  .step-badge{
+    display:flex;align-items:center;justify-content:center;
+    width:36px;height:36px;border-radius:50%;
+    background:var(--accent);color:var(--bg);
+    font-family:'Bebas Neue',sans-serif;font-size:20px;flex-shrink:0;
+  }
+  .step-title-wrap{}
+  .step-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:3px;}
+  h2.step-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);}
+
+  p.desc{color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:16px;}
+  p.desc strong{color:var(--text);}
+
+  /* code */
+  .cmd{
+    background:#060c18;border:1px solid rgba(0,212,255,.15);
+    border-left:3px solid var(--accent);
+    padding:14px 18px;margin:14px 0;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    cursor:pointer;transition:border-color .2s;
+  }
+  .cmd:hover{border-color:rgba(0,212,255,.5);}
+  .cmd code{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);
+    word-break:break-all;
+  }
+  .cmd-copy{
+    flex-shrink:0;
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;
+    color:var(--muted);border:1px solid rgba(0,212,255,.2);
+    padding:3px 8px;transition:all .2s;background:transparent;cursor:pointer;
+    white-space:nowrap;
+  }
+  .cmd:hover .cmd-copy{color:var(--accent);border-color:var(--accent);}
+  .cmd-copy.copied{color:var(--green);border-color:var(--green);}
+
+  /* code block */
+  .code-block{
+    background:#060c18;border:1px solid rgba(0,212,255,.1);
+    border-top:2px solid var(--accent);
+    padding:18px 20px;margin:14px 0;overflow-x:auto;position:relative;
+  }
+  .code-lbl{
+    position:absolute;top:-1px;right:14px;
+    background:var(--accent);color:var(--bg);
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;
+  }
+  pre{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#c4cde0;}
+  .kw{color:#ff79c6;} .fn{color:#50fa7b;} .st{color:#f1fa8c;} .nm{color:#bd93f9;} .cm{color:#4a5870;font-style:italic;}
+
+  /* checklist */
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);
+    font-size:13px;color:var(--muted);line-height:1.65;cursor:pointer;
+    transition:color .2s;
+  }
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li:hover{color:var(--text);}
+  .chk{
+    width:18px;height:18px;flex-shrink:0;
+    border:1.5px solid rgba(0,212,255,.3);
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1px;transition:all .2s;
+  }
+  .checklist li.checked .chk{background:var(--green);border-color:var(--green);}
+  .checklist li.checked .chk::after{content:'✓';font-size:11px;color:#000;font-weight:700;}
+  .checklist li.checked{color:var(--muted);text-decoration:line-through;opacity:.6;}
+
+  /* info box */
+  .info{
+    background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.12);
+    padding:14px 16px;margin:14px 0;
+  }
+  .info-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:6px;}
+  .info p{font-size:12px;color:var(--muted);margin:0;line-height:1.7;}
+
+  /* warn */
+  .warn{
+    background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.2);
+    border-left:3px solid var(--accent2);
+    padding:14px 16px;margin:14px 0;
+  }
+  .warn p{font-size:12px;color:#c8906a;margin:0;line-height:1.7;}
+
+  /* price table */
+  .price-table{margin:16px 0;border:1px solid var(--border);}
+  .pt-row{
+    display:grid;grid-template-columns:1fr 1fr 1fr;
+    padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);
+    font-size:12px;
+  }
+  .pt-row:last-child{border-bottom:none;}
+  .pt-head{
+    background:rgba(0,212,255,.06);
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1px;
+  }
+  .pt-row span:first-child{color:var(--text);font-weight:700;}
+  .pt-row span:nth-child(2){color:var(--green);}
+  .pt-row span:last-child{color:var(--muted);}
+
+  /* prompt box */
+  .prompt{
+    background:rgba(245,197,24,.04);border:1px solid rgba(245,197,24,.2);
+    border-left:3px solid var(--gold);padding:14px 16px;margin:14px 0;
+  }
+  .prompt-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .prompt-txt{font-size:13px;color:#c8b85a;line-height:1.75;font-style:italic;}
+
+  /* nav buttons */
+  .step-footer{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:32px;padding-top:20px;border-top:1px solid var(--border);
+  }
+  .sf-btn{
+    padding:10px 22px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;
+    cursor:pointer;border:1px solid var(--border);
+    background:transparent;color:var(--muted);
+    transition:all .2s;text-decoration:none;
+  }
+  .sf-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .sf-btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+  .sf-btn.primary:hover{background:#00b8e0;}
+  .sf-btn:disabled{opacity:.3;cursor:default;}
+  .step-of{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}
+
+  /* ─── SIDEBAR ─── */
+  .sidebar{display:flex;flex-direction:column;gap:16px;}
+  .sidebar-card{
+    background:var(--card);border:1px solid rgba(255,255,255,.06);
+    padding:20px;
+  }
+  .sc-title{
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:var(--accent);letter-spacing:2px;margin-bottom:14px;
+    padding-bottom:10px;border-bottom:1px solid var(--border);
+  }
+
+  /* progress tracker */
+  .tracker-steps{display:flex;flex-direction:column;gap:6px;}
+  .tracker-item{
+    display:flex;align-items:center;gap:10px;
+    padding:8px 10px;
+    font-size:12px;color:var(--muted);
+    border:1px solid transparent;
+    cursor:pointer;transition:all .2s;
+  }
+  .tracker-item:hover{border-color:var(--border);color:var(--text);}
+  .tracker-item.active{border-color:rgba(0,212,255,.3);color:var(--text);background:rgba(0,212,255,.04);}
+  .tracker-item.done{color:var(--green);}
+  .tracker-icon{font-size:14px;flex-shrink:0;}
+
+  /* link cards */
+  .link-item{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);
+    text-decoration:none;
+  }
+  .link-item:last-child{border-bottom:none;}
+  .link-item span{font-size:12px;color:var(--muted);}
+  .link-item:hover span{color:var(--accent);}
+  .link-arrow{color:var(--accent);font-size:12px;}
+
+  /* overall progress */
+  .overall-bar{height:6px;background:rgba(255,255,255,.06);margin:10px 0 6px;}
+  .overall-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .4s;}
+  .overall-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);text-align:right;}
+  /* ─── GOAL BOX ─── */
+  .goal-box{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);margin-top:20px;overflow:hidden;}
+  .goal-row{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(0,212,255,.08);}
+  .goal-row:last-child{border-bottom:none;}
+  .goal-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+  .goal-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:4px;}
+  .goal-text{font-size:13px;color:var(--muted);line-height:1.7;}
+  .goal-text strong{color:var(--text);}
+  .prereq-check{background:rgba(255,107,53,.04);padding:12px 18px;}
+  .pc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent2);letter-spacing:2px;margin-bottom:8px;}
+  .pc-items{display:flex;flex-wrap:wrap;gap:6px;}
+  .pc-item{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;}
+  .pc-item.req{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:#ff9970;}
+  .pc-item.opt{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);color:var(--accent);}
+
+  /* 文字切れ防止 */
+  .h1-plain,.h1-outline,.h1-fill,
+  .t-solid,.t-outline,.t-fill {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+  h1.ch-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  /* ─── PROMPT GENERATOR ─── */
+  .pg-wrap{background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.18);margin:18px 0;overflow:hidden;}
+  .pg-header{padding:14px 18px;border-bottom:1px solid rgba(0,212,255,.1);display:flex;align-items:center;gap:10px;}
+  .pg-header-icon{font-size:16px;}
+  .pg-header-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
+  .pg-header-sub{font-size:11px;color:var(--muted);margin-left:auto;}
+  .pg-fields{padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+  .pg-field{}
+  .pg-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;}
+  .pg-label span{color:var(--accent);}
+  .pg-input{
+    width:100%;background:#060c18;
+    border:1px solid rgba(0,212,255,.15);
+    color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;
+    padding:10px 12px;outline:none;resize:none;
+    transition:border-color .2s;
+  }
+  .pg-input:focus{border-color:rgba(0,212,255,.5);}
+  .pg-input::placeholder{color:rgba(255,255,255,.2);}
+  .pg-select{
+    width:100%;background:#060c18;
+    border:1px solid rgba(0,212,255,.15);
+    color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;
+    padding:10px 12px;outline:none;
+    -webkit-appearance:none;appearance:none;
+    cursor:pointer;transition:border-color .2s;
+  }
+  .pg-select:focus{border-color:rgba(0,212,255,.5);}
+  .pg-generate{
+    margin:0 18px 16px;width:calc(100% - 36px);
+    padding:12px;background:var(--accent);color:var(--bg);
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;
+    border:none;cursor:pointer;transition:background .2s;
+  }
+  .pg-generate:hover{background:#00b8e0;}
+  .pg-output{margin:0 18px 16px;display:none;}
+  .pg-output.show{display:block;}
+  .pg-out-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .pg-out-text{
+    background:#070d1a;border:1px solid rgba(245,197,24,.2);
+    border-left:3px solid var(--gold);
+    padding:14px 16px;font-size:13px;color:#d4c47a;
+    line-height:1.8;font-style:italic;white-space:pre-wrap;
+    word-break:keep-all;
+  }
+  .pg-copy-btn{
+    margin-top:8px;padding:7px 16px;
+    border:1px solid rgba(245,197,24,.3);background:transparent;
+    color:var(--gold);font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;
+  }
+  .pg-copy-btn:hover{background:rgba(245,197,24,.1);}
+  .pg-copy-btn.copied{color:var(--green);border-color:var(--green);}
+
+  /* ─── 親サイトリンク ─── */
+  .top-link{
+    display:block;width:100%;
+    background:rgba(99,102,241,.08);
+    border-bottom:1px solid rgba(99,102,241,.2);
+    padding:7px 24px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
+    transition:background .2s;
+  }
+  .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+  .top-link-arrow{margin-right:6px;}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="top-link"><span class="top-link-arrow">←</span> 動画コース一覧へ戻る</a>
+<header>
+  <a href="index.html" class="logo">AI/VIDEO_MASTER</a>
+  <div class="bc">COURSE <span>/ CH.02 HANDS-ON</span></div>
+  <div class="hbtns">
+    <a href="index.html" class="hbtn">← INDEX</a>
+    <a href="chapter3.html" class="hbtn nx">NEXT CH.03 →</a>
+  </div>
+</header>
+<div class="prog"><div class="prog-fill" id="topProg"></div></div>
+
+<!-- STEP NAV -->
+<div class="step-nav" id="stepNav">
+  <div class="snav-item active" onclick="goStep(0)">
+    <div style="position:relative;width:28px;">
+      <div class="snav-dot" id="dot0">1</div>
+      <div class="snav-line"></div>
+    </div>
+    <div class="snav-label">料金確認</div>
+  </div>
+  <div class="snav-item" onclick="goStep(1)">
+    <div style="position:relative;width:28px;">
+      <div class="snav-dot" id="dot1">2</div>
+      <div class="snav-line"></div>
+    </div>
+    <div class="snav-label">環境構築</div>
+  </div>
+  <div class="snav-item" onclick="goStep(2)">
+    <div style="position:relative;width:28px;">
+      <div class="snav-dot" id="dot2">3</div>
+      <div class="snav-line"></div>
+    </div>
+    <div class="snav-label">プロジェクト作成</div>
+  </div>
+  <div class="snav-item" onclick="goStep(3)">
+    <div style="position:relative;width:28px;">
+      <div class="snav-dot" id="dot3">4</div>
+      <div class="snav-line"></div>
+    </div>
+    <div class="snav-label">Studio起動</div>
+  </div>
+  <div class="snav-item" onclick="goStep(4)">
+    <div style="position:relative;width:28px;">
+      <div class="snav-dot" id="dot4">5</div>
+    </div>
+    <div class="snav-label">AI接続</div>
+  </div>
+</div>
+
+<div class="ch-hero">
+  <div class="ch-tag">CHAPTER 02 — HANDS-ON WORK</div>
+  <h1 class="ch-title">
+    <span class="t-solid">Remotion</span>
+    <span class="t-outline">セットアップ</span>
+  </h1>
+  <p class="ch-lead">Reactのコードで動画を作る仕組みを理解し、AIエージェントと連携して最初のMP4動画を出力する。</p>
+  <div class="goal-box">
+    <div class="goal-row">
+      <span class="goal-icon">🎯</span>
+      <div>
+        <div class="goal-label">このセッションのゴール</div>
+        <div class="goal-text">自然言語の指示だけでRemotionのコードが生成され、<strong>MP4動画ファイルが1本出力されている状態</strong>にする</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">🛠</span>
+      <div>
+        <div class="goal-label">このセッションでやること</div>
+        <div class="goal-text">料金確認 → Node.js確認 → プロジェクト作成 → Studioでリアルタイムプレビュー → Codexで動画生成・MP4出力</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">✅</span>
+      <div>
+        <div class="goal-label">これができると何が変わるか</div>
+        <div class="goal-text">「動画編集ソフト」を一切使わずにコードで映像を作れる。パラメータ1つ変えるだけで何百パターンもの動画を量産できる基盤が手に入る</div>
+      </div>
+    </div>
+    <div class="prereq-check">
+      <div class="pc-label">📋 事前確認</div>
+      <div class="pc-items">
+        <span class="pc-item req">Node.js v16以上インストール済み</span>
+        <span class="pc-item opt">VS Code または任意のエディタ</span>
+        <span class="pc-item opt">Codex（推奨）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- MAIN STEPS -->
+  <div class="steps-panel">
+
+    <!-- STEP 1: 料金確認 -->
+    <div class="step-block active" id="step0">
+      <div class="step-header">
+        <div class="step-badge">1</div>
+        <div class="step-title-wrap">
+          <div class="step-label">STEP 01</div>
+          <h2 class="step-title">料金・ライセンス確認</h2>
+        </div>
+      </div>
+
+      <p class="desc">まず自分が<strong>無料で使えるかどうか</strong>を確認する。Remotionは個人・小規模利用は完全無料。</p>
+
+      <div class="price-table">
+        <div class="pt-row pt-head">
+          <span>プラン</span><span>料金</span><span>対象</span>
+        </div>
+        <div class="pt-row">
+          <span>Free License</span>
+          <span>無料</span>
+          <span>個人・学習・スタートアップ（従業員3名以下）</span>
+        </div>
+        <div class="pt-row">
+          <span>Company License</span>
+          <span>$25/人/月〜<br>最低$100/月</span>
+          <span>法人利用・商用プロダクト</span>
+        </div>
+        <div class="pt-row">
+          <span>Enterprise</span>
+          <span>要相談</span>
+          <span>大規模利用・カスタム契約</span>
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="info-label">💡 AWS Lambda（クラウドレンダリング）</div>
+        <p>ライセンスとは別に、クラウドレンダリングはAWS従量課金。軽量な動画1本あたり約$0.001〜$0.02程度。ローカルレンダリングのみなら追加費用ゼロ。</p>
+      </div>
+
+      <div class="warn">
+        <p>⚠️ 料金は変動する場合があります。最新情報は <strong>remotion.dev/docs/license</strong> で確認してください。</p>
+      </div>
+
+      <p class="desc" style="margin-top:16px;">以下のチェックリストで自分のケースを確認しよう：</p>
+      <ul class="checklist" id="cl1">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>個人学習・自分のポートフォリオ用 → 無料OK</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>従業員3名以下のスタートアップ → 無料OK</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>商用サービス・クライアントワーク → Company License必要</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>自分のライセンス区分を確認した</li>
+      </ul>
+
+      <div class="step-footer">
+        <button class="sf-btn" disabled>← PREV</button>
+        <span class="step-of" id="stepOf0">STEP 1 / 5</span>
+        <button class="sf-btn primary" onclick="nextStep(0)">NEXT STEP →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 環境構築 -->
+    <div class="step-block" id="step1">
+      <div class="step-header">
+        <div class="step-badge">2</div>
+        <div class="step-title-wrap">
+          <div class="step-label">STEP 02</div>
+          <h2 class="step-title">環境構築</h2>
+        </div>
+      </div>
+
+      <p class="desc">Remotionに必要なのは<strong>Node.js</strong>のみ。すでにインストール済みの場合はバージョン確認だけでOK。</p>
+
+      <p class="desc" style="margin-top:4px;"><strong>① Node.jsのバージョンを確認</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'node -v')">
+        <code>node -v</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+      <div class="info">
+        <div class="info-label">✅ 必要バージョン</div>
+        <p>Node.js <strong>v16以上</strong>が必要。macOSはSequoia 15以上が必須。<br>
+        <code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">v18.x.x</code> や <code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">v20.x.x</code> と表示されればOK。</p>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>② Node.jsが入っていない場合</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'brew install node')">
+        <code>brew install node <span style="color:var(--muted)"># macOS (Homebrew)</span></code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+      <div class="info">
+        <div class="info-label">💡 Homebrewがない場合</div>
+        <p><strong>nodejs.org</strong> からインストーラをダウンロードしてもOK。LTS版を選択してください。</p>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>③ npxが使えることを確認</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'npx -v')">
+        <code>npx -v</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>ターミナル（またはVS Code統合ターミナル）を開いた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div><code style="color:var(--accent);font-family:'JetBrains Mono',monospace">node -v</code> でv16以上が表示された</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div><code style="color:var(--accent);font-family:'JetBrains Mono',monospace">npx -v</code> でバージョンが表示された</li>
+      </ul>
+
+      <div class="step-footer">
+        <button class="sf-btn" onclick="prevStep(1)">← PREV</button>
+        <span class="step-of">STEP 2 / 5</span>
+        <button class="sf-btn primary" onclick="nextStep(1)">NEXT STEP →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: プロジェクト作成 -->
+    <div class="step-block" id="step2">
+      <div class="step-header">
+        <div class="step-badge">3</div>
+        <div class="step-title-wrap">
+          <div class="step-label">STEP 03</div>
+          <h2 class="step-title">プロジェクト作成</h2>
+        </div>
+      </div>
+
+      <p class="desc">コマンド1本でRemotionプロジェクトが生成される。テンプレートを選んでスタート。</p>
+
+      <p class="desc"><strong>① プロジェクトを作成したいフォルダに移動</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'cd ~/Desktop')">
+        <code>cd ~/Desktop <span style="color:var(--muted)"># 任意の場所でOK</span></code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>② Remotionプロジェクトを初期化</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'npx create-remotion@latest my-video')">
+        <code>npx create-remotion@latest my-video</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <div class="info">
+        <div class="info-label">📋 途中で聞かれること</div>
+        <p>テンプレート選択が出る。初回は <strong>Hello World</strong> を選択してEnter。<br>
+        パッケージマネージャーはnpm / pnpm / bunのどれでもOK。</p>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>③ プロジェクトフォルダに入る</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'cd my-video')">
+        <code>cd my-video</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>④ 依存パッケージをインストール</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'npm install')">
+        <code>npm install</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div><code style="color:var(--accent);font-family:'JetBrains Mono',monospace">npx create-remotion@latest</code> が完了した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>プロジェクトフォルダ（my-video）が作成された</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div><code style="color:var(--accent);font-family:'JetBrains Mono',monospace">npm install</code> が完了した</li>
+      </ul>
+
+      <div class="step-footer">
+        <button class="sf-btn" onclick="prevStep(2)">← PREV</button>
+        <span class="step-of">STEP 3 / 5</span>
+        <button class="sf-btn primary" onclick="nextStep(2)">NEXT STEP →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Studio起動 -->
+    <div class="step-block" id="step3">
+      <div class="step-header">
+        <div class="step-badge">4</div>
+        <div class="step-title-wrap">
+          <div class="step-label">STEP 04</div>
+          <h2 class="step-title">Remotion Studio 起動</h2>
+        </div>
+      </div>
+
+      <p class="desc">Remotion Studioはブラウザ上で動くリアルタイムプレビュー環境。コードを変更すると<strong>即座に映像が更新される</strong>。</p>
+
+      <p class="desc"><strong>① Studioを起動</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'npx remotion studio')">
+        <code>npx remotion studio</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <div class="info">
+        <div class="info-label">🌐 ブラウザで開く</div>
+        <p>自動でブラウザが開く。開かない場合は <strong>http://localhost:3000</strong> にアクセス。<br>
+        左側にコンポジション一覧、右側にプレビューが表示される。</p>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>② 最初の動画を確認</strong></p>
+      <div class="code-block">
+        <span class="code-lbl">src/HelloWorld/index.tsx</span>
+        <pre><span class="kw">import</span> { useCurrentFrame, interpolate } <span class="kw">from</span> <span class="st">'remotion'</span>
+
+<span class="kw">export const</span> <span class="fn">HelloWorld</span> = () => {
+  <span class="kw">const</span> frame = <span class="fn">useCurrentFrame</span>()
+  <span class="kw">const</span> opacity = <span class="fn">interpolate</span>(frame, [<span class="nm">0</span>, <span class="nm">30</span>], [<span class="nm">0</span>, <span class="nm">1</span>])
+
+  <span class="kw">return</span> (
+    &lt;div style={{ opacity, color: <span class="st">'white'</span>, fontSize: <span class="nm">80</span> }}&gt;
+      Hello World! 👋
+    &lt;/div&gt;
+  )
+}</pre>
+      </div>
+
+      <p class="desc"><strong>③ 試しに数字を書き換えてみる</strong><br>
+      <span style="color:var(--muted);font-size:13px;"><code style="color:var(--accent);font-family:'JetBrains Mono',monospace">30</code>を<code style="color:var(--accent);font-family:'JetBrains Mono',monospace">10</code>に変更してファイルを保存 → プレビューが即更新されるのを確認</span></p>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>Remotion Studioがブラウザで開いた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>HelloWorldの動画が再生できた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>コードを変更してリアルタイム更新を体験した</li>
+      </ul>
+
+      <div class="step-footer">
+        <button class="sf-btn" onclick="prevStep(3)">← PREV</button>
+        <span class="step-of">STEP 4 / 5</span>
+        <button class="sf-btn primary" onclick="nextStep(3)">NEXT STEP →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: AIエージェント接続 -->
+    <div class="step-block" id="step4">
+      <div class="step-header">
+        <div class="step-badge">5</div>
+        <div class="step-title-wrap">
+          <div class="step-label">STEP 05</div>
+          <h2 class="step-title">Codexと接続</h2>
+        </div>
+      </div>
+
+      <p class="desc">Remotionは<strong>CodexやCodexとの連携を公式に推奨</strong>している。プロンプトだけで映像を作る最速ルート。</p>
+
+      <p class="desc"><strong>① Remotion Skillsをインストール（推奨）</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'npx -y skills@latest add remotion-dev/skills -g -y')">
+        <code>npx -y skills@latest add remotion-dev/skills -g -y</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+      <div class="info">
+        <div class="info-label">💡 Remotion Skills とは</div>
+        <p>AIエージェントにRemotionの使い方を教えるコンテキストファイル。これを入れるとCodexやCodexの精度が大幅に向上する。</p>
+      </div>
+
+      <p class="desc" style="margin-top:16px;"><strong>② Codexからプロンプトで動画を作る</strong></p>
+      <div class="prompt">
+        <div class="prompt-lbl">💬 CLAUDE CODE PROMPT EXAMPLE</div>
+        <div class="prompt-txt">「中央に白いテキスト『Hello AI』を表示して。0フレームから徐々にフェードインし、1秒でズームインしながら現れる。背景はダークブルーのグラデーション。30fps、5秒の動画。」</div>
+      </div>
+
+      <p class="desc"><strong>③ 動画をMP4として出力</strong></p>
+      <div class="cmd" onclick="copyCmd(this, 'npx remotion render HelloWorld out/video.mp4')">
+        <code>npx remotion render HelloWorld out/video.mp4</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+
+      <div class="info">
+        <div class="info-label">🎬 出力完了</div>
+        <p>プロジェクトフォルダ内の <strong>out/video.mp4</strong> に動画が生成される。<br>
+        解像度・フレームレート・コーデックはすべてコードで制御できる。</p>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>Remotion Skillsをインストールした</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>CodexからRemotionを操作してみた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>MP4ファイルが出力された</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>🎉 最初のAI生成動画が完成！</li>
+      </ul>
+
+      <div class="step-footer">
+        <button class="sf-btn" onclick="prevStep(4)">← PREV</button>
+        <span class="step-of">STEP 5 / 5</span>
+        <a href="chapter3.html" class="sf-btn primary">第3章へ進む →</a>
+      </div>
+    </div>
+
+  </div><!-- /steps-panel -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <!-- Progress -->
+    <div class="sidebar-card">
+      <div class="sc-title">// YOUR PROGRESS</div>
+      <div class="overall-bar"><div class="overall-fill" id="overallBar" style="width:0%"></div></div>
+      <div class="overall-pct" id="overallPct">0%</div>
+      <div class="tracker-steps" id="tracker">
+        <div class="tracker-item active" onclick="goStep(0)">
+          <span class="tracker-icon">💰</span>料金確認
+        </div>
+        <div class="tracker-item" onclick="goStep(1)">
+          <span class="tracker-icon">⚙️</span>環境構築
+        </div>
+        <div class="tracker-item" onclick="goStep(2)">
+          <span class="tracker-icon">📁</span>プロジェクト作成
+        </div>
+        <div class="tracker-item" onclick="goStep(3)">
+          <span class="tracker-icon">🎬</span>Studio起動
+        </div>
+        <div class="tracker-item" onclick="goStep(4)">
+          <span class="tracker-icon">🤖</span>AI接続
+        </div>
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="sidebar-card">
+      <div class="sc-title">// OFFICIAL DOCS</div>
+      <a href="https://remotion.dev/docs" target="_blank" class="link-item">
+        <span>📖 公式ドキュメント</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://remotion.dev/docs/license" target="_blank" class="link-item">
+        <span>💳 ライセンス確認</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://remotion.dev/docs/ai/coding-agents" target="_blank" class="link-item">
+        <span>🤖 AIエージェント連携</span>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://remotion.dev/docs/lambda/cost-example" target="_blank" class="link-item">
+        <span>☁️ Lambda料金計算</span>
+        <span class="link-arrow">↗</span>
+      </a>
+    </div>
+
+    <!-- Quick ref -->
+    <div class="sidebar-card">
+      <div class="sc-title">// QUICK COMMANDS</div>
+      <div class="cmd" style="margin:0 0 2px" onclick="copyCmd(this,'npx create-remotion@latest')">
+        <code style="font-size:11px;">create-remotion@latest</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+      <div class="cmd" style="margin:2px 0" onclick="copyCmd(this,'npx remotion studio')">
+        <code style="font-size:11px;">remotion studio</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+      <div class="cmd" style="margin:2px 0" onclick="copyCmd(this,'npx remotion render')">
+        <code style="font-size:11px;">remotion render</code>
+        <button class="cmd-copy">COPY</button>
+      </div>
+    </div>
+
+  </div><!-- /sidebar -->
+</div><!-- /layout -->
+
+<script>
+  let currentStep = 0;
+  const TOTAL = 5;
+
+  function goStep(n) {
+    document.getElementById('step' + currentStep).classList.remove('active');
+    currentStep = n;
+    document.getElementById('step' + currentStep).classList.add('active');
+    updateNav();
+    window.scrollTo({top: document.querySelector('.ch-hero').offsetTop - 80, behavior:'smooth'});
+  }
+
+  function nextStep(n) { if(n < TOTAL-1) goStep(n+1); }
+  function prevStep(n) { if(n > 0) goStep(n-1); }
+
+  function updateNav() {
+    const items = document.querySelectorAll('.snav-item');
+    const trackers = document.querySelectorAll('.tracker-item');
+    items.forEach((el, i) => {
+      el.classList.remove('active','done');
+      if(i < currentStep) el.classList.add('done');
+      if(i === currentStep) el.classList.add('active');
+    });
+    trackers.forEach((el, i) => {
+      el.classList.remove('active','done');
+      if(i < currentStep) el.classList.add('done');
+      if(i === currentStep) el.classList.add('active');
+    });
+    // update dots
+    for(let i=0;i<TOTAL;i++){
+      const dot = document.getElementById('dot'+i);
+      if(i < currentStep) dot.textContent = '✓';
+      else dot.textContent = i+1;
+    }
+    // progress bar
+    const pct = Math.round((currentStep / (TOTAL-1)) * 100);
+    document.getElementById('topProg').style.width = (17 + pct * 0.83) + '%';
+    document.getElementById('overallBar').style.width = pct + '%';
+    document.getElementById('overallPct').textContent = pct + '%';
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('checked');
+  }
+
+  function copyCmd(el, text) {
+    const btn = el.querySelector('.cmd-copy');
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 1800);
+    }).catch(() => {
+      btn.textContent = 'COPY';
+    });
+  }
+
+  function generateRemotionPrompt() {
+    const theme = document.getElementById('r-theme').value.trim() || '動画テーマ未入力';
+    const text = document.getElementById('r-text').value.trim();
+    const style = document.getElementById('r-style').value || 'スタイリッシュでミニマル、ダーク背景にシアンのアクセント';
+    const duration = document.getElementById('r-duration').value;
+    const anim = document.getElementById('r-anim').value.trim();
+
+    const textPart = text ? `メインテキストとして「${text}」を表示する。` : '';
+    const animPart = anim ? `アニメーションは「${anim}」のイメージで作成する。` : 'テキストはフェードインで登場させる。';
+
+    const prompt = `RemotionとReactを使って、以下の仕様で動画コンポーネントを作成してください。
+
+【テーマ・目的】
+${theme}
+
+【表示内容】
+${textPart || 'テーマに合ったテキストを自動で考えて配置する。'}
+
+【スタイル・雰囲気】
+${style}。フォントはNoto Sans JPを使用する。
+
+【動画仕様】
+・サイズ：1920×1080px（フルHD）
+・フレームレート：30fps
+・長さ：${duration}
+
+【アニメーション】
+${animPart}
+各要素には適切なイージングを設定し、滑らかな動きにする。
+
+【技術要件】
+・useCurrentFrame()とinterpolate()を使ってアニメーションを実装する
+・外部画像は使わず、CSSグラデーションとSVGのみで表現する
+・コンポーネントはexport constで定義し、そのままRemotionのCompositionに登録できる形にする
+
+まずコードを生成してください。`;
+
+    document.getElementById('pg-remotion-text').textContent = prompt;
+    const out = document.getElementById('pg-remotion-out');
+    out.classList.add('show');
+    out.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+
+  function copyPrompt(textId, btnId) {
+    const text = document.getElementById(textId).textContent;
+    const btn = document.getElementById(btnId);
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED! ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'COPY PROMPT'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="color-scheme" content="dark">
+<title>CH.05 AIエージェント | AI VIDEO MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060810;--card:#0c1020;--accent:#00e676;--accent-b:#00d4ff;--gold:#f5c518;--green:#00e676;--text:#f0f2f8;--muted:#a8b4cc;--border:rgba(0,230,118,.18);}
+  html{background:#060810;color-scheme:dark;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg)!important;color:var(--text)!important;font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,230,118,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,230,118,.03) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+  header{position:sticky;top:0;z-index:100;padding:14px 24px;background:rgba(6,8,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);}
+  .logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-b);letter-spacing:3px;text-decoration:none;}
+  .bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}.bc span{color:var(--accent);}
+  .hbtns{display:flex;gap:8px;}
+  .hbtn{padding:6px 14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;text-decoration:none;transition:all .2s;}
+  .hbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .hbtn.nx{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+  .prog{height:3px;background:rgba(0,230,118,.08);}
+  .prog-fill{height:100%;width:42%;background:linear-gradient(90deg,var(--accent),#69f0ae);}
+  .step-nav{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:28px 24px 0;display:flex;}
+  .snav-item{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
+  .snav-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(0,230,118,.2);background:var(--card);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);transition:all .3s;position:relative;z-index:1;}
+  .snav-item.done .snav-dot{background:var(--green);border-color:var(--green);color:#000;font-weight:700;}
+  .snav-item.active .snav-dot{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;box-shadow:0 0 16px rgba(0,230,118,.4);}
+  .snav-line{position:absolute;top:13px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:rgba(0,230,118,.1);}
+  .snav-item.done .snav-line{background:var(--green);}
+  .snav-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:6px;text-align:center;display:none;}
+  @media(min-width:500px){.snav-label{display:block;}}
+  .snav-item.active .snav-label,.snav-item.done .snav-label{color:var(--accent);}
+  .ch-hero{position:relative;z-index:1;padding:48px 24px 36px;max-width:860px;margin:0 auto;}
+  .ch-tag{display:inline-flex;gap:8px;border:1px solid var(--border);background:rgba(0,230,118,.06);padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;margin-bottom:16px;}
+  h1.ch-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,68px);letter-spacing:3px;line-height:1;margin-bottom:14px;}
+  .t-solid{display:block;color:var(--text);}.t-outline{display:block;color:transparent;-webkit-text-stroke:2px var(--accent);}
+  .ch-lead{font-size:14px;color:var(--muted);max-width:560px;line-height:1.9;}
+  .layout{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:32px 24px 80px;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start;}
+  @media(max-width:720px){.layout{grid-template-columns:1fr;}}
+  .step-block{display:none;animation:fadeIn .4s ease;}.step-block.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .step-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .step-badge{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#000;font-family:'Bebas Neue',sans-serif;font-size:20px;flex-shrink:0;}
+  .step-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:3px;}
+  h2.step-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);}
+  p.desc{color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:16px;}
+  p.desc strong{color:var(--text);}
+  .agent-flow{display:flex;flex-direction:column;gap:2px;margin:16px 0;}
+  .agent{background:var(--card);border:1px solid rgba(0,230,118,.12);border-left:3px solid var(--accent);padding:16px 20px;display:flex;align-items:flex-start;gap:14px;}
+  .agent-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+  .agent-name{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;}
+  .agent-desc{font-size:12px;color:var(--muted);line-height:1.65;}
+  .arrow-down{text-align:center;color:var(--accent);font-size:18px;padding:4px 0;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted);line-height:1.65;cursor:pointer;}
+  .checklist li:last-child{border-bottom:none;}
+  .chk{width:18px;height:18px;flex-shrink:0;border:1.5px solid rgba(0,230,118,.3);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;}
+  .checklist li.checked .chk{background:var(--green);border-color:var(--green);}
+  .checklist li.checked .chk::after{content:'✓';font-size:11px;color:#000;font-weight:700;}
+  .checklist li.checked{color:var(--muted);text-decoration:line-through;opacity:.6;}
+  .info{background:rgba(0,230,118,.04);border:1px solid rgba(0,230,118,.12);padding:14px 16px;margin:14px 0;}
+  .info-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:6px;}
+  .info p{font-size:12px;color:var(--muted);margin:0;line-height:1.7;}
+  .prompt{background:rgba(245,197,24,.04);border:1px solid rgba(245,197,24,.2);border-left:3px solid var(--gold);padding:14px 16px;margin:14px 0;}
+  .prompt-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .prompt-txt{font-size:13px;color:#c8b85a;line-height:1.75;font-style:italic;}
+  .code-block{background:#060c18;border:1px solid rgba(0,230,118,.1);border-top:2px solid var(--accent);padding:18px 20px;margin:14px 0;overflow-x:auto;position:relative;}
+  .code-lbl{position:absolute;top:-1px;right:14px;background:var(--accent);color:#000;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;font-weight:700;}
+  pre{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#c4cde0;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.st{color:#f1fa8c;}.nm{color:#bd93f9;}.cm{color:#4a5870;font-style:italic;}.imp{color:#8be9fd;}
+  .step-footer{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--border);}
+  .sf-btn{padding:10px 22px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;text-decoration:none;}
+  .sf-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .sf-btn.primary{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700;}
+  .sf-btn:disabled{opacity:.3;cursor:default;}
+  .sidebar{display:flex;flex-direction:column;gap:16px;}
+  .sidebar-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:20px;}
+  .sc-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .tracker-item{display:flex;align-items:center;gap:10px;padding:8px 10px;font-size:12px;color:var(--muted);border:1px solid transparent;cursor:pointer;transition:all .2s;margin-bottom:6px;}
+  .tracker-item.active{border-color:rgba(0,230,118,.3);color:var(--text);background:rgba(0,230,118,.04);}
+  .tracker-item.done{color:var(--green);}
+  .overall-bar{height:6px;background:rgba(255,255,255,.06);margin:10px 0 6px;}
+  .overall-fill{height:100%;background:linear-gradient(90deg,var(--accent),#69f0ae);transition:width .4s;}
+  .overall-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);text-align:right;}
+  .goal-box{background:rgba(0,230,118,.03);border:1px solid rgba(0,230,118,.15);margin-top:20px;overflow:hidden;}
+  .goal-row{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(0,230,118,.08);}
+  .goal-row:last-child{border-bottom:none;}
+  .goal-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+  .goal-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:4px;}
+  .goal-text{font-size:13px;color:var(--muted);line-height:1.7;}
+  .goal-text strong{color:var(--text);}
+  .prereq-check{background:rgba(0,230,118,.04);padding:12px 18px;}
+  .pc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;}
+  .pc-items{display:flex;flex-wrap:wrap;gap:6px;}
+  .pc-item{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;}
+  .pc-item.req{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:#ff9970;}
+  .pc-item.opt{background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.2);color:var(--accent);}
+
+  /* 文字切れ防止 */
+  .h1-plain,.h1-outline,.h1-fill,
+  .t-solid,.t-outline,.t-fill {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+  h1.ch-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  .pg-wrap{background:rgba(0,230,118,.03);border:1px solid rgba(0,230,118,.18);margin:18px 0;overflow:hidden;}
+  .pg-header{padding:14px 18px;border-bottom:1px solid rgba(0,230,118,.1);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .pg-header-icon{font-size:16px;}
+  .pg-header-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
+  .pg-header-sub{font-size:11px;color:var(--muted);margin-left:auto;}
+  .pg-fields{padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+  .pg-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;}
+  .pg-label span{color:var(--accent);}
+  .pg-input,.pg-select{width:100%;background:#060c18;border:1px solid rgba(0,230,118,.15);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s;}
+  .pg-input:focus,.pg-select:focus{border-color:rgba(0,230,118,.5);}
+  .pg-input::placeholder{color:rgba(255,255,255,.2);}
+  .pg-select{-webkit-appearance:none;appearance:none;cursor:pointer;}
+  .pg-generate{margin:0 18px 16px;width:calc(100% - 36px);padding:12px;background:var(--accent);color:#000;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;border:none;cursor:pointer;transition:opacity .2s;}
+  .pg-generate:hover{opacity:.85;}
+  .pg-output{margin:0 18px 16px;display:none;}
+  .pg-output.show{display:block;}
+  .pg-out-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .pg-out-text{background:#070d1a;border:1px solid rgba(245,197,24,.2);border-left:3px solid var(--gold);padding:14px 16px;font-size:13px;color:#d4c47a;line-height:1.8;font-style:italic;white-space:pre-wrap;word-break:keep-all;}
+  .pg-copy-btn{margin-top:8px;padding:7px 16px;border:1px solid rgba(245,197,24,.3);background:transparent;color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .pg-copy-btn.copied{color:var(--green);border-color:var(--green);}
+
+  /* ─── 親サイトリンク ─── */
+  .top-link{
+    display:block;width:100%;
+    background:rgba(99,102,241,.08);
+    border-bottom:1px solid rgba(99,102,241,.2);
+    padding:7px 24px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
+    transition:background .2s;
+  }
+  .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+  .top-link-arrow{margin-right:6px;}
+</style>
+</head>
+<body>
+<a href="index.html" class="top-link"><span class="top-link-arrow">←</span> 動画コース一覧へ戻る</a>
+<header>
+  <a href="index.html" class="logo">AI/VIDEO_MASTER</a>
+  <div class="bc">COURSE <span>/ CH.05 HANDS-ON</span></div>
+  <div class="hbtns">
+    <a href="chapter4.html" class="hbtn">← CH.04</a>
+    <a href="completion.html" class="hbtn nx">修了証を受け取る 🎓</a>
+  </div>
+</header>
+<div class="prog"><div class="prog-fill" id="topProg"></div></div>
+
+<div class="step-nav">
+  <div class="snav-item active" onclick="goStep(0)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot0">1</div><div class="snav-line"></div></div><div class="snav-label">設計</div></div>
+  <div class="snav-item" onclick="goStep(1)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot1">2</div><div class="snav-line"></div></div><div class="snav-label">企画Agent</div></div>
+  <div class="snav-item" onclick="goStep(2)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot2">3</div><div class="snav-line"></div></div><div class="snav-label">実行Agent</div></div>
+  <div class="snav-item" onclick="goStep(3)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot3">4</div><div class="snav-line"></div></div><div class="snav-label">改善ループ</div></div>
+  <div class="snav-item" onclick="goStep(4)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot4">5</div></div><div class="snav-label">統合</div></div>
+</div>
+
+<div class="ch-hero">
+  <div class="ch-tag">CHAPTER 05 — HANDS-ON WORK</div>
+  <h1 class="ch-title"><span class="t-solid">AIエージェント</span><span class="t-outline">自律型プロダクション</span></h1>
+  <p class="ch-lead">複数のAIを連携させ「動画制作会社」そのものを自動化するアーキテクチャを設計し、動くプロトタイプを作る。</p>
+  <div class="goal-box">
+    <div class="goal-row">
+      <span class="goal-icon">🎯</span>
+      <div>
+        <div class="goal-label">このセッションのゴール</div>
+        <div class="goal-text">「企画→制作→品質管理」を3つのAIが自律的に担う<strong>動画制作パイプラインの設計図を完成させ、実際に動くプロトタイプのコードを手に入れる</strong></div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">🛠</span>
+      <div>
+        <div class="goal-label">このセッションでやること（一緒にワーク）</div>
+        <div class="goal-text">3エージェント構成を設計 → OpenAI APIで企画エージェントを実装 → 企画→コード生成のパイプラインを繋ぐ → 改善ループの設計 → 全システムを統合して完走</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">✅</span>
+      <div>
+        <div class="goal-label">これができると何が変わるか</div>
+        <div class="goal-text">「動画を1本作る」から「動画制作の仕組みを作る」にシフトできる。人が寝ている間にAIが企画・制作・改善を繰り返す、完全自動の動画制作体制が構築できる</div>
+      </div>
+    </div>
+    <div class="prereq-check">
+      <div class="pc-label">📋 事前確認</div>
+      <div class="pc-items">
+        <span class="pc-item req">CH.02〜04 修了推奨</span>
+        <span class="pc-item req">OpenAI APIキー取得済み</span>
+        <span class="pc-item req">Python 3.8以上</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="steps-panel">
+
+    <div class="step-block active" id="step0">
+      <div class="step-header"><div class="step-badge">1</div><div><div class="step-label">STEP 01</div><h2 class="step-title">システム設計</h2></div></div>
+      <p class="desc">まずエージェント全体の役割分担を設計する。3つのエージェントが連携して自律的に動画を制作する。</p>
+      <div class="agent-flow">
+        <div class="agent"><span class="agent-icon">📡</span><div><div class="agent-name">企画・構成エージェント（ChatGPT / GPT-4o）</div><div class="agent-desc">SNSトレンドを取得し、バズる可能性の高い台本と構成案を作成する</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="agent"><span class="agent-icon">⚙️</span><div><div class="agent-name">実行エージェント（Codex）</div><div class="agent-desc">構成案を元にRemotionやMoviePyのスクリプトを生成し、実際の映像を構築する</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="agent"><span class="agent-icon">🔍</span><div><div class="agent-name">品質管理エージェント（Codex）</div><div class="agent-desc">コードエラー・デザイントーン・倫理チェックを行い、必要に応じて修正を指示する</div></div></div>
+      </div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>3エージェントの役割分担を理解した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>自分のユースケースに合わせた設計をメモした</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" disabled>← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 1 / 5</span><button class="sf-btn primary" onclick="nextStep(0)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step1">
+      <div class="step-header"><div class="step-badge">2</div><div><div class="step-label">STEP 02</div><h2 class="step-title">企画エージェントを作る</h2></div></div>
+      <p class="desc">ClaudeのAPIを使ってトレンド分析と台本生成を自動化する。</p>
+      <div class="code-block"><span class="code-lbl">PYTHON — PLANNING AGENT</span>
+<pre><span class="imp">from</span> openai <span class="imp">import</span> OpenAI
+<span class="imp">import</span> os
+
+client = <span class="fn">OpenAI</span>(api_key=os.environ[<span class="st">"OPENAI_API_KEY"</span>])
+
+<span class="kw">def</span> <span class="fn">create_script</span>(topic: str) -> str:
+  response = client.chat.completions.<span class="fn">create</span>(
+    model=<span class="st">"gpt-4o"</span>,
+    messages=[{
+      <span class="st">"role"</span>: <span class="st">"user"</span>,
+      <span class="st">"content"</span>: <span class="st">f"""
+        テーマ「{topic}」について
+        30秒のショート動画の台本を作成してください。
+        フック（0-3秒）、本編（4-25秒）、CTA（26-30秒）
+        の構成でJSON形式で出力。
+      """</span>
+    }]
+  )
+  <span class="kw">return</span> response.choices[<span class="nm">0</span>].message.content
+
+script = <span class="fn">create_script</span>(<span class="st">"AI動画制作の革命"</span>)
+<span class="fn">print</span>(script)</pre></div>
+      <p class="desc">自分のビジネス・ジャンルに合わせた<strong>企画エージェントのシステムプロンプト</strong>を生成しよう。</p>
+      <div class="pg-wrap" id="pg-agent">
+        <div class="pg-header">
+          <span class="pg-header-icon">🤖</span>
+          <span class="pg-header-title">PLANNING AGENT PROMPT GENERATOR</span>
+          <span class="pg-header-sub">入力 → 生成 → Codex / OpenAI APIのsystem promptに設定</span>
+        </div>
+        <div class="pg-fields">
+          <div>
+            <div class="pg-label">あなたのビジネス・発信ジャンル <span>*</span></div>
+            <input class="pg-input" id="ag-genre" placeholder="例：AIコンサルタント、飲食店オーナー、フィットネストレーナー" />
+          </div>
+          <div>
+            <div class="pg-label">ターゲット視聴者</div>
+            <input class="pg-input" id="ag-target" placeholder="例：中小企業の経営者、20代の女性、初心者のダイエッター" />
+          </div>
+          <div>
+            <div class="pg-label">主に投稿するSNSプラットフォーム</div>
+            <select class="pg-select" id="ag-platform">
+              <option value="Instagram（リール）とX（旧Twitter）">Instagram（リール）＋ X</option>
+              <option value="YouTube（ショート）">YouTube ショート</option>
+              <option value="TikTok">TikTok</option>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="複数プラットフォーム横断">複数プラットフォーム横断</option>
+            </select>
+          </div>
+          <div>
+            <div class="pg-label">動画の尺・スタイル</div>
+            <select class="pg-select" id="ag-style">
+              <option value="30秒以内のショート動画、フック→本編→CTAの3部構成">30秒ショート（フック→本編→CTA）</option>
+              <option value="60秒の解説動画、問題提起→解決策→行動促進の構成">60秒解説動画</option>
+              <option value="3〜5分のハウツー動画">3〜5分のハウツー</option>
+              <option value="15秒のインパクト重視の広告動画">15秒広告動画</option>
+            </select>
+          </div>
+        </div>
+        <button class="pg-generate" onclick="generateAgentPrompt()">⚡ システムプロンプトを生成</button>
+        <div class="pg-output" id="pg-agent-out">
+          <div class="pg-out-label">💬 生成されたシステムプロンプト（Claude APIのsystem欄に設定）</div>
+          <div class="pg-out-text" id="pg-agent-text"></div>
+          <button class="pg-copy-btn" id="pg-agent-copy" onclick="copyPrompt('pg-agent-text','pg-agent-copy')">COPY PROMPT</button>
+        </div>
+      </div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>OpenAI APIキーを取得した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>企画エージェント（GPT-4o）が台本を生成した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(1)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 2 / 5</span><button class="sf-btn primary" onclick="nextStep(1)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step2">
+      <div class="step-header"><div class="step-badge">3</div><div><div class="step-label">STEP 03</div><h2 class="step-title">実行エージェントを繋ぐ</h2></div></div>
+      <p class="desc">企画エージェントが生成した台本をそのままCodexに渡し、Remotionコードを自動生成する。</p>
+      <div class="code-block"><span class="code-lbl">PYTHON — EXECUTION PIPELINE</span>
+<pre><span class="imp">import</span> subprocess, json
+
+<span class="kw">def</span> <span class="fn">generate_video_code</span>(script_json: str) -> str:
+  <span class="cm"># 台本をCodexへのプロンプトに変換</span>
+  prompt = <span class="st">f"""
+以下の台本からRemotionのReactコードを生成してください。
+台本: {script_json}
+
+要件:
+- 1920x1080, 30fps
+- フォント: Noto Sans JP
+- カラー: ダーク背景 + シアンのアクセント
+- 各セクションをシーンとして分割
+"""</span>
+  <span class="cm"># CodexやCodexに渡す</span>
+  <span class="fn">print</span>(<span class="st">"→ Codexにプロンプトを送信中..."</span>)
+  <span class="kw">return</span> prompt
+
+<span class="cm"># パイプライン実行</span>
+script = <span class="fn">create_script</span>(<span class="st">"AIの未来"</span>)
+code_prompt = <span class="fn">generate_video_code</span>(script)
+<span class="fn">print</span>(code_prompt)</pre></div>
+      <div class="info"><div class="info-label">💡 実用的なワークフロー</div><p>完全自動化の前に「台本確認 → 承認 → コード生成」という<strong>人間がチェックするステップ</strong>を挟むことで精度が大幅に向上する。</p></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>企画→実行のパイプラインを繋いだ</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>台本からRemotionコードが生成された</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(2)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 3 / 5</span><button class="sf-btn primary" onclick="nextStep(2)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step3">
+      <div class="step-header"><div class="step-badge">4</div><div><div class="step-label">STEP 04</div><h2 class="step-title">自律的改善ループ</h2></div></div>
+      <p class="desc">YouTube APIから視聴データを取得し、そのフィードバックで次回作を<strong>自動的に改善</strong>するループを構築する。</p>
+      <div class="agent-flow">
+        <div class="agent"><span class="agent-icon">📊</span><div><div class="agent-name">データ収集</div><div class="agent-desc">YouTube API → 視聴維持率・クリック率・離脱ポイントを取得</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="agent"><span class="agent-icon">🧠</span><div><div class="agent-name">分析・改善指示</div><div class="agent-desc">Claudeがデータを分析し「冒頭3秒の離脱が多い→より強いフックに変更」と指示</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="agent"><span class="agent-icon">🔄</span><div><div class="agent-name">次回作に反映</div><div class="agent-desc">改善指示を企画エージェントへフィードバック→次の動画の品質が向上</div></div></div>
+      </div>
+      <p class="desc">実際の数値を入力すると<strong>改善指示プロンプト</strong>が生成される。</p>
+      <div class="pg-wrap" id="pg-improve">
+        <div class="pg-header">
+          <span class="pg-header-icon">📊</span>
+          <span class="pg-header-title">IMPROVEMENT LOOP GENERATOR</span>
+        </div>
+        <div class="pg-fields">
+          <div>
+            <div class="pg-label">最も数値が悪い指標 <span>*</span></div>
+            <select class="pg-select" id="im-metric">
+              <option value="冒頭3秒の離脱率が高い">冒頭3秒の離脱率が高い</option>
+              <option value="視聴維持率が全体的に低い">視聴維持率が全体的に低い</option>
+              <option value="クリック率（CTR）が低い">クリック率（CTR）が低い</option>
+              <option value="コメント・エンゲージメントが少ない">コメント・エンゲージメントが少ない</option>
+              <option value="フォロワーへの転換率が低い">フォロワーへの転換率が低い</option>
+            </select>
+          </div>
+          <div>
+            <div class="pg-label">具体的な数値（任意）</div>
+            <input class="pg-input" id="im-value" placeholder="例：冒頭3秒で40%離脱、平均視聴率28%、CTR 1.2%" />
+          </div>
+          <div>
+            <div class="pg-label">動画のジャンル・テーマ</div>
+            <input class="pg-input" id="im-genre" placeholder="例：AIビジネス活用、ダイエット、料理レシピ" />
+          </div>
+        </div>
+        <button class="pg-generate" onclick="generateImprovePrompt()">⚡ 改善指示プロンプトを生成</button>
+        <div class="pg-output" id="pg-improve-out">
+          <div class="pg-out-label">💬 生成されたプロンプト（企画エージェントへのフィードバックとして使用）</div>
+          <div class="pg-out-text" id="pg-improve-text"></div>
+          <button class="pg-copy-btn" id="pg-improve-copy" onclick="copyPrompt('pg-improve-text','pg-improve-copy')">COPY PROMPT</button>
+        </div>
+      </div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>改善ループの設計図を書いた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>サンプルデータで分析プロンプトを試した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(3)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 4 / 5</span><button class="sf-btn primary" onclick="nextStep(3)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step4">
+      <div class="step-header"><div class="step-badge">5</div><div><div class="step-label">STEP 05</div><h2 class="step-title">全システム統合・完走</h2></div></div>
+      <p class="desc">5チャプターを通じて習得した全スキルを統合し、自分だけの<strong>AI動画制作パイプライン</strong>を設計する。</p>
+      <div class="agent-flow">
+        <div class="agent"><span class="agent-icon">⚛️</span><div><div class="agent-name">CH.02 Remotion</div><div class="agent-desc">React×コードで高品質なモーショングラフィックス動画を生成</div></div></div>
+        <div class="arrow-down">+</div>
+        <div class="agent"><span class="agent-icon">🎬</span><div><div class="agent-name">CH.03 After Effects</div><div class="agent-desc">エクスプレッション・ExtendScriptでプロ品質の仕上げ</div></div></div>
+        <div class="arrow-down">+</div>
+        <div class="agent"><span class="agent-icon">🐍</span><div><div class="agent-name">CH.04 MoviePy</div><div class="agent-desc">大量生成・字幕・パーソナライズ動画の自動量産</div></div></div>
+        <div class="arrow-down">↓</div>
+        <div class="agent" style="border-color:rgba(0,230,118,.4);background:rgba(0,230,118,.05);"><span class="agent-icon">🤖</span><div><div class="agent-name">CH.05 AIエージェント統合</div><div class="agent-desc">全ツールを連携させた自律型制作システムの完成</div></div></div>
+      </div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>全5チャプターを完走した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>自分のユースケースに合ったパイプラインを設計した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>実際に動画を1本自動生成した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>🎉 AI VIDEO MASTER COURSE 完走！</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(4)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 5 / 5</span><a href="completion.html" class="sf-btn primary" onclick="markAllComplete()">修了証を受け取る 🎓</a></div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sc-title">// YOUR PROGRESS</div>
+      <div class="overall-bar"><div class="overall-fill" id="overallBar" style="width:0%"></div></div>
+      <div class="overall-pct" id="overallPct">0%</div>
+      <div class="tracker-steps" id="tracker">
+        <div class="tracker-item active" onclick="goStep(0)"><span>🏗️</span>システム設計</div>
+        <div class="tracker-item" onclick="goStep(1)"><span>📡</span>企画Agent</div>
+        <div class="tracker-item" onclick="goStep(2)"><span>⚙️</span>実行Agent</div>
+        <div class="tracker-item" onclick="goStep(3)"><span>🔄</span>改善ループ</div>
+        <div class="tracker-item" onclick="goStep(4)"><span>🎓</span>統合・完走</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep=0;const TOTAL=5;
+  function goStep(n){document.getElementById('step'+currentStep).classList.remove('active');currentStep=n;document.getElementById('step'+currentStep).classList.add('active');updateNav();window.scrollTo({top:document.querySelector('.ch-hero').offsetTop-80,behavior:'smooth'});}
+  function nextStep(n){if(n<TOTAL-1)goStep(n+1);}
+  function prevStep(n){if(n>0)goStep(n-1);}
+  function updateNav(){
+    document.querySelectorAll('.snav-item').forEach((el,i)=>{el.classList.remove('active','done');if(i<currentStep)el.classList.add('done');if(i===currentStep)el.classList.add('active');});
+    document.querySelectorAll('.tracker-item').forEach((el,i)=>{el.classList.remove('active','done');if(i<currentStep)el.classList.add('done');if(i===currentStep)el.classList.add('active');});
+    for(let i=0;i<TOTAL;i++){document.getElementById('dot'+i).textContent=i<currentStep?'✓':i+1;}
+    const pct=Math.round((currentStep/(TOTAL-1))*100);
+    document.getElementById('topProg').style.width=(42+pct*0.58)+'%';
+    document.getElementById('overallBar').style.width=pct+'%';
+    document.getElementById('overallPct').textContent=pct+'%';
+  }
+  function toggleCheck(el){el.classList.toggle('checked');}
+  function markAllComplete(){
+    const p={ch2:true,ch3:true,ch4:true,ch5:true,completed:true,date:new Date().toLocaleDateString('ja-JP')};
+    localStorage.setItem('videoCourseProgress',JSON.stringify(p));
+  }
+
+  function generateAgentPrompt() {
+    const genre = document.getElementById('ag-genre').value.trim() || 'コンテンツクリエイター';
+    const target = document.getElementById('ag-target').value.trim() || 'SNSユーザー';
+    const platform = document.getElementById('ag-platform').value;
+    const style = document.getElementById('ag-style').value;
+    const prompt = `あなたは${genre}向けのバイラルSNS動画コンテンツの専門家です。
+
+【役割】
+${target}に響く、${platform}に最適化された動画台本を作成する企画エージェントとして行動してください。
+
+【制作スタイル】
+${style}で台本を作成してください。
+
+【必須ルール】
+1. 毎回必ず以下のJSON形式で出力する：
+{
+  "hook": "冒頭のフック文（視聴者の興味を瞬時に掴む1文）",
+  "main": "本編の内容（箇条書きで3〜5点）",
+  "cta": "最後の行動促進メッセージ",
+  "thumbnail_text": "サムネイルに使うテキスト（15文字以内）",
+  "hashtags": ["タグ1", "タグ2", "タグ3"]
+}
+2. ${target}が「自分ごと」に感じられる言葉を使う
+3. 最初の3秒で離脱されないよう、冒頭は必ず問いかけか驚きの事実で始める
+4. 専門用語は使わず、誰でも理解できる言葉に変換する`;
+    document.getElementById('pg-agent-text').textContent = prompt;
+    document.getElementById('pg-agent-out').classList.add('show');
+    document.getElementById('pg-agent-out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function generateImprovePrompt() {
+    const metric = document.getElementById('im-metric').value;
+    const value = document.getElementById('im-value').value.trim();
+    const genre = document.getElementById('im-genre').value.trim() || 'SNS動画';
+    const valuePart = value ? `実測値：${value}。` : '';
+    const prompt = `${genre}の動画パフォーマンスデータを分析して、次回作の改善案を提案してください。
+
+【課題】
+${metric}
+${valuePart}
+
+【依頼内容】
+1. この数値が悪い原因として考えられる要因を3つ挙げる
+2. 次回の動画で具体的に変更すべき点を3つ提案する（変更前→変更後の形式で）
+3. 改善後に期待できる数値目標を示す
+
+提案は具体的なアクションとして、台本・映像・サムネイルのどこを変えるかまで踏み込んで答えてください。`;
+    document.getElementById('pg-improve-text').textContent = prompt;
+    document.getElementById('pg-improve-out').classList.add('show');
+    document.getElementById('pg-improve-out').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function copyPrompt(textId, btnId) {
+    const text = document.getElementById(textId).textContent;
+    const btn = document.getElementById(btnId);
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED! ✓'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'COPY PROMPT'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+</script>
+</body>
+</html>

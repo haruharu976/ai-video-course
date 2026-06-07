@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="color-scheme" content="dark">
+<title>CH.04 Python MoviePy | AI VIDEO MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060810;--card:#0c1020;--accent:#a78bfa;--accent-b:#00d4ff;--gold:#f5c518;--green:#00e676;--text:#f0f2f8;--muted:#a8b4cc;--border:rgba(167,139,250,.18);}
+  html{background:#060810;color-scheme:dark;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg)!important;color:var(--text)!important;font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(167,139,250,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(167,139,250,.03) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+  header{position:sticky;top:0;z-index:100;padding:14px 24px;background:rgba(6,8,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);}
+  .logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent-b);letter-spacing:3px;text-decoration:none;}
+  .bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);}.bc span{color:var(--accent);}
+  .hbtns{display:flex;gap:8px;}
+  .hbtn{padding:6px 14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
+  .hbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .hbtn.nx{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+  .prog{height:3px;background:rgba(167,139,250,.08);}
+  .prog-fill{height:100%;width:34%;background:linear-gradient(90deg,var(--accent),#c084fc);}
+  .step-nav{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:28px 24px 0;display:flex;}
+  .snav-item{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
+  .snav-dot{width:28px;height:28px;border-radius:50%;border:2px solid rgba(167,139,250,.2);background:var(--card);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);transition:all .3s;position:relative;z-index:1;}
+  .snav-item.done .snav-dot{background:var(--green);border-color:var(--green);color:#000;font-weight:700;}
+  .snav-item.active .snav-dot{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;box-shadow:0 0 16px rgba(167,139,250,.4);}
+  .snav-line{position:absolute;top:13px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:rgba(167,139,250,.1);}
+  .snav-item.done .snav-line{background:var(--green);}
+  .snav-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:6px;text-align:center;display:none;}
+  @media(min-width:500px){.snav-label{display:block;}}
+  .snav-item.active .snav-label,.snav-item.done .snav-label{color:var(--accent);}
+  .ch-hero{position:relative;z-index:1;padding:48px 24px 36px;max-width:860px;margin:0 auto;}
+  .ch-tag{display:inline-flex;gap:8px;border:1px solid var(--border);background:rgba(167,139,250,.06);padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;margin-bottom:16px;}
+  h1.ch-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,68px);letter-spacing:3px;line-height:1;margin-bottom:14px;}
+  .t-solid{display:block;color:var(--text);}.t-outline{display:block;color:transparent;-webkit-text-stroke:2px var(--accent);}
+  .ch-lead{font-size:14px;color:var(--muted);max-width:560px;line-height:1.9;}
+  .layout{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:32px 24px 80px;display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start;}
+  @media(max-width:720px){.layout{grid-template-columns:1fr;}}
+  .step-block{display:none;animation:fadeIn .4s ease;}.step-block.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .step-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .step-badge{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:20px;flex-shrink:0;}
+  .step-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:3px;}
+  h2.step-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--text);}
+  p.desc{color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:16px;}
+  p.desc strong{color:var(--text);}
+  .cmd{background:#060c18;border:1px solid rgba(167,139,250,.15);border-left:3px solid var(--accent);padding:14px 18px;margin:14px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;}
+  .cmd code{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);word-break:break-all;}
+  .cmd-copy{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);border:1px solid rgba(167,139,250,.2);padding:3px 8px;transition:all .2s;background:transparent;cursor:pointer;white-space:nowrap;}
+  .cmd-copy.copied{color:var(--green);border-color:var(--green);}
+  .code-block{background:#060c18;border:1px solid rgba(167,139,250,.1);border-top:2px solid var(--accent);padding:18px 20px;margin:14px 0;overflow-x:auto;position:relative;}
+  .code-lbl{position:absolute;top:-1px;right:14px;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;}
+  pre{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.75;color:#c4cde0;}
+  .kw{color:#ff79c6;}.fn{color:#50fa7b;}.st{color:#f1fa8c;}.nm{color:#bd93f9;}.cm{color:#4a5870;font-style:italic;}.imp{color:#8be9fd;}
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted);line-height:1.65;cursor:pointer;}
+  .checklist li:last-child{border-bottom:none;}
+  .chk{width:18px;height:18px;flex-shrink:0;border:1.5px solid rgba(167,139,250,.3);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;}
+  .checklist li.checked .chk{background:var(--green);border-color:var(--green);}
+  .checklist li.checked .chk::after{content:'✓';font-size:11px;color:#000;font-weight:700;}
+  .checklist li.checked{color:var(--muted);text-decoration:line-through;opacity:.6;}
+  .info{background:rgba(167,139,250,.04);border:1px solid rgba(167,139,250,.12);padding:14px 16px;margin:14px 0;}
+  .info-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:6px;}
+  .info p{font-size:12px;color:var(--muted);margin:0;line-height:1.7;}
+  .prompt{background:rgba(245,197,24,.04);border:1px solid rgba(245,197,24,.2);border-left:3px solid var(--gold);padding:14px 16px;margin:14px 0;}
+  .prompt-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .prompt-txt{font-size:13px;color:#c8b85a;line-height:1.75;font-style:italic;}
+  .step-footer{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--border);}
+  .sf-btn{padding:10px 22px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .2s;text-decoration:none;}
+  .sf-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .sf-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;}
+  .sf-btn:disabled{opacity:.3;cursor:default;}
+  .sidebar{display:flex;flex-direction:column;gap:16px;}
+  .sidebar-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:20px;}
+  .sc-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .tracker-steps{display:flex;flex-direction:column;gap:6px;}
+  .tracker-item{display:flex;align-items:center;gap:10px;padding:8px 10px;font-size:12px;color:var(--muted);border:1px solid transparent;cursor:pointer;transition:all .2s;}
+  .tracker-item.active{border-color:rgba(167,139,250,.3);color:var(--text);background:rgba(167,139,250,.04);}
+  .tracker-item.done{color:var(--green);}
+  .overall-bar{height:6px;background:rgba(255,255,255,.06);margin:10px 0 6px;}
+  .overall-fill{height:100%;background:linear-gradient(90deg,var(--accent),#c084fc);transition:width .4s;}
+  .overall-pct{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);text-align:right;}
+  .goal-box{background:rgba(167,139,250,.03);border:1px solid rgba(167,139,250,.15);margin-top:20px;overflow:hidden;}
+  .goal-row{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border-bottom:1px solid rgba(167,139,250,.08);}
+  .goal-row:last-child{border-bottom:none;}
+  .goal-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+  .goal-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:4px;}
+  .goal-text{font-size:13px;color:var(--muted);line-height:1.7;}
+  .goal-text strong{color:var(--text);}
+  .prereq-check{background:rgba(167,139,250,.05);padding:12px 18px;}
+  .pc-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;}
+  .pc-items{display:flex;flex-wrap:wrap;gap:6px;}
+  .pc-item{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;}
+  .pc-item.req{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:#ff9970;}
+  .pc-item.opt{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);color:var(--accent);}
+
+  /* 文字切れ防止 */
+  .h1-plain,.h1-outline,.h1-fill,
+  .t-solid,.t-outline,.t-fill {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+  h1.ch-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  .pg-wrap{background:rgba(167,139,250,.03);border:1px solid rgba(167,139,250,.18);margin:18px 0;overflow:hidden;}
+  .pg-header{padding:14px 18px;border-bottom:1px solid rgba(167,139,250,.1);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .pg-header-icon{font-size:16px;}
+  .pg-header-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
+  .pg-header-sub{font-size:11px;color:var(--muted);margin-left:auto;}
+  .pg-fields{padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+  .pg-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;}
+  .pg-label span{color:var(--accent);}
+  .pg-input,.pg-select{width:100%;background:#060c18;border:1px solid rgba(167,139,250,.15);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:10px 12px;outline:none;transition:border-color .2s;}
+  .pg-input:focus,.pg-select:focus{border-color:rgba(167,139,250,.5);}
+  .pg-input::placeholder{color:rgba(255,255,255,.2);}
+  .pg-select{-webkit-appearance:none;appearance:none;cursor:pointer;}
+  .pg-generate{margin:0 18px 16px;width:calc(100% - 36px);padding:12px;background:var(--accent);color:#fff;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;border:none;cursor:pointer;transition:background .2s;}
+  .pg-generate:hover{opacity:.85;}
+  .pg-output{margin:0 18px 16px;display:none;}
+  .pg-output.show{display:block;}
+  .pg-out-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;}
+  .pg-out-text{background:#070d1a;border:1px solid rgba(245,197,24,.2);border-left:3px solid var(--gold);padding:14px 16px;font-size:13px;color:#d4c47a;line-height:1.8;font-style:italic;white-space:pre-wrap;word-break:keep-all;}
+  .pg-copy-btn{margin-top:8px;padding:7px 16px;border:1px solid rgba(245,197,24,.3);background:transparent;color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .pg-copy-btn.copied{color:var(--green);border-color:var(--green);}
+
+  /* ─── 親サイトリンク ─── */
+  .top-link{
+    display:block;width:100%;
+    background:rgba(99,102,241,.08);
+    border-bottom:1px solid rgba(99,102,241,.2);
+    padding:7px 24px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
+    transition:background .2s;
+  }
+  .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+  .top-link-arrow{margin-right:6px;}
+</style>
+</head>
+<body>
+<a href="index.html" class="top-link"><span class="top-link-arrow">←</span> 動画コース一覧へ戻る</a>
+<header>
+  <a href="index.html" class="logo">AI/VIDEO_MASTER</a>
+  <div class="bc">COURSE <span>/ CH.04 HANDS-ON</span></div>
+  <div class="hbtns">
+    <a href="chapter3.html" class="hbtn">← CH.03</a>
+    <a href="chapter5.html" class="hbtn nx">NEXT CH.05 →</a>
+  </div>
+</header>
+<div class="prog"><div class="prog-fill" id="topProg"></div></div>
+
+<div class="step-nav">
+  <div class="snav-item active" onclick="goStep(0)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot0">1</div><div class="snav-line"></div></div><div class="snav-label">環境構築</div></div>
+  <div class="snav-item" onclick="goStep(1)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot1">2</div><div class="snav-line"></div></div><div class="snav-label">基本編集</div></div>
+  <div class="snav-item" onclick="goStep(2)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot2">3</div><div class="snav-line"></div></div><div class="snav-label">テキスト合成</div></div>
+  <div class="snav-item" onclick="goStep(3)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot3">4</div><div class="snav-line"></div></div><div class="snav-label">大量生成</div></div>
+  <div class="snav-item" onclick="goStep(4)"><div style="position:relative;width:28px;"><div class="snav-dot" id="dot4">5</div></div><div class="snav-label">自動字幕</div></div>
+</div>
+
+<div class="ch-hero">
+  <div class="ch-tag">CHAPTER 04 — HANDS-ON WORK</div>
+  <h1 class="ch-title"><span class="t-solid">Python MoviePy</span><span class="t-outline">ヘッドレス編集</span></h1>
+  <p class="ch-lead">編集ソフトを一切使わずにPythonで動画を量産する。インストールから動画出力まで一緒にやる。</p>
+  <div class="goal-box">
+    <div class="goal-row">
+      <span class="goal-icon">🎯</span>
+      <div>
+        <div class="goal-label">このセッションのゴール</div>
+        <div class="goal-text">Pythonスクリプトを実行するだけで、<strong>テキスト付き動画・自動字幕・CSVからの量産動画</strong>が自動生成されている状態にする</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">🛠</span>
+      <div>
+        <div class="goal-label">このセッションでやること（一緒にワーク）</div>
+        <div class="goal-text">MoviePyインストール → 動画カット・結合 → テキスト合成 → CSVから名前入り動画を量産 → Whisperで自動字幕生成</div>
+      </div>
+    </div>
+    <div class="goal-row">
+      <span class="goal-icon">✅</span>
+      <div>
+        <div class="goal-label">これができると何が変わるか</div>
+        <div class="goal-text">1本ずつ手作業で動画編集する時代が終わる。CSVのデータを流し込むだけで何百本もパーソナライズ動画が自動生成できるようになる。SNSマーケの武器になる</div>
+      </div>
+    </div>
+    <div class="prereq-check">
+      <div class="pc-label">📋 事前確認</div>
+      <div class="pc-items">
+        <span class="pc-item req">Python 3.8以上インストール済み</span>
+        <span class="pc-item req">pip使用可能</span>
+        <span class="pc-item opt">Homebrew（Mac推奨）</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="steps-panel">
+
+    <div class="step-block active" id="step0">
+      <div class="step-header"><div class="step-badge">1</div><div><div class="step-label">STEP 01</div><h2 class="step-title">環境構築</h2></div></div>
+      <p class="desc">MoviePyはPythonのライブラリ。<strong>pip一発でインストール完了</strong>。AEもRemotionも不要。</p>
+      <p class="desc"><strong>① Pythonバージョン確認</strong></p>
+      <div class="cmd" onclick="copyCmd(this,'python3 --version')"><code>python3 --version</code><button class="cmd-copy">COPY</button></div>
+      <div class="info"><div class="info-label">✅ 必要バージョン</div><p>Python <strong>3.8以上</strong>。Macには標準でPython3が入っている場合が多い。</p></div>
+      <p class="desc" style="margin-top:14px;"><strong>② MoviePyをインストール</strong></p>
+      <div class="cmd" onclick="copyCmd(this,'pip3 install moviepy')"><code>pip3 install moviepy</code><button class="cmd-copy">COPY</button></div>
+      <p class="desc" style="margin-top:14px;"><strong>③ ImageMagick（テキスト描画に必要）</strong></p>
+      <div class="cmd" onclick="copyCmd(this,'brew install imagemagick')"><code>brew install imagemagick <span style="color:var(--muted)"># macOS</span></code><button class="cmd-copy">COPY</button></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>python3 --version でバージョン確認した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>moviepyのインストールが完了した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>ImageMagickをインストールした</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" disabled>← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 1 / 5</span><button class="sf-btn primary" onclick="nextStep(0)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step1">
+      <div class="step-header"><div class="step-badge">2</div><div><div class="step-label">STEP 02</div><h2 class="step-title">基本的な動画編集</h2></div></div>
+      <p class="desc">まずは動画のカット・結合・書き出しを体験する。</p>
+      <div class="code-block"><span class="code-lbl">PYTHON — BASIC</span>
+<pre><span class="imp">from</span> moviepy.editor <span class="imp">import</span> VideoFileClip, concatenate_videoclips
+
+<span class="cm"># 動画を読み込み</span>
+clip = <span class="fn">VideoFileClip</span>(<span class="st">"input.mp4"</span>)
+
+<span class="cm"># 最初の10秒だけ切り出す</span>
+clip_cut = clip.<span class="fn">subclip</span>(<span class="nm">0</span>, <span class="nm">10</span>)
+
+<span class="cm"># 別の動画と結合</span>
+clip2 = <span class="fn">VideoFileClip</span>(<span class="st">"input2.mp4"</span>)
+final = <span class="fn">concatenate_videoclips</span>([clip_cut, clip2])
+
+<span class="cm"># MP4として書き出し</span>
+final.<span class="fn">write_videofile</span>(<span class="st">"output.mp4"</span>)</pre></div>
+      <p class="desc">下のフォームを使って<strong>あなたのMoviePy専用プロンプト</strong>を生成しよう。</p>
+      <div class="pg-wrap" id="pg-mp">
+        <div class="pg-header">
+          <span class="pg-header-icon">🐍</span>
+          <span class="pg-header-title">MOVIEPY SCRIPT GENERATOR</span>
+          <span class="pg-header-sub">入力 → 生成 → Pythonで実行</span>
+        </div>
+        <div class="pg-fields">
+          <div>
+            <div class="pg-label">何をしたいか <span>*</span></div>
+            <select class="pg-select" id="mp-task">
+              <option value="">選択してください</option>
+              <option value="動画をカットして結合する">動画をカット・結合する</option>
+              <option value="動画にテキストを重ねる">動画にテキストを重ねる</option>
+              <option value="フォルダ内の複数動画を一括処理する">フォルダ内の複数動画を一括処理</option>
+              <option value="動画の解像度・速度を変換する">解像度・速度を変換する</option>
+              <option value="動画にBGM・音楽を追加する">BGM・音楽を追加する</option>
+            </select>
+          </div>
+          <div>
+            <div class="pg-label">入力ファイルの種類・場所</div>
+            <input class="pg-input" id="mp-input" placeholder="例：input.mp4、./videos/フォルダ内の全MP4、template.mp4" />
+          </div>
+          <div>
+            <div class="pg-label">具体的な条件・要望</div>
+            <input class="pg-input" id="mp-detail" placeholder="例：最初の30秒だけ切り出す、中央に白文字で名前を表示、フェードインで登場" />
+          </div>
+          <div>
+            <div class="pg-label">出力ファイル名</div>
+            <input class="pg-input" id="mp-output" placeholder="例：output.mp4、out_フォルダに保存" />
+          </div>
+        </div>
+        <button class="pg-generate" onclick="generateMPPrompt()">⚡ Pythonスクリプトのプロンプトを生成</button>
+        <div class="pg-output" id="pg-mp-out">
+          <div class="pg-out-label">💬 生成されたプロンプト（Codexに貼り付け）</div>
+          <div class="pg-out-text" id="pg-mp-text"></div>
+          <button class="pg-copy-btn" id="pg-mp-copy" onclick="copyPrompt('pg-mp-text','pg-mp-copy')">COPY PROMPT</button>
+        </div>
+      </div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>サンプルコードを実行してみた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>自分の動画ファイルで試した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(1)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 2 / 5</span><button class="sf-btn primary" onclick="nextStep(1)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step2">
+      <div class="step-header"><div class="step-badge">3</div><div><div class="step-label">STEP 03</div><h2 class="step-title">テキスト・ロゴ合成</h2></div></div>
+      <p class="desc">動画にテキストやロゴを重ねる。SNSのリール動画テンプレートの基本。</p>
+      <div class="code-block"><span class="code-lbl">PYTHON — TEXT OVERLAY</span>
+<pre><span class="imp">from</span> moviepy.editor <span class="imp">import</span> VideoFileClip, TextClip, CompositeVideoClip
+
+clip = <span class="fn">VideoFileClip</span>(<span class="st">"input.mp4"</span>)
+
+<span class="cm"># テキストクリップ作成</span>
+txt = <span class="fn">TextClip</span>(
+  <span class="st">"AIで動画制作"</span>,
+  fontsize=<span class="nm">70</span>, color=<span class="st">'white'</span>,
+  font=<span class="st">'Noto-Sans-CJK-JP'</span>
+).<span class="fn">set_position</span>(<span class="st">'center'</span>).<span class="fn">set_duration</span>(<span class="nm">3</span>)
+
+<span class="cm"># 動画に合成</span>
+final = <span class="fn">CompositeVideoClip</span>([clip, txt])
+final.<span class="fn">write_videofile</span>(<span class="st">"output.mp4"</span>)</pre></div>
+      <div class="info"><div class="info-label">💡 日本語フォント</div><p>MacにはNoto Sans CJK JPが入っていない場合がある。<br><code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">fc-list | grep -i noto</code> でフォント名を確認してから指定しよう。</p></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>テキストを動画に合成できた</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>フォントサイズ・色・位置を変えて試した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(2)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 3 / 5</span><button class="sf-btn primary" onclick="nextStep(2)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step3">
+      <div class="step-header"><div class="step-badge">4</div><div><div class="step-label">STEP 04</div><h2 class="step-title">CSVから動画を大量生成</h2></div></div>
+      <p class="desc">CSVのデータをループで流し込んで<strong>パーソナライズ動画を自動量産</strong>する。SNSマーケの核心。</p>
+      <div class="code-block"><span class="code-lbl">PYTHON — BULK GENERATE</span>
+<pre><span class="imp">import</span> csv
+<span class="imp">from</span> moviepy.editor <span class="imp">import</span> VideoFileClip, TextClip, CompositeVideoClip
+
+<span class="cm"># CSVからデータ読み込み</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">'data.csv'</span>) <span class="kw">as</span> f:
+  rows = <span class="fn">list</span>(csv.<span class="fn">DictReader</span>(f))
+
+base = <span class="fn">VideoFileClip</span>(<span class="st">"template.mp4"</span>)
+
+<span class="kw">for</span> row <span class="kw">in</span> rows:
+  txt = <span class="fn">TextClip</span>(row[<span class="st">'name'</span>], fontsize=<span class="nm">60</span>, color=<span class="st">'white'</span>)
+  txt = txt.<span class="fn">set_position</span>(<span class="st">'center'</span>).<span class="fn">set_duration</span>(base.duration)
+  final = <span class="fn">CompositeVideoClip</span>([base, txt])
+  final.<span class="fn">write_videofile</span>(<span class="st">f"out_{row['id']}.mp4"</span>)
+  <span class="fn">print</span>(<span class="st">f"✅ {row['name']} 完了"</span>)</pre></div>
+      <div class="info"><div class="info-label">📋 CSVの例（data.csv）</div><p><code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">id,name<br>1,田中様<br>2,鈴木様<br>3,佐藤様</code></p></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>CSVファイルを用意した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>ループで複数の動画が生成された</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>Codexで独自のデータ構造に合わせたスクリプトを生成した</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(3)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 4 / 5</span><button class="sf-btn primary" onclick="nextStep(3)">NEXT →</button></div>
+    </div>
+
+    <div class="step-block" id="step4">
+      <div class="step-header"><div class="step-badge">5</div><div><div class="step-label">STEP 05</div><h2 class="step-title">自動字幕生成</h2></div></div>
+      <p class="desc">Whisperでテキスト化した文字起こしをMoviePyに流し込み、<strong>単語ごとに色が変わる動的字幕</strong>を自動生成する。</p>
+      <div class="code-block"><span class="code-lbl">PYTHON — AUTO CAPTIONS</span>
+<pre><span class="imp">import</span> whisper
+<span class="imp">from</span> moviepy.editor <span class="imp">import</span> VideoFileClip, TextClip, CompositeVideoClip
+
+<span class="cm"># Whisperで文字起こし</span>
+model = whisper.<span class="fn">load_model</span>(<span class="st">"base"</span>)
+result = model.<span class="fn">transcribe</span>(<span class="st">"video.mp4"</span>, word_timestamps=<span class="kw">True</span>)
+
+clip = <span class="fn">VideoFileClip</span>(<span class="st">"video.mp4"</span>)
+subtitles = []
+
+<span class="kw">for</span> seg <span class="kw">in</span> result[<span class="st">'segments'</span>]:
+  txt = <span class="fn">TextClip</span>(
+    seg[<span class="st">'text'</span>], fontsize=<span class="nm">40</span>,
+    color=<span class="st">'yellow'</span>, stroke_color=<span class="st">'black'</span>, stroke_width=<span class="nm">2</span>
+  ).<span class="fn">set_start</span>(seg[<span class="st">'start'</span>]).<span class="fn">set_end</span>(seg[<span class="st">'end'</span>])
+  txt = txt.<span class="fn">set_position</span>((<span class="st">'center'</span>, <span class="st">'bottom'</span>))
+  subtitles.<span class="fn">append</span>(txt)
+
+final = <span class="fn">CompositeVideoClip</span>([clip] + subtitles)
+final.<span class="fn">write_videofile</span>(<span class="st">"captioned.mp4"</span>)</pre></div>
+      <div class="cmd" onclick="copyCmd(this,'pip3 install openai-whisper')"><code>pip3 install openai-whisper</code><button class="cmd-copy">COPY</button></div>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="chk"></div>whisperをインストールした</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>自分の動画に字幕を自動生成した</li>
+        <li onclick="toggleCheck(this)"><div class="chk"></div>🎉 CH.04 完了！</li>
+      </ul>
+      <div class="step-footer"><button class="sf-btn" onclick="prevStep(4)">← PREV</button><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">STEP 5 / 5</span><a href="chapter5.html" class="sf-btn primary" onclick="markComplete('ch4')">第5章へ進む →</a></div>
+    </div>
+
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sc-title">// YOUR PROGRESS</div>
+      <div class="overall-bar"><div class="overall-fill" id="overallBar" style="width:0%"></div></div>
+      <div class="overall-pct" id="overallPct">0%</div>
+      <div class="tracker-steps">
+        <div class="tracker-item active" onclick="goStep(0)"><span>⚙️</span>環境構築</div>
+        <div class="tracker-item" onclick="goStep(1)"><span>✂️</span>基本編集</div>
+        <div class="tracker-item" onclick="goStep(2)"><span>✍️</span>テキスト合成</div>
+        <div class="tracker-item" onclick="goStep(3)"><span>📊</span>大量生成</div>
+        <div class="tracker-item" onclick="goStep(4)"><span>💬</span>自動字幕</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentStep=0;const TOTAL=5;
+  function goStep(n){document.getElementById('step'+currentStep).classList.remove('active');currentStep=n;document.getElementById('step'+currentStep).classList.add('active');updateNav();window.scrollTo({top:document.querySelector('.ch-hero').offsetTop-80,behavior:'smooth'});}
+  function nextStep(n){if(n<TOTAL-1)goStep(n+1);}
+  function prevStep(n){if(n>0)goStep(n-1);}
+  function updateNav(){
+    document.querySelectorAll('.snav-item').forEach((el,i)=>{el.classList.remove('active','done');if(i<currentStep)el.classList.add('done');if(i===currentStep)el.classList.add('active');});
+    document.querySelectorAll('.tracker-item').forEach((el,i)=>{el.classList.remove('active','done');if(i<currentStep)el.classList.add('done');if(i===currentStep)el.classList.add('active');});
+    for(let i=0;i<TOTAL;i++){document.getElementById('dot'+i).textContent=i<currentStep?'✓':i+1;}
+    const pct=Math.round((currentStep/(TOTAL-1))*100);
+    document.getElementById('topProg').style.width=(34+pct*0.66)+'%';
+    document.getElementById('overallBar').style.width=pct+'%';
+    document.getElementById('overallPct').textContent=pct+'%';
+  }
+  function toggleCheck(el){el.classList.toggle('checked');}
+  function copyCmd(el,text){const btn=el.querySelector('.cmd-copy');navigator.clipboard.writeText(text).then(()=>{btn.textContent='COPIED!';btn.classList.add('copied');setTimeout(()=>{btn.textContent='COPY';btn.classList.remove('copied');},1800);});}
+  function markComplete(ch){const p=JSON.parse(localStorage.getItem('videoCourseProgress')||'{}');p[ch]=true;localStorage.setItem('videoCourseProgress',JSON.stringify(p));}
+
+  function generateMPPrompt() {
+    const task = document.getElementById('mp-task').value || 'タスク未選択';
+    const inp = document.getElementById('mp-input').value.trim() || 'input.mp4';
+    const detail = document.getElementById('mp-detail').value.trim();
+    const out = document.getElementById('mp-output').value.trim() || 'output.mp4';
+    const detailPart = detail ? `詳細条件：${detail}。` : '';
+    const prompt = `MoviePyを使ったPythonスクリプトを書いてください。
+
+【やりたいこと】
+${task}
+
+【入力ファイル】
+${inp}
+
+${detailPart}
+
+【出力】
+${out} として保存する
+
+【要件】
+・Python 3のMoviePyライブラリを使う（from moviepy.editor import ...）
+・スクリプトをそのまま実行できる完全なコードにする
+・処理の進捗をprint()で表示する
+・エラーが起きやすい箇所にはtry/exceptを入れる
+・コード冒頭に必要なライブラリのインストールコマンドをコメントで記載する
+
+完全なPythonスクリプトを出力してください。`;
+    document.getElementById('pg-mp-text').textContent = prompt;
+    const o = document.getElementById('pg-mp-out');
+    o.classList.add('show');
+    o.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+  function copyPrompt(textId, btnId) {
+    const text = document.getElementById(textId).textContent;
+    const btn = document.getElementById(btnId);
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED! ✓'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'COPY PROMPT'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+</script>
+</body>
+</html>

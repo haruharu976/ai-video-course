@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>受講前セットアップガイド | AI VIDEO MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060810;--card:#0c1020;--accent:#00d4ff;--accent2:#ff6b35;--gold:#f5c518;--green:#00e676;--purple:#a78bfa;--text:#f0f2f8;--muted:#a8b4cc;--border:rgba(0,212,255,.15);}
+  html{background:#060810;color-scheme:dark;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg)!important;color:var(--text)!important;font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+
+  header{position:sticky;top:0;z-index:100;padding:14px 24px;background:rgba(6,8,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);}
+  .logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:3px;text-decoration:none;}
+  .hbtn{padding:6px 14px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
+  .hbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .hbtn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:700;}
+
+  .hero{position:relative;z-index:1;padding:56px 24px 36px;max-width:860px;margin:0 auto;}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,107,53,.3);background:rgba(255,107,53,.06);padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent2);letter-spacing:3px;margin-bottom:16px;}
+  h1.page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,5vw,48px);letter-spacing:2px;line-height:1.1;margin-bottom:14px;word-break:keep-all;overflow-wrap:normal;}
+  .page-lead{font-size:14px;color:var(--muted);line-height:1.9;max-width:580px;}
+
+  .wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:24px 24px 80px;}
+
+  /* セクション */
+  .sec{margin-bottom:48px;}
+  .sec-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .sec-icon{font-size:20px;}
+  .sec-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;}
+  h2.sec-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);word-break:keep-all;overflow-wrap:normal;}
+
+  p.body{color:var(--muted);font-size:14px;line-height:1.85;margin-bottom:14px;}
+  p.body strong{color:var(--text);}
+
+  /* 警告・注意ボックス */
+  .alert{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;margin:14px 0;border-left:3px solid var(--accent2);background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.2);border-left:3px solid var(--accent2);}
+  .alert-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+  .alert-body{}
+  .alert-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent2);letter-spacing:2px;margin-bottom:5px;}
+  .alert-text{font-size:13px;color:#c8906a;line-height:1.7;}
+  .alert-text strong{color:var(--text);}
+
+  .tip{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;margin:14px 0;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);}
+  .tip-icon{font-size:16px;flex-shrink:0;}
+  .tip-body{}
+  .tip-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:5px;}
+  .tip-text{font-size:13px;color:var(--muted);line-height:1.7;}
+  .tip-text strong{color:var(--text);}
+
+  /* .mdファイル表示 */
+  .md-wrap{background:#070d1a;border:1px solid rgba(0,212,255,.12);border-top:2px solid var(--accent);margin:16px 0;position:relative;}
+  .md-header{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(0,212,255,.08);}
+  .md-filename{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:1px;}
+  .md-save-hint{font-size:11px;color:var(--muted);}
+  .md-body{padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:#c4cde0;white-space:pre-wrap;overflow-x:auto;}
+  .md-footer{display:flex;gap:8px;padding:10px 16px;border-top:1px solid rgba(0,212,255,.08);}
+  .md-btn{padding:6px 14px;border:1px solid rgba(0,212,255,.25);background:transparent;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .md-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .md-btn.copied{color:var(--green);border-color:var(--green);}
+
+  /* ジェネレーター */
+  .gen-wrap{background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.18);margin:18px 0;overflow:hidden;}
+  .gen-head{padding:12px 16px;border-bottom:1px solid rgba(0,212,255,.1);display:flex;align-items:center;gap:10px;}
+  .gen-head-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;}
+  .gen-fields{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .gen-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+  .gen-input{width:100%;background:#060c18;border:1px solid rgba(0,212,255,.15);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:9px 12px;outline:none;transition:border-color .2s;}
+  .gen-input:focus{border-color:rgba(0,212,255,.5);}
+  .gen-input::placeholder{color:rgba(255,255,255,.2);}
+  .gen-select{width:100%;background:#060c18;border:1px solid rgba(0,212,255,.15);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:13px;padding:9px 12px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;}
+  .gen-btn{margin:0 16px 14px;width:calc(100% - 32px);padding:11px;background:var(--accent);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;border:none;cursor:pointer;transition:background .2s;}
+  .gen-btn:hover{background:#00b8e0;}
+
+  /* チェックリスト */
+  .checklist{list-style:none;margin:14px 0;}
+  .checklist li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--muted);line-height:1.65;cursor:pointer;}
+  .checklist li:last-child{border-bottom:none;}
+  .chk{width:18px;height:18px;flex-shrink:0;border:1.5px solid rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;}
+  .checklist li.checked .chk{background:var(--green);border-color:var(--green);}
+  .checklist li.checked .chk::after{content:'✓';font-size:11px;color:#000;font-weight:700;}
+  .checklist li.checked{opacity:.6;text-decoration:line-through;}
+  .chk-text strong{color:var(--text);}
+
+  /* ツール対応表 */
+  .tool-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12px;}
+  .tool-table th{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--accent);padding:8px 12px;border-bottom:2px solid var(--border);text-align:left;}
+  .tool-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top;}
+  .tool-table tr:last-child td{border-bottom:none;}
+  .tool-table td:first-child{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:11px;white-space:nowrap;}
+  .tool-table td strong{color:var(--text);}
+  .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;margin-right:4px;}
+  .b-req{background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.3);color:#ff9970;}
+  .b-opt{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);color:var(--accent);}
+
+  code{font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:.9em;background:rgba(0,212,255,.08);padding:1px 5px;}
+
+  /* ─── 親サイトリンク ─── */
+  .top-link{
+    display:block;width:100%;
+    background:rgba(99,102,241,.08);
+    border-bottom:1px solid rgba(99,102,241,.2);
+    padding:7px 24px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
+    transition:background .2s;
+  }
+  .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+  .top-link-arrow{margin-right:6px;}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="top-link"><span class="top-link-arrow">←</span> 動画コース一覧へ戻る</a>
+<header>
+  <a href="index.html" class="logo">AI/VIDEO_MASTER</a>
+  <a href="index.html" class="hbtn primary">← コース一覧へ</a>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">⚠ BEFORE YOU START</div>
+  <h1 class="page-title">受講前<br>セットアップガイド</h1>
+  <p class="page-lead">このガイドを読んでから講義に入ること。<br>環境・ファイル・注意点を事前に把握しておくことで、ワーク中に詰まる時間をゼロにできる。</p>
+</div>
+
+<div class="wrap">
+
+  <!-- ─── 1. 注意ポイント ─── -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-icon">⚠️</span>
+      <div>
+        <div class="sec-label">// CAUTION</div>
+        <h2 class="sec-title">受講前に知っておくべき注意点</h2>
+      </div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-icon">🔑</span>
+      <div>
+        <div class="alert-label">APIキーは絶対にコードに直書きしない</div>
+        <div class="alert-text">OpenAI APIキーやAWS認証情報を <code>.js</code> や <code>.py</code> ファイルに直接書くと、GitHubにpushした瞬間に世界中に公開される。<strong>必ず <code>.env</code> ファイルに書いて、<code>.gitignore</code> に追加する。</strong></div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-icon">🗑️</span>
+      <div>
+        <div class="alert-label">AIが生成したコードをすぐに本番環境で実行しない</div>
+        <div class="alert-text">特にExtendScriptとMoviePyは<strong>ファイルの上書き・削除</strong>を行う可能性がある。必ずテスト用のコピーフォルダで試してから本番素材に適用する。</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-icon">💸</span>
+      <div>
+        <div class="alert-label">AWS Lambdaのコスト管理（CH.02 Remotion）</div>
+        <div class="alert-text">Remotionのクラウドレンダリング（Lambda）はAWSの従量課金。<strong>上限アラートを必ず設定</strong>してから使い始める。ローカルレンダリングのみなら追加費用ゼロ。最初はローカルで動作確認を完了させること。</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-icon">🤖</span>
+      <div>
+        <div class="alert-label">AIのハルシネーション（存在しない関数を書くことがある）</div>
+        <div class="alert-text">CodexやClaudeが<strong>存在しないMoviePyのメソッドやAEのエクスプレッション関数</strong>を生成することがある。エラーが出たらそのエラーメッセージをそのままAIに「このエラーを修正して」と渡すデバッグループを習慣にする。</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-icon">📁</span>
+      <div>
+        <div class="alert-label">AGENTS.md の使い分け</div>
+        <div class="alert-text">このコースでは<strong><code>AGENTS.md</code>をプロジェクトのルートに保存する。</strong>Codexが自動で読み込み、毎回ルールを守った状態でコードを生成してくれる。<br>※ Claude Codeを使う場合は同じ内容を <code>CLAUDE.md</code> として保存する。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 2. ツール対応表 ─── -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-icon">🗺️</span>
+      <div>
+        <div class="sec-label">// TOOLS MAP</div>
+        <h2 class="sec-title">チャプター別ツール対応表</h2>
+      </div>
+    </div>
+    <p class="body">各チャプターで使うツールと、事前に必要な準備を確認しておこう。</p>
+    <table class="tool-table">
+      <thead>
+        <tr><th>CHAPTER</th><th>使うツール</th><th>事前準備</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CH.02<br>Remotion</td>
+          <td><span class="badge b-req">必須</span>Node.js v16以上<br><span class="badge b-req">必須</span>npmまたはpnpm<br><span class="badge b-opt">推奨</span>Codex<br><span class="badge b-opt">推奨</span>VS Code</td>
+          <td><code>node -v</code> でバージョン確認<br>エディタにAI拡張機能をインストール<br>Remotionライセンス確認（個人は無料）</td>
+        </tr>
+        <tr>
+          <td>CH.03<br>After Effects</td>
+          <td><span class="badge b-req">必須</span>After Effects 2022以降<br><span class="badge b-opt">推奨</span>Codex（コード生成用）</td>
+          <td>AEを起動して動作確認<br>スクリプトの実行許可をオンに：<br>AE環境設定 → スクリプト →「ファイルへの書き込みとネットワークへのアクセスを許可」</td>
+        </tr>
+        <tr>
+          <td>CH.04<br>MoviePy</td>
+          <td><span class="badge b-req">必須</span>Python 3.8以上<br><span class="badge b-req">必須</span>pip<br><span class="badge b-req">必須</span>moviepy<br><span class="badge b-req">必須</span>ImageMagick（テキスト描画）<br><span class="badge b-opt">推奨</span>openai-whisper（字幕）</td>
+          <td><code>python3 --version</code> 確認<br><code>pip3 install moviepy</code><br><code>brew install imagemagick</code>（Mac）<br>テスト用MP4を1本用意しておく</td>
+        </tr>
+        <tr>
+          <td>CH.05<br>AIエージェント</td>
+          <td><span class="badge b-req">必須</span>Python 3.8以上<br><span class="badge b-req">必須</span>OpenAI APIキー<br><span class="badge b-req">必須</span>openai Pythonライブラリ<br><span class="badge b-opt">推奨</span>CH.02〜04の修了</td>
+          <td>OpenAI APIキーを <strong>platform.openai.com</strong> で取得<br><code>pip3 install openai</code><br><code>.env</code> ファイルを作成してAPIキーを保管</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ─── 3. .env ファイル ─── -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-icon">🔐</span>
+      <div>
+        <div class="sec-label">// SECURITY</div>
+        <h2 class="sec-title">.env ファイルの作り方（必須）</h2>
+      </div>
+    </div>
+    <p class="body">CH.05でClaude APIを使う前に、<strong>必ずこの手順でAPIキーを管理する。</strong></p>
+
+    <div class="md-wrap">
+      <div class="md-header">
+        <span class="md-filename">.env</span>
+        <span class="md-save-hint">プロジェクトのルートフォルダに保存</span>
+      </div>
+      <div class="md-body" id="env-content">ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxxxxxxx
+
+# AWS Lambda（Remotion クラウドレンダリング用・任意）
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_REGION=ap-northeast-1</div>
+      <div class="md-footer">
+        <button class="md-btn" onclick="copyMd('env-content', this)">COPY</button>
+      </div>
+    </div>
+
+    <div class="md-wrap">
+      <div class="md-header">
+        <span class="md-filename">.gitignore</span>
+        <span class="md-save-hint">同じフォルダに保存（GitHubへの流出防止）</span>
+      </div>
+      <div class="md-body" id="gitignore-content"># 絶対にGitにコミットしないファイル
+.env
+.env.local
+.env.production
+
+# 出力ファイル（大容量）
+out/
+*.mp4
+*.mov
+__pycache__/
+node_modules/</div>
+      <div class="md-footer">
+        <button class="md-btn" onclick="copyMd('gitignore-content', this)">COPY</button>
+      </div>
+    </div>
+
+    <div class="tip">
+      <span class="tip-icon">💡</span>
+      <div>
+        <div class="tip-label">Pythonでの読み込み方</div>
+        <div class="tip-text"><code>pip3 install python-dotenv</code> でライブラリをインストール後、スクリプト冒頭に以下を追加：<br><code>from dotenv import load_dotenv; load_dotenv()</code><br>これで <code>os.environ["ANTHROPIC_API_KEY"]</code> で安全に読み込める。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 4. AGENTS.md ジェネレーター ─── -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-icon">📄</span>
+      <div>
+        <div class="sec-label">// SETUP FILES</div>
+        <h2 class="sec-title">AGENTS.md を作る</h2>
+      </div>
+    </div>
+    <p class="body">このファイルをプロジェクトのルートに置くと、<strong>CodexやCodexが毎回自動で読み込み</strong>、あなたのプロジェクトのルールを理解した状態で動いてくれる。講義中のワークでも必ず使う。</p>
+
+    <div class="tip">
+      <span class="tip-icon">📌</span>
+      <div>
+        <div class="tip-label">どちらのファイル名で保存するか</div>
+        <div class="tip-text">このコースでは <strong><code>AGENTS.md</code></strong> として保存する。プロジェクトのルートに置くだけでCodexが自動で読み込む。</div>
+      </div>
+    </div>
+
+    <div class="gen-wrap">
+      <div class="gen-head">
+        <span style="font-size:16px;">⚙️</span>
+        <span class="gen-head-title">AGENTS.md ジェネレーター</span>
+      </div>
+      <div class="gen-fields">
+        <div>
+          <div class="gen-label">プロジェクト名・目的</div>
+          <input class="gen-input" id="md-project" placeholder="例：AI動画自動生成システム、SNSショート動画量産パイプライン" />
+        </div>
+        <div>
+          <div class="gen-label">主に使うツール・言語</div>
+          <select class="gen-select" id="md-tool">
+            <option value="Remotion（React/TypeScript）">CH.02 — Remotion（React/TypeScript）</option>
+            <option value="After Effects（Expression / ExtendScript）">CH.03 — After Effects（Expression/ExtendScript）</option>
+            <option value="Python（MoviePy）">CH.04 — Python（MoviePy）</option>
+            <option value="Python（OpenAI Codex / AIエージェント）">CH.05 — Python（Claude API/エージェント）</option>
+            <option value="Remotion・MoviePy・Claude APIすべて">全チャプター横断（全ツール）</option>
+          </select>
+        </div>
+        <div>
+          <div class="gen-label">出力先・保存先のルール（任意）</div>
+          <input class="gen-input" id="md-output" placeholder="例：完成動画はout/フォルダに保存、ファイル名は日付_タイトル形式" />
+        </div>
+        <div>
+          <div class="gen-label">コードの注意点・禁止事項（任意）</div>
+          <input class="gen-input" id="md-rules" placeholder="例：APIキーは.envから読む、本番素材を直接上書きしない" />
+        </div>
+      </div>
+      <button class="gen-btn" onclick="generateMd()">⚡ AGENTS.md を生成する</button>
+      <div id="md-output-wrap" style="display:none;">
+        <div class="md-wrap" style="margin:0 16px 14px;">
+          <div class="md-header">
+            <span class="md-filename">AGENTS.md</span>
+            <span class="md-save-hint">プロジェクトのルートに配置</span>
+          </div>
+          <div class="md-body" id="generated-md"></div>
+          <div class="md-footer">
+            <button class="md-btn" onclick="copyMd('generated-md', this)">COPY</button>
+            <span style="font-size:11px;color:var(--muted);margin-left:8px;">コピー → ルートフォルダに AGENTS.md の両方で保存</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── 5. 事前チェックリスト ─── -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-icon">✅</span>
+      <div>
+        <div class="sec-label">// PRE-FLIGHT CHECK</div>
+        <h2 class="sec-title">受講前チェックリスト</h2>
+      </div>
+    </div>
+    <p class="body">講義開始前にすべてにチェックが入っている状態にしておこう。</p>
+    <ul class="checklist">
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>ターミナル（Mac）またはコマンドプロンプト（Windows）が開ける</strong></div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>node -v</strong> でv16以上が表示される（CH.02用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>python3 --version</strong> で3.8以上が表示される（CH.04・05用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>pip3 install moviepy</strong> が完了している（CH.04用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>After Effects</strong> が起動できる（CH.03用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>OpenAI APIキー</strong> を取得して .env に保存済み（CH.05用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>VS Code または任意のエディタ</strong> がインストールされている</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>テスト用のMP4ファイル</strong> を1本用意している（CH.04用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text">APIキーは <strong>.env に保存</strong>し、<strong>.gitignore に .env を追加</strong>している</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text">AGENTS.md をプロジェクトフォルダに作成した</div></li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+function toggleCheck(el){ el.classList.toggle('checked'); }
+
+function copyMd(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'COPIED! ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function generateMd() {
+  const project = document.getElementById('md-project').value.trim() || 'AI動画制作プロジェクト';
+  const tool = document.getElementById('md-tool').value;
+  const output = document.getElementById('md-output').value.trim();
+  const rules = document.getElementById('md-rules').value.trim();
+  const outputPart = output ? `\n## 出力ルール\n- ${output}` : '';
+  const rulesPart = rules ? `\n## 禁止事項・注意点\n- ${rules}\n- APIキーや認証情報は必ず .env から読み込む（コードに直書き禁止）\n- 生成したコードは必ずテスト環境で確認してから本番素材に適用する` : `\n## 禁止事項・注意点\n- APIキーや認証情報は必ず .env から読み込む（コードに直書き禁止）\n- 生成したコードは必ずテスト環境で確認してから本番素材に適用する\n- 大量ループ処理の前に必ず小規模テストを行う`;
+
+  const md = `# ${project}
+
+## プロジェクト概要
+このプロジェクトは「${project}」を目的としたAI動画制作システムです。
+
+## 主な技術スタック
+- ${tool}
+- AIコーディングエージェント（Codex）と連携して開発する
+${outputPart}
+
+## コーディングルール
+- コードは日本語コメント付きで出力する
+- 関数には必ず処理の概要をコメントで記載する
+- エラーハンドリングを必ず入れる（try/exceptまたはtry/catch）
+- 処理の進捗はprint()またはconsole.log()で出力する
+- ファイルパスはハードコードせず変数や引数で渡す
+${rulesPart}
+
+## AIエージェントへの指示
+- 一度にすべてのコードを生成せず、ステップごとに確認しながら進める
+- エラーが出た場合はエラーメッセージをそのまま渡して修正を依頼する
+- 完成したコードは必ずテスト用ファイルで動作確認してから本番に適用する
+- 不明な点は「〇〇の意図は何ですか？」と質問してから実装する`;
+
+  document.getElementById('generated-md').textContent = md;
+  document.getElementById('md-output-wrap').style.display = 'block';
+  document.getElementById('md-output-wrap').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+</script>
+</body>
+</html>
