@@ -232,6 +232,22 @@
   }
   .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
   .top-link-arrow{margin-right:6px;}
+
+  /* エラー相談ボックス */
+  .error-help{margin:32px 0;border:1px solid rgba(167,139,250,.25);background:rgba(167,139,250,.05);overflow:hidden;}
+  .error-help-head{padding:12px 18px;background:rgba(167,139,250,.1);border-bottom:1px solid rgba(167,139,250,.2);display:flex;align-items:center;gap:10px;}
+  .error-help-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:#a78bfa;letter-spacing:2px;}
+  .error-help-body{padding:18px;}
+  .error-help-desc{font-size:13px;color:#a8b4cc;line-height:1.85;margin-bottom:14px;}
+  .error-help-desc strong{color:#f0f2f8;}
+  .error-copy-wrap{background:#070d1a;border:1px solid rgba(167,139,250,.15);padding:14px 16px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c4cde0;line-height:1.9;}
+  .error-copy-label{font-size:9px;color:#a78bfa;letter-spacing:2px;margin-bottom:8px;}
+  .error-copy-btn{margin-top:10px;padding:5px 14px;border:1px solid rgba(167,139,250,.3);background:transparent;color:#a78bfa;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .error-copy-btn:hover{border-color:#a78bfa;background:rgba(167,139,250,.1);}
+  .error-copy-btn.copied{color:#00e676;border-color:#00e676;}
+  .ai-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .ai-link{padding:8px 16px;border:1px solid rgba(167,139,250,.25);background:transparent;color:#a78bfa;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
+  .ai-link:hover{background:rgba(167,139,250,.1);border-color:#a78bfa;}
 </style>
 </head>
 <body>
@@ -636,6 +652,33 @@ timeToFrames(time)
     </div>
   </div>
 </div>
+
+  <div class="error-help">
+    <div class="error-help-head">
+      <span style="font-size:16px;">🆘</span>
+      <span class="error-help-title">エラーが出たら AI に相談する</span>
+    </div>
+    <div class="error-help-body">
+      <p class="error-help-desc"><strong>エラーメッセージをそのままコピー</strong>して、以下のテンプレートでAIに質問するだけでほぼ解決できます。</p>
+      <div class="error-copy-wrap">
+        <div class="error-copy-label">// TEMPLATE</div>
+        <div id="error-tmpl-ch3">このChapterの作業中に以下のエラーが出ました。解決方法を教えてください。
+
+【環境】
+- OS: Mac（またはWindows）
+- 実行したコマンドまたは操作: （ここに書く）
+
+【エラーメッセージ】
+（ターミナルまたはエディタのエラー全文をここに貼り付ける）</div>
+        <button class="error-copy-btn" onclick="copyErrTmpl('error-tmpl-ch3', this)">COPY TEMPLATE</button>
+      </div>
+      <p class="error-help-desc">コピー後、以下のAIに送信：</p>
+      <div class="ai-links">
+        <a class="ai-link" href="https://claude.ai" target="_blank" rel="noopener">→ Claude で相談</a>
+        <a class="ai-link" href="https://chatgpt.com" target="_blank" rel="noopener">→ ChatGPT で相談</a>
+      </div>
+    </div>
+  </div>
 
 <script>
   let currentStep=0;const TOTAL=5;

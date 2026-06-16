@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>AI動画制作マスターコース</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#060810;--bg2:#0c1020;--accent:#00d4ff;--accent2:#ff6b35;--gold:#f5c518;--green:#00e676;--text:#f0f2f8;--muted:#a8b4cc;--border:rgba(0,212,255,.15);--card:#0c1020;}
+  html{background:#060810;color-scheme:dark;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg)!important;color:var(--text)!important;font-family:'Noto Sans JP',sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+  .orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;}
+  .orb1{width:500px;height:500px;background:rgba(0,212,255,.08);top:-150px;left:-80px;}
+  .orb2{width:400px;height:400px;background:rgba(255,107,53,.07);bottom:-80px;right:-60px;}
+
+  header{position:relative;z-index:10;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(6,8,16,.98);}
+  .logo{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:3px;}
+  .logo em{color:#3a4060;font-style:normal;}
+  nav a{color:var(--muted);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;margin-left:24px;letter-spacing:1px;transition:color .2s;}
+  nav a:hover{color:var(--accent);}
+
+  /* HERO */
+  .hero{position:relative;z-index:1;padding:64px 28px 48px;max-width:1000px;margin:0 auto;}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:rgba(0,212,255,.06);padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;margin-bottom:28px;}
+  .hero-tag::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 2s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,96px);line-height:.92;letter-spacing:3px;margin-bottom:24px;}
+  .h1-plain{display:block;color:var(--text);}
+  .h1-outline{display:block;color:transparent;-webkit-text-stroke:2px var(--accent);}
+  .h1-fill{display:block;color:var(--accent2);text-shadow:0 0 40px rgba(255,107,53,.4);}
+  .hero-desc{color:var(--muted);font-size:14px;line-height:1.9;max-width:480px;margin-bottom:40px;}
+  .stats{display:flex;gap:40px;margin-bottom:56px;border-left:2px solid var(--border);padding-left:24px;}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--accent);line-height:1;}
+  .stat-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:3px;}
+
+  /* ─── 受講前提条件セクション ─── */
+  .prereq-wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 28px 48px;}
+  .section-title-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .sec-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent2);letter-spacing:3px;}
+  h2.sec-h{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--text);}
+
+  .prereq-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:16px;}
+  @media(max-width:640px){.prereq-grid{grid-template-columns:1fr;}}
+
+  .prereq-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:20px;}
+  .prereq-card.required{border-top:2px solid var(--accent2);}
+  .prereq-card.optional{border-top:2px solid rgba(0,212,255,.4);}
+  .prereq-type{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;margin-bottom:10px;}
+  .req-label{color:var(--accent2);}
+  .opt-label{color:var(--accent);}
+  .prereq-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;}
+  .prereq-desc{font-size:12px;color:var(--muted);line-height:1.75;}
+  .prereq-desc strong{color:var(--text);}
+
+  .notice-box{background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.2);border-left:3px solid var(--accent2);padding:16px 20px;margin-top:4px;}
+  .notice-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent2);letter-spacing:2px;margin-bottom:8px;}
+  .notice-text{font-size:13px;color:#c8906a;line-height:1.75;}
+  .notice-list{list-style:none;margin-top:8px;}
+  .notice-list li{font-size:12px;color:var(--muted);padding:4px 0;display:flex;align-items:flex-start;gap:8px;}
+  .notice-list li::before{content:'×';color:var(--accent2);font-weight:700;flex-shrink:0;}
+
+  /* ─── COURSE GRID ─── */
+  .sec-label{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:4px;padding:0 28px;max-width:1000px;margin:0 auto 20px;}
+  .grid{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 28px 80px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px;}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+
+  .card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid rgba(255,255,255,.06);padding:24px;position:relative;overflow:hidden;transition:border-color .3s,transform .2s;}
+  .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+  .card:hover{border-color:rgba(0,212,255,.35);transform:translateY(-2px);}
+  .card:hover::after{transform:scaleX(1);}
+  .card-featured{grid-column:span 2;border-color:rgba(0,212,255,.15);background:linear-gradient(135deg,rgba(0,212,255,.05),var(--card));}
+  @media(max-width:640px){.card-featured{grid-column:span 1;}}
+
+  /* カードの「ゴール」タグ */
+  .card-goal{background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);padding:8px 12px;margin-bottom:14px;font-size:12px;color:#69f0ae;line-height:1.6;}
+  .card-goal::before{content:'🎯 ゴール：';font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);letter-spacing:1px;display:block;margin-bottom:3px;}
+
+  .card-badge{display:inline-block;background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.3);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;margin-bottom:12px;}
+  .card-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:10px;}
+  .card-icon{font-size:24px;display:block;margin-bottom:8px;}
+  .card-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;line-height:1.05;margin-bottom:8px;}
+  .card-title-dark{color:var(--text);}
+  .card-title-outline{color:transparent;-webkit-text-stroke:1.5px var(--accent);}
+  .card-tech{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1px;margin-bottom:10px;}
+  .card-desc{font-size:12px;color:var(--muted);line-height:1.75;}
+  .card-arrow{position:absolute;bottom:18px;right:18px;color:var(--accent);font-size:16px;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s;}
+  .card:hover .card-arrow{opacity:1;transform:translateX(0);}
+  .card-dimmed{opacity:.35;pointer-events:none;}
+
+  /* prereq badges on cards */
+  .card-prereq{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;}
+  .prereq-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:2px;}
+  .pt-req{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:#ff9970;}
+  .pt-opt{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);color:var(--accent);}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(6,8,16,.98);}
+  footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;}
+
+  .fade{opacity:0;transform:translateY(16px);animation:fu .6s ease forwards;}
+  @keyframes fu{to{opacity:1;transform:translateY(0);}}
+  .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}
+
+  /* 文字切れ防止 */
+  .h1-plain,.h1-outline,.h1-fill,
+  .t-solid,.t-outline,.t-fill {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    white-space: normal;
+  }
+  h1.ch-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+  }
+
+  /* ─── 親サイトリンク ─── */
+  .top-link{
+    display:block;width:100%;
+    background:rgba(99,102,241,.08);
+    border-bottom:1px solid rgba(99,102,241,.2);
+    padding:7px 24px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;
+    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
+    transition:background .2s;
+  }
+  .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+  .top-link-arrow{margin-right:6px;}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<a href="https://ai-workshop-guide-wheat.vercel.app" class="top-link" target="_blank"><span class="top-link-arrow">←</span> AI社員講座トップへ戻る</a>
+<header>
+  <div class="logo">AI<em>/</em>VIDEO<em>_</em>MASTER</div>
+  <nav><a href="#">コース概要</a><a href="#">進捗</a></nav>
+</header>
+
+<section class="hero">
+  <div class="hero-tag fade">VIDEO PRODUCTION × AI CODEX</div>
+  <h1 class="fade d1">
+    <span class="h1-plain">AI動画制作</span>
+    <span class="h1-outline">MASTER</span>
+    <span class="h1-fill">COURSE</span>
+  </h1>
+  <p class="hero-desc fade d2">Remotion・After Effects・MoviePyをAIコーディングで掌握する。<br>コードで映像を語る、次世代クリエイターへの道。</p>
+  <div class="stats fade d3">
+    <div><div class="stat-num">4</div><div class="stat-label">CHAPTERS</div></div>
+    <div><div class="stat-num">3</div><div class="stat-label">TOOLS</div></div>
+    <div><div class="stat-num">∞</div><div class="stat-label">POSSIBILITY</div></div>
+  </div>
+</section>
+
+<!-- ─── 受講前提条件 ─── -->
+<div class="prereq-wrap fade d3">
+  <div class="section-title-row">
+    <span class="sec-badge">⚠ PREREQUISITES</span>
+    <h2 class="sec-h">受講前に確認してください</h2>
+  </div>
+
+  <div class="prereq-grid">
+    <div class="prereq-card required">
+      <div class="prereq-type req-label">// 必須スキル・環境</div>
+      <div class="prereq-title">PCの基本操作・ターミナル</div>
+      <div class="prereq-desc">ファイルの移動・コピー、フォルダ構成の理解。<br>Macのターミナルまたは WindowsのコマンドプロンプトでコマンドをEnterで実行できること。</div>
+    </div>
+    <div class="prereq-card required">
+      <div class="prereq-type req-label">// 必須インストール（CH.02）</div>
+      <div class="prereq-title">Node.js（v18以上）</div>
+      <div class="prereq-desc"><strong>nodejs.org</strong> からLTS版をダウンロード・インストール済みであること。<br>ターミナルで <code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">node -v</code> を実行してバージョンが表示されること。</div>
+    </div>
+    <div class="prereq-card required">
+      <div class="prereq-type req-label">// 必須インストール（CH.04）</div>
+      <div class="prereq-title">Python 3.8以上</div>
+      <div class="prereq-desc"><strong>python.org</strong> からPython 3をダウンロード・インストール済みであること。<br>ターミナルで <code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">python3 --version</code> が表示されること。<br>pipも合わせてインストールされていること。</div>
+    </div>
+    <div class="prereq-card required">
+      <div class="prereq-type req-label">// 必須インストール（CH.03）</div>
+      <div class="prereq-title">Adobe After Effects</div>
+      <div class="prereq-desc">Adobe Creative Cloudよりインストール済みであること。<br>バージョンは2022以降を推奨。<br>（7日間無料トライアルあり）</div>
+    </div>
+    <div class="prereq-card optional">
+      <div class="prereq-type opt-label">// あると望ましい</div>
+      <div class="prereq-title">AIコーディングエージェント</div>
+      <div class="prereq-desc">Codex・Cursorなどのいずれか1つ。<br>CH.02〜05で活用する。有料プランが必要な場合あり。</div>
+    </div>
+    <div class="prereq-card optional">
+      <div class="prereq-type opt-label">// あると望ましい</div>
+      <div class="prereq-title">テキストエディタ（VS Code推奨）</div>
+      <div class="prereq-desc"><strong>code.visualstudio.com</strong> より無料でインストール可能。<br>コードの確認・編集に使用する。</div>
+    </div>
+  </div>
+
+  <a href="setup-guide.html" style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.25);padding:16px 20px;margin-bottom:12px;text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,230,118,.6)'" onmouseout="this.style.borderColor='rgba(0,230,118,.25)'">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#00e676;letter-spacing:2px;margin-bottom:4px;">📋 SETUP GUIDE</div>
+      <div style="font-size:13px;color:#f0f2f8;font-weight:700;">受講前セットアップガイドを見る</div>
+      <div style="font-size:12px;color:#a8b4cc;margin-top:3px;">注意点・.envの作り方・CLAUDE.md生成・事前チェックリスト</div>
+    </div>
+    <span style="color:#00e676;font-size:20px;">→</span>
+  </a>
+
+  <div class="notice-box">
+    <div class="notice-label">🚫 このコースで扱わないこと</div>
+    <div class="notice-text">以下の内容はこのコースの範囲外です。事前に各自でご準備ください。</div>
+    <ul class="notice-list">
+      <li>Node.js・Pythonのインストール方法・バージョン管理の詳細説明</li>
+      <li>pip・npmなどパッケージマネージャーの基礎説明</li>
+      <li>Adobe Creative Cloudのアカウント作成・インストール手順</li>
+      <li>プログラミング言語（JavaScript・Python）の基礎文法</li>
+      <li>PCのOS設定・ネットワーク環境の構築</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ─── COURSE CHAPTERS ─── -->
+<div class="sec-label fade d4">// COURSE CHAPTERS</div>
+<div class="grid">
+
+  <a href="chapter2.html" class="card card-featured fade">
+    <div class="card-badge">⚡ まずここから</div>
+    <div class="card-num">CHAPTER 02</div>
+    <span class="card-icon">⚛️</span>
+    <div class="card-title">
+      <span class="card-title-dark">REMOTION</span>
+      <span class="card-title-outline"> × CODEX</span>
+    </div>
+    <div class="card-tech">remotion · react · typescript · css animation</div>
+    <div class="card-goal">Reactコードで動画を作る仕組みを理解し、自然言語の指示だけでオリジナルのMP4動画を1本出力できる</div>
+    <div class="card-desc">Web技術で動画を作る革命的フレームワーク。セットアップからAIエージェント接続、最初の動画出力まで一緒にやる。</div>
+    <div class="card-prereq">
+      <span class="prereq-tag pt-req">Node.js必須</span>
+      <span class="prereq-tag pt-opt">Codex推奨</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="chapter3.html" class="card fade">
+    <div class="card-num">CHAPTER 03</div>
+    <span class="card-icon">🎬</span>
+    <div class="card-title">
+      <span class="card-title-dark">AFTER</span>
+      <span class="card-title-outline">EFFECTS</span>
+    </div>
+    <div class="card-tech">expression · extendscript · javascript</div>
+    <div class="card-goal">AEのエクスプレッションをゼロから理解し、AIが生成したコードを貼り付けてプロ品質のアニメーションを作れる</div>
+    <div class="card-desc">エクスプレッションとExtendScriptをAI生成で自動化。AE未経験者向けの丁寧な操作ガイド付き。</div>
+    <div class="card-prereq">
+      <span class="prereq-tag pt-req">After Effects必須</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="chapter4.html" class="card fade">
+    <div class="card-num">CHAPTER 04</div>
+    <span class="card-icon">🐍</span>
+    <div class="card-title">
+      <span class="card-title-dark">PYTHON</span>
+      <span class="card-title-outline">MOVIEPY</span>
+    </div>
+    <div class="card-tech">python · moviepy · whisper · csv</div>
+    <div class="card-goal">編集ソフト不要でPythonスクリプトを実行し、テキスト付き動画・自動字幕・CSV連携による動画の量産ができる</div>
+    <div class="card-desc">大量生成・SNS自動化。サーバーサイドで動画を量産するワークフローを構築する。</div>
+    <div class="card-prereq">
+      <span class="prereq-tag pt-req">Python 3.8以上必須</span>
+      <span class="prereq-tag pt-req">pip必須</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="chapter5.html" class="card fade">
+    <div class="card-num">CHAPTER 05</div>
+    <span class="card-icon">🤖</span>
+    <div class="card-title">
+      <span class="card-title-dark">AI AGENT</span>
+      <span class="card-title-outline">SYSTEM</span>
+    </div>
+    <div class="card-tech">claude api · codex · pipeline · automation</div>
+    <div class="card-goal">複数のAIを連携させた「自律型動画制作パイプライン」の設計図を描き、実際に動くプロトタイプを作れる</div>
+    <div class="card-desc">企画・実行・品質管理の3エージェントを連携させ、動画制作の全工程を自動化するアーキテクチャを構築する。</div>
+    <div class="card-prereq">
+      <span class="prereq-tag pt-req">CH.02〜04修了推奨</span>
+      <span class="prereq-tag pt-req">OpenAI APIキー必須</span>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+</div>
+
+<footer>
+  <p>AI VIDEO MASTER COURSE</p>
+  <p>© 2026</p>
+</footer>
+
+<script>
+(function(){
+  const p=JSON.parse(localStorage.getItem('videoCourseProgress')||'{}');
+  const map={ch2:'chapter2',ch3:'chapter3',ch4:'chapter4',ch5:'chapter5'};
+  Object.entries(map).forEach(([k,page])=>{
+    if(p[k]){
+      const a=document.querySelector('a[href="'+page+'.html"]');
+      if(a){
+        const b=document.createElement('div');
+        b.style.cssText='position:absolute;top:10px;right:10px;background:#00e676;color:#000;font-family:"JetBrains Mono",monospace;font-size:9px;padding:2px 7px;font-weight:700;letter-spacing:1px;z-index:2;';
+        b.textContent='✓ DONE';
+        a.style.position='relative';
+        a.appendChild(b);
+      }
+    }
+  });
+  if(p.completed){
+    const tag=document.createElement('a');
+    tag.href='completion.html';
+    tag.style.cssText='position:fixed;bottom:24px;right:24px;z-index:999;background:#00d4ff;color:#060810;font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:2px;padding:12px 22px;font-weight:700;text-decoration:none;box-shadow:0 0 30px rgba(0,212,255,.4);';
+    tag.textContent='🎓 修了証を見る';
+    document.body.appendChild(tag);
+  }
+})();
+</script>
+</body>
+</html>

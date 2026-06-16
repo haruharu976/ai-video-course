@@ -110,6 +110,22 @@
   }
   .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
   .top-link-arrow{margin-right:6px;}
+
+  /* エラー相談ボックス */
+  .error-help{margin:32px 0;border:1px solid rgba(167,139,250,.25);background:rgba(167,139,250,.05);overflow:hidden;}
+  .error-help-head{padding:12px 18px;background:rgba(167,139,250,.1);border-bottom:1px solid rgba(167,139,250,.2);display:flex;align-items:center;gap:10px;}
+  .error-help-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:#a78bfa;letter-spacing:2px;}
+  .error-help-body{padding:18px;}
+  .error-help-desc{font-size:13px;color:#a8b4cc;line-height:1.85;margin-bottom:14px;}
+  .error-help-desc strong{color:#f0f2f8;}
+  .error-copy-wrap{background:#070d1a;border:1px solid rgba(167,139,250,.15);padding:14px 16px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c4cde0;line-height:1.9;}
+  .error-copy-label{font-size:9px;color:#a78bfa;letter-spacing:2px;margin-bottom:8px;}
+  .error-copy-btn{margin-top:10px;padding:5px 14px;border:1px solid rgba(167,139,250,.3);background:transparent;color:#a78bfa;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .error-copy-btn:hover{border-color:#a78bfa;background:rgba(167,139,250,.1);}
+  .error-copy-btn.copied{color:#00e676;border-color:#00e676;}
+  .ai-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .ai-link{padding:8px 16px;border:1px solid rgba(167,139,250,.25);background:transparent;color:#a78bfa;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
+  .ai-link:hover{background:rgba(167,139,250,.1);border-color:#a78bfa;}
 </style>
 </head>
 <body>
@@ -196,7 +212,7 @@
       <tbody>
         <tr>
           <td>CH.02<br>Remotion</td>
-          <td><span class="badge b-req">必須</span>Node.js v16以上<br><span class="badge b-req">必須</span>npmまたはpnpm<br><span class="badge b-opt">推奨</span>Codex<br><span class="badge b-opt">推奨</span>VS Code</td>
+          <td><span class="badge b-req">必須</span>Node.js v18以上<br><span class="badge b-req">必須</span>npmまたはpnpm<br><span class="badge b-opt">推奨</span>Codex<br><span class="badge b-opt">推奨</span>VS Code</td>
           <td><code>node -v</code> でバージョン確認<br>エディタにAI拡張機能をインストール<br>Remotionライセンス確認（個人は無料）</td>
         </tr>
         <tr>
@@ -352,7 +368,7 @@ node_modules/</div>
     <p class="body">講義開始前にすべてにチェックが入っている状態にしておこう。</p>
     <ul class="checklist">
       <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>ターミナル（Mac）またはコマンドプロンプト（Windows）が開ける</strong></div></li>
-      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>node -v</strong> でv16以上が表示される（CH.02用）</div></li>
+      <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>node -v</strong> でv18以上が表示される（CH.02用）</div></li>
       <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>python3 --version</strong> で3.8以上が表示される（CH.04・05用）</div></li>
       <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>pip3 install moviepy</strong> が完了している（CH.04用）</div></li>
       <li onclick="toggleCheck(this)"><div class="chk"></div><div class="chk-text"><strong>After Effects</strong> が起動できる（CH.03用）</div></li>
@@ -364,9 +380,69 @@ node_modules/</div>
     </ul>
   </div>
 
+
+  <!-- ─── 6. エラーが出たときは ─── -->
+  <div class="sec">
+    <div class="sec-head">
+      <span class="sec-icon">🆘</span>
+      <div>
+        <div class="sec-label">// TROUBLESHOOTING</div>
+        <h2 class="sec-title">エラーが出たら AI に相談する</h2>
+      </div>
+    </div>
+    <p class="body">セットアップ中にエラーが出ても焦らなくてOK。<strong>エラーメッセージをそのままコピーして、以下のテンプレートでAIに質問する</strong>だけでほぼ解決できる。</p>
+
+    <div class="error-help">
+      <div class="error-help-head">
+        <span style="font-size:16px;">📋</span>
+        <span class="error-help-title">AI相談テンプレート（コピーして使う）</span>
+      </div>
+      <div class="error-help-body">
+        <div class="error-copy-wrap">
+          <div class="error-copy-label">// TEMPLATE</div>
+          <div id="error-tmpl-setup">Remotionのセットアップ中に以下のエラーが出ました。解決方法を教えてください。
+
+【環境】
+- OS: Mac（またはWindows）
+- Node.js: （node -v の結果を貼る）
+- 実行したコマンド: （例：npx create-video@latest my-video）
+
+【エラーメッセージ】
+（ターミナルのエラー全文をここに貼り付ける）</div>
+          <button class="error-copy-btn" onclick="copyErrTmpl('error-tmpl-setup', this)">COPY TEMPLATE</button>
+        </div>
+        <p class="error-help-desc">テンプレートをコピーして、エラーメッセージを貼り付けてから以下のAIに送信：</p>
+        <div class="ai-links">
+          <a class="ai-link" href="https://claude.ai" target="_blank" rel="noopener">→ Claude で相談</a>
+          <a class="ai-link" href="https://chatgpt.com" target="_blank" rel="noopener">→ ChatGPT で相談</a>
+        </div>
+        <div class="tip" style="margin-top:18px;">
+          <span class="tip-icon">💡</span>
+          <div>
+            <div class="tip-label">よくあるエラーと対処法</div>
+            <div class="tip-text">
+              <strong>npm error 404 create-remotion</strong> → 正しいコマンドは <code>npx create-video@latest</code><br>
+              <strong>permission denied</strong> → Macの場合 <code>sudo</code> を先頭につけて再実行<br>
+              <strong>command not found: node</strong> → <a href="https://nodejs.org" target="_blank" style="color:#00d4ff;">nodejs.org</a> からLTS版をインストール<br>
+              <strong>ENOSPC / disk space</strong> → ディスク空き容量を確認（最低5GB以上推奨）
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
+
+function copyErrTmpl(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'COPIED! ✓'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY TEMPLATE'; btn.classList.remove('copied'); }, 2000);
+  });
+}
 function toggleCheck(el){ el.classList.toggle('checked'); }
 
 function copyMd(id, btn) {
