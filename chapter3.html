@@ -248,6 +248,10 @@
   .ai-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
   .ai-link{padding:8px 16px;border:1px solid rgba(167,139,250,.25);background:transparent;color:#a78bfa;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
   .ai-link:hover{background:rgba(167,139,250,.1);border-color:#a78bfa;}
+
+  /* ─── AI HELP LINK ─── */
+  .ai-help-link{display:inline-flex;align-items:center;gap:8px;margin:10px 0 4px;padding:7px 14px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);font-family:'JetBrains Mono',monospace;font-size:10px;color:#a78bfa;text-decoration:none;letter-spacing:1px;transition:all .2s;}
+  .ai-help-link:hover{background:rgba(167,139,250,.12);border-color:#a78bfa;}
 </style>
 </head>
 <body>
@@ -488,6 +492,7 @@ timeToFrames(time)
 <span class="fn">wiggle</span>(<span class="nm">3</span>, <span class="nm">50</span>)</pre></div>
       <p class="desc"><strong>最初に試すエクスプレッション：wiggle</strong><br>不透明度プロパティのエクスプレッション欄に入力すると、ランダムに揺れ動くアニメーションができる。</p>
       <div class="cmd" onclick="copyCmd(this,'wiggle(3, 30)')"><code>wiggle(3, 30)</code><button class="cmd-copy">COPY</button></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>不透明度にwiggleを入力して動きを確認した</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>数字を変えて動きの違いを体感した</li>
@@ -545,6 +550,7 @@ timeToFrames(time)
       </div>
 
       <div class="info"><div class="info-label">💡 次のステップ</div><p>生成されたプロンプトをCodexに送る → 返ってきたコードをAEのエクスプレッション欄（Alt+クリック）に貼り付ける → エラーが出たらエラーメッセージごとAIに渡して「このエラーを修正して」と伝える。</p></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>フォームに自分のやりたいことを入力してプロンプトを生成した</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>生成されたコードをAEに貼り付けた</li>
@@ -621,6 +627,7 @@ timeToFrames(time)
       <div class="prompt"><div class="prompt-lbl">🎯 課題1 — オーディオリアクティブ</div><div class="prompt-txt">「音楽レイヤーの振幅に連動して、テキストレイヤーのスケールを100〜150の間でバウンスさせるエクスプレッションを作成する」</div></div>
       <div class="prompt"><div class="prompt-lbl">🎯 課題2 — データ自動反映</div><div class="prompt-txt">「プロジェクト内の全ソリッドレイヤーに対して、レイヤー名をテキストとして中央表示し、連番でタイムラインに並べるExtendScriptを作成する」</div></div>
       <div class="prompt"><div class="prompt-lbl">🎯 課題3 — 親子関係の自動化</div><div class="prompt-txt">「レイヤー名に_childが含まれる全レイヤーを、最も近い_parentレイヤーに3フレーム遅延で追従させるエクスプレッションを作成する」</div></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>課題1をクリアした</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>課題2をクリアした</li>
@@ -775,5 +782,20 @@ ${rulePart}
   }
 
 </script>
+
+<!-- AI HELP BANNER -->
+<div style="max-width:860px;margin:0 auto 48px;padding:0 24px;position:relative;z-index:1;">
+  <a href="ai-help.html" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.25);border-left:3px solid #a78bfa;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(167,139,250,.12)'" onmouseout="this.style.background='rgba(167,139,250,.06)'">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="font-size:24px;">🆘</span>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#a78bfa;letter-spacing:2px;margin-bottom:4px;">SUPPORT PAGE</div>
+        <div style="font-size:13px;color:#f0f2f8;font-weight:700;">エラー解決 × AI相談室</div>
+        <div style="font-size:11px;color:#a8b4cc;margin-top:2px;">エラーの種類をプルダウンで選ぶ → テンプレをコピー → Gemini / Claude / ChatGPT に送るだけ</div>
+      </div>
+    </div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#a78bfa;white-space:nowrap;">→ 相談室へ</span>
+  </a>
+</div>
 </body>
 </html>

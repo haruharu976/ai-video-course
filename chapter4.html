@@ -155,6 +155,10 @@
   .ai-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
   .ai-link{padding:8px 16px;border:1px solid rgba(167,139,250,.25);background:transparent;color:#a78bfa;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;transition:all .2s;}
   .ai-link:hover{background:rgba(167,139,250,.1);border-color:#a78bfa;}
+
+  /* ─── AI HELP LINK ─── */
+  .ai-help-link{display:inline-flex;align-items:center;gap:8px;margin:10px 0 4px;padding:7px 14px;background:rgba(167,139,250,.05);border:1px solid rgba(167,139,250,.2);font-family:'JetBrains Mono',monospace;font-size:10px;color:#a78bfa;text-decoration:none;letter-spacing:1px;transition:all .2s;}
+  .ai-help-link:hover{background:rgba(167,139,250,.12);border-color:#a78bfa;}
 </style>
 </head>
 <body>
@@ -227,6 +231,7 @@
       <div class="cmd" onclick="copyCmd(this,'pip3 install moviepy')"><code>pip3 install moviepy</code><button class="cmd-copy">COPY</button></div>
       <p class="desc" style="margin-top:14px;"><strong>③ ImageMagick（テキスト描画に必要）</strong></p>
       <div class="cmd" onclick="copyCmd(this,'brew install imagemagick')"><code>brew install imagemagick <span style="color:var(--muted)"># macOS</span></code><button class="cmd-copy">COPY</button></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>python3 --version でバージョン確認した</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>moviepyのインストールが完了した</li>
@@ -292,6 +297,7 @@ final.<span class="fn">write_videofile</span>(<span class="st">"output.mp4"</spa
           <button class="pg-copy-btn" id="pg-mp-copy" onclick="copyPrompt('pg-mp-text','pg-mp-copy')">COPY PROMPT</button>
         </div>
       </div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>サンプルコードを実行してみた</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>自分の動画ファイルで試した</li>
@@ -318,6 +324,7 @@ txt = <span class="fn">TextClip</span>(
 final = <span class="fn">CompositeVideoClip</span>([clip, txt])
 final.<span class="fn">write_videofile</span>(<span class="st">"output.mp4"</span>)</pre></div>
       <div class="info"><div class="info-label">💡 日本語フォント</div><p>MacにはNoto Sans CJK JPが入っていない場合がある。<br><code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">fc-list | grep -i noto</code> でフォント名を確認してから指定しよう。</p></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>テキストを動画に合成できた</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>フォントサイズ・色・位置を変えて試した</li>
@@ -345,6 +352,7 @@ base = <span class="fn">VideoFileClip</span>(<span class="st">"template.mp4"</sp
   final.<span class="fn">write_videofile</span>(<span class="st">f"out_{row['id']}.mp4"</span>)
   <span class="fn">print</span>(<span class="st">f"✅ {row['name']} 完了"</span>)</pre></div>
       <div class="info"><div class="info-label">📋 CSVの例（data.csv）</div><p><code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">id,name<br>1,田中様<br>2,鈴木様<br>3,佐藤様</code></p></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>CSVファイルを用意した</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>ループで複数の動画が生成された</li>
@@ -378,6 +386,7 @@ subtitles = []
 final = <span class="fn">CompositeVideoClip</span>([clip] + subtitles)
 final.<span class="fn">write_videofile</span>(<span class="st">"captioned.mp4"</span>)</pre></div>
       <div class="cmd" onclick="copyCmd(this,'pip3 install openai-whisper')"><code>pip3 install openai-whisper</code><button class="cmd-copy">COPY</button></div>
+
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="chk"></div>whisperをインストールした</li>
         <li onclick="toggleCheck(this)"><div class="chk"></div>自分の動画に字幕を自動生成した</li>
@@ -491,5 +500,20 @@ ${out} として保存する
   }
 
 </script>
+
+<!-- AI HELP BANNER -->
+<div style="max-width:860px;margin:0 auto 48px;padding:0 24px;position:relative;z-index:1;">
+  <a href="ai-help.html" style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.25);border-left:3px solid #a78bfa;text-decoration:none;transition:background .2s;" onmouseover="this.style.background='rgba(167,139,250,.12)'" onmouseout="this.style.background='rgba(167,139,250,.06)'">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="font-size:24px;">🆘</span>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#a78bfa;letter-spacing:2px;margin-bottom:4px;">SUPPORT PAGE</div>
+        <div style="font-size:13px;color:#f0f2f8;font-weight:700;">エラー解決 × AI相談室</div>
+        <div style="font-size:11px;color:#a8b4cc;margin-top:2px;">エラーの種類をプルダウンで選ぶ → テンプレをコピー → Gemini / Claude / ChatGPT に送るだけ</div>
+      </div>
+    </div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#a78bfa;white-space:nowrap;">→ 相談室へ</span>
+  </a>
+</div>
 </body>
 </html>

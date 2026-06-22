@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja" style="background:#060810;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<title>エラー解決 × AI相談室 | AI VIDEO MASTER</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#060810; --card:#0c1020;
+  --accent:#00d4ff; --accent2:#ff6b35; --gold:#f5c518; --green:#00e676;
+  --purple:#a78bfa; --text:#f0f2f8; --muted:#a8b4cc; --border:rgba(0,212,255,.15);
+}
+html{background:#060810;color-scheme:dark;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg)!important;color:var(--text)!important;font-family:'Noto Sans JP',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0;}
+
+/* NAV */
+.top-link{display:block;width:100%;background:rgba(99,102,241,.08);border-bottom:1px solid rgba(99,102,241,.2);padding:7px 24px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#a5b4fc;letter-spacing:1px;text-decoration:none;}
+.top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
+header{position:sticky;top:0;z-index:100;padding:14px 24px;background:rgba(6,8,16,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);}
+.logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:3px;text-decoration:none;}
+.bc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;}
+.bc span{color:var(--purple);}
+
+/* HERO */
+.hero{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:48px 24px 32px;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(167,139,250,.3);background:rgba(167,139,250,.06);padding:5px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:3px;margin-bottom:16px;}
+h1.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,62px);letter-spacing:3px;line-height:1;margin-bottom:12px;}
+.t-s{color:var(--text);}
+.t-o{color:transparent;-webkit-text-stroke:2px var(--purple);}
+.hero-lead{font-size:14px;color:var(--muted);max-width:560px;line-height:1.9;}
+
+/* AI CARDS */
+.ai-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0;}
+@media(max-width:600px){.ai-cards{grid-template-columns:1fr;}}
+.ai-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:16px;border-top:2px solid;}
+.ai-card.gemini{border-top-color:#4285f4;}
+.ai-card.claude{border-top-color:var(--accent2);}
+.ai-card.chatgpt{border-top-color:var(--green);}
+.ai-card-name{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;margin-bottom:10px;}
+.ai-card.gemini .ai-card-name{color:#4285f4;}
+.ai-card.claude .ai-card-name{color:var(--accent2);}
+.ai-card.chatgpt .ai-card-name{color:var(--green);}
+.ai-card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;}
+.ai-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border:1px solid rgba(255,255,255,.1);color:var(--muted);}
+.ai-card p{font-size:11px;color:var(--muted);line-height:1.7;}
+.ai-card-btn{display:block;margin-top:12px;padding:7px 0;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-decoration:none;border:1px solid;transition:all .2s;}
+.ai-card.gemini .ai-card-btn{border-color:#4285f4;color:#4285f4;}
+.ai-card.gemini .ai-card-btn:hover{background:#4285f4;color:#fff;}
+.ai-card.claude .ai-card-btn{border-color:var(--accent2);color:var(--accent2);}
+.ai-card.claude .ai-card-btn:hover{background:var(--accent2);color:#fff;}
+.ai-card.chatgpt .ai-card-btn{border-color:var(--green);color:var(--green);}
+.ai-card.chatgpt .ai-card-btn:hover{background:var(--green);color:#000;}
+
+/* MAIN SELECTOR */
+.selector-wrap{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 24px 60px;}
+.selector-card{background:var(--card);border:1px solid rgba(167,139,250,.2);border-top:3px solid var(--purple);padding:24px;}
+.selector-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--purple);letter-spacing:3px;margin-bottom:16px;}
+.selects-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+@media(max-width:500px){.selects-row{grid-template-columns:1fr;}}
+.sel-group label{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:6px;}
+select{width:100%;background:#060c18;border:1px solid rgba(167,139,250,.3);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:12px;padding:10px 12px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a78bfa'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;cursor:pointer;outline:none;transition:border-color .2s;}
+select:focus{border-color:var(--purple);}
+
+/* TEMPLATE OUTPUT */
+.tmpl-output{background:#060c18;border:1px solid rgba(167,139,250,.2);border-left:3px solid var(--purple);padding:0;overflow:hidden;margin-top:4px;}
+.tmpl-out-head{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(167,139,250,.06);border-bottom:1px solid rgba(167,139,250,.12);}
+.tmpl-out-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--purple);letter-spacing:2px;}
+.copy-btn{padding:5px 14px;border:1px solid rgba(167,139,250,.35);background:transparent;color:var(--purple);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+.copy-btn:hover{background:rgba(167,139,250,.1);border-color:var(--purple);}
+.copy-btn.copied{color:var(--green);border-color:var(--green);}
+#tmplText{padding:16px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#c0ccdf;line-height:1.9;white-space:pre-wrap;word-break:break-all;min-height:120px;}
+
+/* SEND BUTTONS */
+.send-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.send-btn{flex:1;min-width:120px;padding:12px 8px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-decoration:none;border:1px solid;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.send-btn.gemini{border-color:#4285f4;color:#4285f4;}
+.send-btn.gemini:hover{background:#4285f4;color:#fff;}
+.send-btn.claude{border-color:var(--accent2);color:var(--accent2);}
+.send-btn.claude:hover{background:var(--accent2);color:#fff;}
+.send-btn.chatgpt{border-color:var(--green);color:var(--green);}
+.send-btn.chatgpt:hover{background:var(--green);color:#000;}
+.send-note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);}
+.send-note strong{color:var(--purple);}
+
+/* COMMON ERRORS */
+.section{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 24px 48px;}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--text);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.err-cards{display:flex;flex-direction:column;gap:10px;}
+.err-card{background:#0d0306;border:1px solid rgba(255,80,80,.15);border-left:3px solid #ff5555;overflow:hidden;}
+.err-card-head{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:rgba(255,80,80,.05);cursor:pointer;user-select:none;}
+.err-card-head:hover{background:rgba(255,80,80,.08);}
+.err-card-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff8080;}
+.err-card-ch{font-family:'JetBrains Mono',monospace;font-size:9px;color:#6a3a3a;letter-spacing:1px;}
+.err-card-toggle{color:#ff5555;font-size:14px;transition:transform .2s;}
+.err-card.open .err-card-toggle{transform:rotate(90deg);}
+.err-card-body{display:none;padding:14px 16px;border-top:1px solid rgba(255,80,80,.1);}
+.err-card.open .err-card-body{display:block;}
+.err-msg{font-family:'JetBrains Mono',monospace;font-size:11px;color:#ff7070;background:#060306;padding:10px 12px;margin-bottom:10px;border-left:2px solid #ff5555;}
+.err-sol{font-size:12px;color:var(--muted);line-height:1.8;}
+.err-sol strong{color:var(--text);}
+.err-sol code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);background:rgba(0,212,255,.06);padding:1px 5px;}
+
+/* TIPS */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.tip-card{background:var(--card);border:1px solid rgba(255,255,255,.05);padding:16px;}
+.tip-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(167,139,250,.2);line-height:1;}
+.tip-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:1px;margin:4px 0 8px;}
+.tip-body{font-size:12px;color:var(--muted);line-height:1.7;}
+</style>
+</head>
+<body>
+
+<a href="Movie_index.html" class="top-link">← 動画コース一覧へ戻る</a>
+<header>
+  <a href="Movie_index.html" class="logo">AI/VIDEO_MASTER</a>
+  <div class="bc">SUPPORT <span>/ AI相談室</span></div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">SUPPORT PAGE</div>
+  <h1 class="hero-title">
+    <span class="t-s">エラー解決</span><br>
+    <span class="t-o">AI相談室</span>
+  </h1>
+  <p class="hero-lead">詰まったらAIに丸投げしよう。エラーをコピーしてテンプレートに貼るだけ。Gemini・Claude・ChatGPTは返答がそれぞれ違うので、1つで解決しなければ全部試してみるのがコツ。</p>
+
+</div>
+
+<!-- HOW TO USE FLOW -->
+<div style="position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 24px 32px;">
+  <div style="background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.15);border-top:3px solid var(--accent);padding:20px 24px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:16px;">// 使い方 — このページでできること</div>
+    <div style="display:flex;align-items:flex-start;gap:0;overflow-x:auto;">
+      <div style="flex:1;min-width:130px;text-align:center;padding:0 4px;">
+        <div style="background:#060c18;border:1px solid rgba(0,212,255,.2);padding:12px 8px;">
+          <div style="font-size:22px;margin-bottom:6px;">📋</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">STEP 1</div>
+          <div style="font-size:11px;color:var(--text);font-weight:700;margin-bottom:4px;">チャプター・ステップを選ぶ</div>
+          <div style="font-size:10px;color:var(--muted);">2つのプルダウンで絞り込む</div>
+        </div>
+      </div>
+      <div style="color:rgba(0,212,255,.4);font-size:18px;padding:0 6px;align-self:center;flex-shrink:0;">→</div>
+      <div style="flex:1;min-width:130px;text-align:center;padding:0 4px;">
+        <div style="background:#060c18;border:1px solid rgba(167,139,250,.3);padding:12px 8px;">
+          <div style="font-size:22px;margin-bottom:6px;">✏️</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#a78bfa;letter-spacing:1px;margin-bottom:4px;">STEP 2</div>
+          <div style="font-size:11px;color:var(--text);font-weight:700;margin-bottom:4px;">テンプレにエラーを貼り付ける</div>
+          <div style="font-size:10px;color:var(--muted);">テンプレ欄は直接編集できる<br>ターミナルのエラーをコピーして貼る</div>
+        </div>
+      </div>
+      <div style="color:rgba(0,212,255,.4);font-size:18px;padding:0 6px;align-self:center;flex-shrink:0;">→</div>
+      <div style="flex:1;min-width:130px;text-align:center;padding:0 4px;">
+        <div style="background:#060c18;border:1px solid rgba(0,212,255,.2);padding:12px 8px;">
+          <div style="font-size:22px;margin-bottom:6px;">📋</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;">STEP 3</div>
+          <div style="font-size:11px;color:var(--text);font-weight:700;margin-bottom:4px;">全文コピー</div>
+          <div style="font-size:10px;color:var(--muted);">「COPY」ボタンで<br>テンプレ全体をコピー</div>
+        </div>
+      </div>
+      <div style="color:rgba(0,212,255,.4);font-size:18px;padding:0 6px;align-self:center;flex-shrink:0;">→</div>
+      <div style="flex:1;min-width:130px;text-align:center;padding:0 4px;">
+        <div style="background:#060c18;border:1px solid rgba(0,230,118,.3);padding:12px 8px;">
+          <div style="font-size:22px;margin-bottom:6px;">🤖</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);letter-spacing:1px;margin-bottom:4px;">STEP 4</div>
+          <div style="font-size:11px;color:var(--text);font-weight:700;margin-bottom:4px;">AIに貼り付けて送信</div>
+          <div style="font-size:10px;color:var(--muted);">下の3ボタンからAIを開いて貼り付けるだけ</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.04);">💡 1つのAIで解決しなかったら<strong style="color:var(--text);">別のAIにも同じテンプレを送ってみよう</strong>。返答のスタイルや着眼点が違うので複数に聞くほど解決率が上がる。</p>
+  </div>
+</div>
+
+<!-- TEMPLATE SELECTOR -->
+<div class="selector-wrap">
+  <div class="selector-card">
+    <div class="selector-label">// STEP 01 — どのエラーについて質問しますか？</div>
+
+    <div class="selects-row">
+      <div class="sel-group">
+        <label>チャプター</label>
+        <select id="selChapter" onchange="updateTemplate()">
+          <option value="ch02">CH.02 Remotion セットアップ</option>
+          <option value="ch03">CH.03 After Effects</option>
+          <option value="ch04">CH.04 Python MoviePy</option>
+          <option value="ch05">CH.05 AI Agent</option>
+        </select>
+      </div>
+      <div class="sel-group">
+        <label>どのステップで詰まった？</label>
+        <select id="selStep" onchange="updateTemplate()">
+          <!-- populated by JS -->
+        </select>
+      </div>
+    </div>
+
+    <div class="tmpl-output">
+      <div class="tmpl-out-head">
+        <span class="tmpl-out-label">// テンプレート ← エラーを直接ここに貼り付けてOK</span>
+        <button class="copy-btn" id="copyBtn" onclick="copyTemplate()">COPY</button>
+      </div>
+      <div id="tmplText" contenteditable="true" spellcheck="false" style="outline:none;cursor:text;" title="クリックして直接編集できます"></div>
+      <div style="padding:6px 16px 8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(167,139,250,.5);border-top:1px solid rgba(167,139,250,.08);">✏️ クリックして直接編集できます　／　プルダウンを変えるとリセットされます</div>
+    </div>
+
+    <div class="ai-cards" style="margin-top:16px;">
+      <div class="ai-card gemini">
+        <div class="ai-card-name">🔵 GEMINI</div>
+        <div class="ai-card-tags"><span class="ai-tag">最新情報</span><span class="ai-tag">Google連携</span></div>
+        <p>最新のパッケージ情報やバージョン問題に強い。Googleの最新技術との相性がいい。</p>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener" class="ai-card-btn">→ Gemini で相談する</a>
+      </div>
+      <div class="ai-card claude">
+        <div class="ai-card-name">🟠 CLAUDE</div>
+        <div class="ai-card-tags"><span class="ai-tag">コード説明</span><span class="ai-tag">丁寧</span></div>
+        <p>コードの意味を丁寧に説明してくれる。「なぜそうなるか」を知りたいときに向いている。</p>
+        <a href="https://claude.ai" target="_blank" rel="noopener" class="ai-card-btn">→ Claude で相談する</a>
+      </div>
+      <div class="ai-card chatgpt">
+        <div class="ai-card-name">🟢 CHATGPT</div>
+        <div class="ai-card-tags"><span class="ai-tag">速い</span><span class="ai-tag">実績豊富</span></div>
+        <p>回答が速く、多くのエラー事例を学習している。一般的なエラーはほぼ即解決できる。</p>
+        <a href="https://chatgpt.com" target="_blank" rel="noopener" class="ai-card-btn">→ ChatGPT で相談する</a>
+      </div>
+    </div>
+    <p class="send-note">
+      💡 <strong>1つで解決しなかったら別のAIにも同じテンプレを送ってみよう。</strong>返答のスタイルや着眼点が違うので、複数のAIに聞くほど解決率が上がる。
+    </p>
+  </div>
+</div>
+
+<!-- COMMON ERRORS -->
+<div class="section">
+  <div class="section-title">よくあるエラー一覧</div>
+  <div class="err-cards">
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">command not found: node</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.02 STEP2</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">zsh: command not found: node</div>
+        <p class="err-sol"><strong>原因：</strong>Node.jsがインストールされていない。<br>
+        <strong>解決：</strong>macOSなら <code>brew install node</code> を実行。Homebrewが入っていない場合は <a href="https://nodejs.org" target="_blank" style="color:var(--accent);">nodejs.org</a> からLTS版をダウンロード。<br>
+        Windowsは <a href="https://nodejs.org" target="_blank" style="color:var(--accent);">nodejs.org</a> から .msi インストーラーをダウンロード。</p>
+      </div>
+    </div>
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">Error creating git repository / empty ident name</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.02 STEP3</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">Error: Could not create git repository<br>fatal: empty ident name (for &lt;user@host&gt;) not allowed</div>
+        <p class="err-sol"><strong>原因：</strong>gitにユーザー情報が設定されていない。<br>
+        <strong>解決：</strong>以下を実行してから再度 <code>npx create-video@latest</code> を実行する。<br>
+        <code>git config --global user.email "you@example.com"</code><br>
+        <code>git config --global user.name "Your Name"</code></p>
+      </div>
+    </div>
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">npm error 404 Not Found — create-remotion</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.02 STEP3</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">npm error 404 Not Found - GET https://registry.npmjs.org/create-remotion</div>
+        <p class="err-sol"><strong>原因：</strong>コマンド名が間違っている。<br>
+        <strong>解決：</strong><code>create-remotion</code> ではなく <code>create-video@latest</code> が正しい。<br>
+        正しいコマンド → <code>npx create-video@latest my-video</code></p>
+      </div>
+    </div>
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">EACCES: permission denied</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.02 STEP3</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">npm error code EACCES<br>npm error syscall mkdir<br>npm error path /usr/local/lib/node_modules</div>
+        <p class="err-sol"><strong>原因：</strong>権限がないディレクトリに書き込もうとしている。<br>
+        <strong>解決（macOS）：</strong>コマンドの先頭に <code>sudo</code> をつけて実行。<br>
+        または nvm（Node Version Manager）を使うと権限問題が起きにくい。</p>
+      </div>
+    </div>
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">ポート3000が使用中 / address already in use</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.02 STEP4</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">Error: listen EADDRINUSE: address already in use :::3000</div>
+        <p class="err-sol"><strong>原因：</strong>別のプロセスがポート3000を使っている。<br>
+        <strong>解決：</strong><code>npx remotion studio --port 3001</code> で別ポートで起動する。<br>
+        またはポート3000を使っているプロセスを終了する → <code>lsof -ti:3000 | xargs kill -9</code></p>
+      </div>
+    </div>
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">Cannot find module 'remotion'</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.02 STEP4</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">Error: Cannot find module 'remotion'<br>Require stack: - /path/to/my-video/src/...</div>
+        <p class="err-sol"><strong>原因：</strong>node_modulesがインストールされていない、またはプロジェクトフォルダの外で実行している。<br>
+        <strong>解決：</strong><code>cd my-video</code> でフォルダに入ってから <code>npm install</code> を実行。その後 <code>npx remotion studio</code> を再実行。</p>
+      </div>
+    </div>
+
+    <div class="err-card" onclick="toggleErr(this)">
+      <div class="err-card-head">
+        <span class="err-card-title">ModuleNotFoundError: No module named 'moviepy'</span>
+        <span style="display:flex;align-items:center;gap:12px;"><span class="err-card-ch">CH.04</span><span class="err-card-toggle">▶</span></span>
+      </div>
+      <div class="err-card-body">
+        <div class="err-msg">ModuleNotFoundError: No module named 'moviepy'</div>
+        <p class="err-sol"><strong>原因：</strong>MoviePyライブラリがインストールされていない。<br>
+        <strong>解決：</strong><code>pip install moviepy</code> または <code>pip3 install moviepy</code> を実行。<br>
+        仮想環境を使っている場合はアクティベートを確認 → <code>source venv/bin/activate</code></p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TIPS -->
+<div class="section">
+  <div class="section-title">AIへの質問を上手くするコツ</div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-num">01</div>
+      <div class="tip-title">エラー全文を貼る</div>
+      <p class="tip-body">「エラーが出ました」だけではAIは解決できない。ターミナルのエラーメッセージを全部コピーして貼り付けよう。</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">02</div>
+      <div class="tip-title">環境情報を伝える</div>
+      <p class="tip-body">OS（Mac/Windows）とNode.jsのバージョンを必ず書く。同じエラーでもOSによって解決策が違う。</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">03</div>
+      <div class="tip-title">何をしたかったか書く</div>
+      <p class="tip-body">「○○をしようとした」というゴールを伝えると、AIが正しい方向の解決策を出してくれる。</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">04</div>
+      <div class="tip-title">3つのAIを試す</div>
+      <p class="tip-body">1つのAIで解決しなければ他のAIに同じテンプレを送ってみよう。得意分野が違うので突破口が見つかる。</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">05</div>
+      <div class="tip-title">解決策をそのまま実行</div>
+      <p class="tip-body">AIが提示したコマンドはまずそのままコピーして実行してみる。「なぜか」は後で聞けばOK。</p>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">06</div>
+      <div class="tip-title">新しいエラーも貼る</div>
+      <p class="tip-body">解決策を試して新しいエラーが出たらそれもAIに貼る。チャット履歴を続けると文脈を引き継いでくれる。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── TEMPLATE DATA ───
+const TEMPLATES = {
+  ch02: {
+    label: 'CH.02 Remotion セットアップ',
+    steps: [
+      {
+        label: 'STEP1 — 料金・ライセンス確認',
+        tmpl: `RemotionのCH.02 料金・ライセンス確認について質問があります。
+
+【質問内容】
+（ここにわからないことを書く）
+
+【やりたいこと】
+自分がRemotionを無料で使えるかどうか確認したい。`
+      },
+      {
+        label: 'STEP2 — 環境構築（node -v でエラー）',
+        tmpl: `RemotionのCH.02環境構築中にNode.jsのバージョン確認でエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- 実行コマンド: node -v
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+「node -v」を実行してv18以上のバージョン番号が表示される状態にしたい。`
+      },
+      {
+        label: 'STEP3 — プロジェクト作成（create-video でエラー）',
+        tmpl: `RemotionのCH.02でプロジェクト作成コマンドを実行したらエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Node.js バージョン: （node -v の結果を貼る）
+- 実行したコマンド: npx create-video@latest my-video
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+my-videoフォルダが作成されて「Project created!」と表示される状態にしたい。`
+      },
+      {
+        label: 'STEP3 — npm install でエラー',
+        tmpl: `RemotionのCH.02でnpm installを実行したらエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Node.js バージョン: （node -v の結果）
+- 実行したコマンド: cd my-video && npm install
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+「added XXX packages」と表示されてnode_modulesフォルダが作られた状態にしたい。`
+      },
+      {
+        label: 'STEP4 — Remotion Studio が起動しない',
+        tmpl: `RemotionのCH.02でStudioを起動しようとしたらエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Node.js バージョン: （node -v の結果）
+- 実行したコマンド: npx remotion studio
+- プロジェクトフォルダ: my-video
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+ブラウザでlocalhost:3000が開いてRemotionのプレビュー画面が表示される状態にしたい。`
+      },
+      {
+        label: 'STEP5 — Codex連携・MP4出力でエラー',
+        tmpl: `RemotionのCH.02でMP4出力コマンドを実行したらエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Node.js バージョン: （node -v の結果）
+- 実行したコマンド: npx remotion render MyComp out/video.mp4
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【Composition.tsxの内容（もしあれば）】
+（コードを貼り付ける）
+
+【やりたいこと】
+out/video.mp4 というファイルが生成されてMP4として再生できる状態にしたい。`
+      }
+    ]
+  },
+  ch03: {
+    label: 'CH.03 After Effects',
+    steps: [
+      {
+        label: 'セットアップ・インストールでエラー',
+        tmpl: `After EffectsのCH.03作業中にエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows）
+- After Effectsバージョン: （例: 2024）
+- 発生した操作: （何をしたときにエラーが出たか）
+
+【エラーメッセージ / 状況】
+（ここにエラー内容を貼り付ける）
+
+【やりたいこと】
+（どういう状態になりたいかを書く）`
+      },
+      {
+        label: 'Expressionエラー（赤いアイコンが出た）',
+        tmpl: `After EffectsのExpressionでエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows）
+- After Effectsバージョン: （例: 2024）
+- Expressionを書いたプロパティ: （例: Position / Opacity など）
+
+【書いたExpression】
+（ここにExpressionのコードを貼り付ける）
+
+【エラーメッセージ】
+（赤いアイコンをクリックして表示されるエラー文を貼り付ける）
+
+【やりたいこと】
+（どんなアニメーションを作ろうとしているか）`
+      },
+      {
+        label: 'レンダリング・書き出しでエラー',
+        tmpl: `After EffectsのCH.03でレンダリング（書き出し）中にエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows）
+- After Effectsバージョン: （例: 2024）
+- 書き出し方法: （レンダーキュー / Media Encoder）
+
+【エラーメッセージ】
+（ここにエラー内容を貼り付ける）
+
+【やりたいこと】
+MP4またはムービーファイルとして書き出しが完了した状態にしたい。`
+      }
+    ]
+  },
+  ch04: {
+    label: 'CH.04 Python MoviePy',
+    steps: [
+      {
+        label: 'Python / pip インストールエラー',
+        tmpl: `PythonのCH.04作業中にインストールでエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Pythonバージョン: （python --version の結果）
+- 実行したコマンド: （pip install moviepy など）
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+MoviePyをimportできる状態にしたい。`
+      },
+      {
+        label: 'スクリプト実行時にエラー（ModuleNotFoundError など）',
+        tmpl: `PythonのCH.04でスクリプト実行中にエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Pythonバージョン: （python --version の結果）
+- 実行したコマンド: python main.py（など）
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【Pythonコード（エラーが出た部分）】
+（コードを貼り付ける）
+
+【やりたいこと】
+MP4動画ファイルが生成される状態にしたい。`
+      },
+      {
+        label: 'MP4が生成されない / 動画が壊れている',
+        tmpl: `PythonのCH.04でスクリプトは動いたがMP4が正しく生成されません。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- Pythonバージョン: （python --version の結果）
+- MoviePyバージョン: （pip show moviepy の結果）
+
+【状況】
+（エラーは出ないが何が起きているか説明する）
+
+【Pythonコード】
+（コードを貼り付ける）
+
+【やりたいこと】
+正常に再生できるMP4ファイルが生成される状態にしたい。`
+      }
+    ]
+  },
+  ch05: {
+    label: 'CH.05 AI Agent',
+    steps: [
+      {
+        label: 'API キー設定エラー',
+        tmpl: `AI AgentのCH.05でAPIキーの設定中にエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- 使用AIサービス: （Anthropic / OpenAI など）
+- 実行したコマンドまたは操作: （何をしたか）
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+APIキーが認識されてエージェントが起動する状態にしたい。`
+      },
+      {
+        label: 'エージェントが期待通りに動かない',
+        tmpl: `AI AgentのCH.05でエージェントが期待通りに動きません。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- 使用AIモデル: （claude-sonnet / gpt-4o など）
+- Node.jsまたはPythonバージョン:
+
+【送ったプロンプト/指示】
+（ここに書く）
+
+【実際に起きたこと】
+（ここに書く）
+
+【期待していた動作】
+（ここに書く）
+
+【関連コード（あれば）】
+（ここに貼り付ける）`
+      },
+      {
+        label: 'SDK / ライブラリのインポートエラー',
+        tmpl: `AI AgentのCH.05でSDKのimport/requireでエラーが出ました。
+
+【環境】
+- OS: （Mac / Windows / Linux）
+- 言語: （Node.js / Python）
+- バージョン: （node -v または python --version の結果）
+- 実行したコマンド: （npm install @anthropic-ai/sdk など）
+
+【エラーメッセージ（ターミナルの出力をそのまま貼る）】
+（ここに貼り付ける）
+
+【やりたいこと】
+SDKをimportしてAnthropicクライアントが作れる状態にしたい。`
+      }
+    ]
+  }
+};
+
+// ─── INIT ───
+function populateSteps() {
+  const ch = document.getElementById('selChapter').value;
+  const sel = document.getElementById('selStep');
+  sel.innerHTML = '';
+  TEMPLATES[ch].steps.forEach((s, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = s.label;
+    sel.appendChild(opt);
+  });
+  updateTemplate();
+}
+
+function updateTemplate() {
+  const ch = document.getElementById('selChapter').value;
+  const stepIdx = parseInt(document.getElementById('selStep').value) || 0;
+  const tmpl = TEMPLATES[ch].steps[stepIdx];
+  document.getElementById('tmplText').textContent = tmpl ? tmpl.tmpl : '';
+}
+
+function copyTemplate() {
+  const el = document.getElementById('tmplText');
+  // innerText preserves line breaks from contenteditable
+  const text = el.innerText;
+  const btn = document.getElementById('copyBtn');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'COPIED! ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function toggleErr(el) { el.classList.toggle('open'); }
+
+// ─── HANDLE HASH ───
+function applyHash() {
+  const hash = location.hash.replace('#','');
+  if (!hash) return;
+  // format: ch02-step1 (step is 0-indexed internally, 1-indexed in hash)
+  const m = hash.match(/^(ch\d+)-step(\d+)$/);
+  if (m) {
+    const chSel = document.getElementById('selChapter');
+    const chVal = m[1];
+    const stepVal = parseInt(m[2]) - 1;
+    if (TEMPLATES[chVal]) {
+      chSel.value = chVal;
+      populateSteps();
+      const stepSel = document.getElementById('selStep');
+      if (stepSel.options[stepVal]) {
+        stepSel.selectedIndex = stepVal;
+        updateTemplate();
+      }
+      // scroll to selector
+      document.querySelector('.selector-wrap').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }
+}
+
+// init
+document.getElementById('selChapter').addEventListener('change', populateSteps);
+populateSteps();
+window.addEventListener('hashchange', applyHash);
+applyHash();
+</script>
+</body>
+</html>

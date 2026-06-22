@@ -22,109 +22,116 @@
   nav a{color:var(--muted);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:11px;margin-left:24px;letter-spacing:1px;transition:color .2s;}
   nav a:hover{color:var(--accent);}
 
-  /* HERO */
-  .hero{position:relative;z-index:1;padding:64px 28px 48px;max-width:1000px;margin:0 auto;}
+  /* ─── HERO ─── */
+  .hero{position:relative;z-index:1;padding:64px 28px 0;max-width:1000px;margin:0 auto;}
   .hero-tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:rgba(0,212,255,.06);padding:6px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:3px;margin-bottom:28px;}
   .hero-tag::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;animation:blink 2s infinite;}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,12vw,96px);line-height:.92;letter-spacing:3px;margin-bottom:24px;}
+  .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+  @media(max-width:700px){.hero-inner{grid-template-columns:1fr;}}
+  .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,82px);line-height:.92;letter-spacing:3px;margin-bottom:20px;}
   .h1-plain{display:block;color:var(--text);}
   .h1-outline{display:block;color:transparent;-webkit-text-stroke:2px var(--accent);}
   .h1-fill{display:block;color:var(--accent2);text-shadow:0 0 40px rgba(255,107,53,.4);}
-  .hero-desc{color:var(--muted);font-size:14px;line-height:1.9;max-width:480px;margin-bottom:40px;}
-  .stats{display:flex;gap:40px;margin-bottom:56px;border-left:2px solid var(--border);padding-left:24px;}
-  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--accent);line-height:1;}
-  .stat-label{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;margin-top:3px;}
+  .hero-desc{color:var(--muted);font-size:14px;line-height:1.9;margin-bottom:24px;}
+  .hero-cta{display:inline-block;padding:12px 28px;background:var(--accent);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;font-weight:700;text-decoration:none;transition:background .2s;}
+  .hero-cta:hover{background:#00b8e0;}
 
-  /* ─── 受講前提条件セクション ─── */
-  .prereq-wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 28px 48px;}
-  .section-title-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
-  .sec-badge{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent2);letter-spacing:3px;}
-  h2.sec-h{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--text);}
+  /* ─── OUTCOME VISUAL ─── */
+  .outcome-visual{position:relative;z-index:1;}
+  .ov-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:10px;text-align:center;}
 
-  .prereq-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:16px;}
-  @media(max-width:640px){.prereq-grid{grid-template-columns:1fr;}}
+  /* ─── WHAT YOU BUILD ─── */
+  .what-section{position:relative;z-index:1;max-width:1000px;margin:60px auto 0;padding:0 28px;}
+  .section-head{margin-bottom:28px;}
+  .section-tag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent2);letter-spacing:3px;display:block;margin-bottom:6px;}
+  h2.section-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;}
 
-  .prereq-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:20px;}
-  .prereq-card.required{border-top:2px solid var(--accent2);}
-  .prereq-card.optional{border-top:2px solid rgba(0,212,255,.4);}
-  .prereq-type{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;margin-bottom:10px;}
-  .req-label{color:var(--accent2);}
-  .opt-label{color:var(--accent);}
-  .prereq-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;}
-  .prereq-desc{font-size:12px;color:var(--muted);line-height:1.75;}
-  .prereq-desc strong{color:var(--text);}
+  .what-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media(max-width:700px){.what-grid{grid-template-columns:1fr;}}
+  .what-card{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:20px;position:relative;overflow:hidden;}
+  .what-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+  .wc-blue::before{background:var(--accent);}
+  .wc-orange::before{background:var(--accent2);}
+  .wc-purple::before{background:#a78bfa;}
+  .what-icon{font-size:28px;margin-bottom:10px;}
+  .what-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:2px;margin-bottom:6px;}
+  .what-desc{font-size:12px;color:var(--muted);line-height:1.7;}
 
-  .notice-box{background:rgba(255,107,53,.05);border:1px solid rgba(255,107,53,.2);border-left:3px solid var(--accent2);padding:16px 20px;margin-top:4px;}
-  .notice-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--accent2);letter-spacing:2px;margin-bottom:8px;}
-  .notice-text{font-size:13px;color:#c8906a;line-height:1.75;}
-  .notice-list{list-style:none;margin-top:8px;}
-  .notice-list li{font-size:12px;color:var(--muted);padding:4px 0;display:flex;align-items:flex-start;gap:8px;}
-  .notice-list li::before{content:'×';color:var(--accent2);font-weight:700;flex-shrink:0;}
+  /* ─── PIPELINE DIAGRAM ─── */
+  .pipeline-section{position:relative;z-index:1;max-width:1000px;margin:60px auto 0;padding:0 28px;}
+  .pipeline-diagram{background:var(--card);border:1px solid rgba(255,255,255,.06);padding:32px 24px;overflow-x:auto;}
+  .pipe-flow{display:flex;align-items:center;gap:0;min-width:600px;}
+  .pipe-node{flex:1;text-align:center;position:relative;}
+  .pipe-box{background:#060c18;border:1px solid rgba(0,212,255,.2);padding:16px 10px;margin:0 6px;}
+  .pipe-node.active .pipe-box{border-color:var(--accent);background:rgba(0,212,255,.07);}
+  .pipe-icon{font-size:28px;display:block;margin-bottom:6px;}
+  .pipe-ch{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;margin-bottom:3px;}
+  .pipe-name{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);letter-spacing:1px;}
+  .pipe-output{font-size:10px;color:var(--accent);margin-top:4px;}
+  .pipe-arrow{font-size:20px;color:rgba(0,212,255,.4);flex-shrink:0;padding:0 2px;}
+  .pipe-final{text-align:center;padding:16px 12px;background:rgba(0,230,118,.07);border:1px solid rgba(0,230,118,.3);margin:0 6px;flex:1;}
+  .pipe-final .pipe-icon{color:var(--green);}
+  .pipe-final .pipe-name{color:var(--green);}
 
-  /* ─── COURSE GRID ─── */
-  .sec-label{position:relative;z-index:1;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:4px;padding:0 28px;max-width:1000px;margin:0 auto 20px;}
-  .grid{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 28px 80px;display:grid;grid-template-columns:repeat(2,1fr);gap:2px;}
-  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+  /* ─── CHAPTER GRID ─── */
+  .chapters-section{position:relative;z-index:1;max-width:1000px;margin:60px auto 0;padding:0 28px 80px;}
+  .ch-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;}
+  @media(max-width:640px){.ch-grid{grid-template-columns:1fr;}}
 
-  .card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid rgba(255,255,255,.06);padding:24px;position:relative;overflow:hidden;transition:border-color .3s,transform .2s;}
-  .card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);transform:scaleX(0);transform-origin:left;transition:transform .3s;}
-  .card:hover{border-color:rgba(0,212,255,.35);transform:translateY(-2px);}
-  .card:hover::after{transform:scaleX(1);}
-  .card-featured{grid-column:span 2;border-color:rgba(0,212,255,.15);background:linear-gradient(135deg,rgba(0,212,255,.05),var(--card));}
-  @media(max-width:640px){.card-featured{grid-column:span 1;}}
+  .ch-card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden;transition:border-color .3s,transform .2s;}
+  .ch-card:hover{border-color:rgba(0,212,255,.35);transform:translateY(-2px);}
+  .ch-card-top{height:4px;}
+  .ch-card-body{padding:24px;}
+  .ch-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .ch-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;}
+  .ch-done-badge{font-family:'JetBrains Mono',monospace;font-size:9px;background:#00e676;color:#000;padding:2px 7px;font-weight:700;display:none;}
+  .ch-title-wrap{margin-bottom:12px;}
+  .ch-tool{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1px;margin-bottom:4px;}
+  .ch-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;line-height:1;}
 
-  /* カードの「ゴール」タグ */
-  .card-goal{background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);padding:8px 12px;margin-bottom:14px;font-size:12px;color:#69f0ae;line-height:1.6;}
-  .card-goal::before{content:'🎯 ゴール：';font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);letter-spacing:1px;display:block;margin-bottom:3px;}
+  /* ─── GOAL VISUAL inside card ─── */
+  .ch-goal-vis{margin:14px 0;border:1px solid rgba(0,212,255,.1);background:#070d1a;padding:14px;}
+  .ch-goal-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:8px;}
+  .goal-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .gf-item{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.15);padding:5px 10px;font-size:11px;color:var(--muted);}
+  .gf-arrow{color:rgba(0,212,255,.4);font-size:12px;}
+  .gf-result{background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);padding:5px 10px;font-size:11px;color:var(--green);font-weight:700;}
 
-  .card-badge{display:inline-block;background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.3);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;margin-bottom:12px;}
-  .card-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;margin-bottom:10px;}
-  .card-icon{font-size:24px;display:block;margin-bottom:8px;}
-  .card-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;line-height:1.05;margin-bottom:8px;}
-  .card-title-dark{color:var(--text);}
-  .card-title-outline{color:transparent;-webkit-text-stroke:1.5px var(--accent);}
-  .card-tech{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1px;margin-bottom:10px;}
-  .card-desc{font-size:12px;color:var(--muted);line-height:1.75;}
-  .card-arrow{position:absolute;bottom:18px;right:18px;color:var(--accent);font-size:16px;opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s;}
-  .card:hover .card-arrow{opacity:1;transform:translateX(0);}
-  .card-dimmed{opacity:.35;pointer-events:none;}
-
-  /* prereq badges on cards */
-  .card-prereq{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px;}
-  .prereq-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:2px;}
+  .ch-desc{font-size:12px;color:var(--muted);line-height:1.75;margin-bottom:12px;}
+  .ch-prereq{display:flex;flex-wrap:wrap;gap:4px;}
+  .prereq-tag{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;}
   .pt-req{background:rgba(255,107,53,.1);border:1px solid rgba(255,107,53,.25);color:#ff9970;}
   .pt-opt{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);color:var(--accent);}
+  .ch-arrow{position:absolute;bottom:18px;right:18px;color:var(--accent);font-size:16px;opacity:0;transition:opacity .2s;}
+  .ch-card:hover .ch-arrow{opacity:1;}
 
-  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(6,8,16,.98);}
+  /* featured card */
+  .ch-card-featured{grid-column:span 2;}
+  @media(max-width:640px){.ch-card-featured{grid-column:span 1;}}
+  .ch-card-featured .ch-title{font-size:36px;}
+  .ch-badge{display:inline-block;background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.3);color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 8px;margin-bottom:12px;}
+
+  /* ─── BEFORE/AFTER SECTION ─── */
+  .ba-section{position:relative;z-index:1;max-width:1000px;margin:60px auto 0;padding:0 28px;}
+  .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+  @media(max-width:600px){.ba-grid{grid-template-columns:1fr;}}
+  .ba-card{padding:24px;background:var(--card);}
+  .ba-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.06);}
+  .ba-before .ba-label{color:#ff6b6b;}
+  .ba-after .ba-label{color:var(--green);}
+  .ba-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:13px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.04);}
+  .ba-item:last-child{border-bottom:none;}
+  .ba-icon{flex-shrink:0;margin-top:1px;}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 28px;display:flex;justify-content:space-between;align-items:center;background:rgba(6,8,16,.98);margin-top:60px;}
   footer p{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;}
 
   .fade{opacity:0;transform:translateY(16px);animation:fu .6s ease forwards;}
   @keyframes fu{to{opacity:1;transform:translateY(0);}}
-  .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}
+  .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}
 
-  /* 文字切れ防止 */
-  .h1-plain,.h1-outline,.h1-fill,
-  .t-solid,.t-outline,.t-fill {
-    word-break: keep-all;
-    overflow-wrap: normal;
-    white-space: normal;
-  }
-  h1.ch-title {
-    word-break: keep-all;
-    overflow-wrap: normal;
-  }
-
-  /* ─── 親サイトリンク ─── */
-  .top-link{
-    display:block;width:100%;
-    background:rgba(99,102,241,.08);
-    border-bottom:1px solid rgba(99,102,241,.2);
-    padding:7px 24px;
-    font-family:'JetBrains Mono',monospace;font-size:10px;
-    color:#a5b4fc;letter-spacing:1px;text-decoration:none;
-    transition:background .2s;
-  }
+  .top-link{display:block;width:100%;background:rgba(99,102,241,.08);border-bottom:1px solid rgba(99,102,241,.2);padding:7px 24px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#a5b4fc;letter-spacing:1px;text-decoration:none;transition:background .2s;}
   .top-link:hover{background:rgba(99,102,241,.15);color:#c7d2fe;}
   .top-link-arrow{margin-right:6px;}
 </style>
@@ -136,158 +143,455 @@
 <a href="https://ai-workshop-guide-wheat.vercel.app" class="top-link" target="_blank"><span class="top-link-arrow">←</span> AI社員講座トップへ戻る</a>
 <header>
   <div class="logo">AI<em>/</em>VIDEO<em>_</em>MASTER</div>
-  <nav><a href="#">コース概要</a><a href="#">進捗</a></nav>
+  <nav>
+    <a href="setup-guide.html">セットアップガイド</a>
+    <a href="chapter2.html">CH.02から始める →</a>
+  </nav>
 </header>
 
-<section class="hero">
-  <div class="hero-tag fade">VIDEO PRODUCTION × AI CODEX</div>
-  <h1 class="fade d1">
-    <span class="h1-plain">AI動画制作</span>
-    <span class="h1-outline">MASTER</span>
-    <span class="h1-fill">COURSE</span>
-  </h1>
-  <p class="hero-desc fade d2">Remotion・After Effects・MoviePyをAIコーディングで掌握する。<br>コードで映像を語る、次世代クリエイターへの道。</p>
-  <div class="stats fade d3">
-    <div><div class="stat-num">4</div><div class="stat-label">CHAPTERS</div></div>
-    <div><div class="stat-num">3</div><div class="stat-label">TOOLS</div></div>
-    <div><div class="stat-num">∞</div><div class="stat-label">POSSIBILITY</div></div>
+<!-- ─── HERO ─── -->
+<section class="hero fade">
+  <div class="hero-tag">VIDEO PRODUCTION × AI CODEX</div>
+  <div class="hero-inner">
+    <div>
+      <h1>
+        <span class="h1-plain">AI動画制作</span>
+        <span class="h1-outline">MASTER</span>
+        <span class="h1-fill">COURSE</span>
+      </h1>
+      <p class="hero-desc">「動画編集ソフトを使いこなす」時代は終わった。<br>コードとAIで動画を<em style="color:var(--accent);font-style:normal;">量産・自動化</em>する新世代のスキルを習得する。</p>
+      <a href="chapter2.html" class="hero-cta">CH.02 から始める →</a>
+    </div>
+    <!-- Hero visual: what you'll produce -->
+    <div class="outcome-visual fade d2">
+      <div class="ov-label">// このコースで作れるもの</div>
+      <svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:340px;">
+        <!-- background -->
+        <rect width="340" height="240" fill="#070d1a" rx="4"/>
+        <rect width="340" height="2" fill="#00d4ff" opacity=".6"/>
+        <!-- monitor frame -->
+        <rect x="20" y="16" width="300" height="170" rx="4" fill="#0c1525" stroke="#00d4ff" stroke-width=".8" stroke-opacity=".3"/>
+        <!-- screen content: video preview -->
+        <rect x="30" y="26" width="280" height="150" rx="2" fill="#060810"/>
+        <!-- animated bars representing video frames -->
+        <rect x="30" y="26" width="280" height="150" rx="2" fill="url(#grad1)"/>
+        <defs>
+          <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a0f1e"/>
+            <stop offset="100%" stop-color="#0d1530"/>
+          </linearGradient>
+        </defs>
+        <!-- video title text illus -->
+        <text x="170" y="80" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="28" fill="#f0f2f8" letter-spacing="2">AI動画</text>
+        <text x="170" y="110" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="16" fill="none" stroke="#00d4ff" stroke-width="1">AUTO GENERATED</text>
+        <!-- progress bar in video -->
+        <rect x="30" y="162" width="280" height="3" fill="#111a2e"/>
+        <rect x="30" y="162" width="180" height="3" fill="#00d4ff" opacity=".7"/>
+        <!-- timeline dots -->
+        <circle cx="30" cy="163" r="4" fill="#00d4ff"/>
+        <!-- playback icons -->
+        <text x="42" y="176" font-size="9" fill="#a8b4cc" font-family="monospace">00:03</text>
+        <text x="286" y="176" font-size="9" fill="#a8b4cc" font-family="monospace" text-anchor="end">00:30</text>
+        <!-- code badge top-right -->
+        <rect x="270" y="30" width="34" height="16" rx="2" fill="#00d4ff" opacity=".15" stroke="#00d4ff" stroke-width=".5"/>
+        <text x="287" y="41" text-anchor="middle" font-size="8" fill="#00d4ff" font-family="monospace">.tsx</text>
+        <!-- stand -->
+        <rect x="155" y="186" width="30" height="6" rx="1" fill="#0c1525"/>
+        <rect x="140" y="192" width="60" height="3" rx="1" fill="#0c1525"/>
+        <!-- output file cards below -->
+        <rect x="20" y="204" width="88" height="28" rx="2" fill="#0c1525" stroke="#00e676" stroke-width=".6" stroke-opacity=".4"/>
+        <text x="30" y="215" font-size="7" fill="#00e676" font-family="monospace">MP4</text>
+        <text x="30" y="226" font-size="8" fill="#a8b4cc" font-family="monospace">output.mp4</text>
+        <rect x="126" y="204" width="88" height="28" rx="2" fill="#0c1525" stroke="#f5c518" stroke-width=".6" stroke-opacity=".4"/>
+        <text x="136" y="215" font-size="7" fill="#f5c518" font-family="monospace">×100</text>
+        <text x="136" y="226" font-size="8" fill="#a8b4cc" font-family="monospace">量産動画</text>
+        <rect x="232" y="204" width="88" height="28" rx="2" fill="#0c1525" stroke="#a78bfa" stroke-width=".6" stroke-opacity=".4"/>
+        <text x="242" y="215" font-size="7" fill="#a78bfa" font-family="monospace">AUTO</text>
+        <text x="242" y="226" font-size="8" fill="#a8b4cc" font-family="monospace">字幕付き</text>
+      </svg>
+    </div>
   </div>
 </section>
 
-<!-- ─── 受講前提条件 ─── -->
-<div class="prereq-wrap fade d3">
-  <div class="section-title-row">
-    <span class="sec-badge">⚠ PREREQUISITES</span>
-    <h2 class="sec-h">受講前に確認してください</h2>
+<!-- ─── BEFORE / AFTER ─── -->
+<div class="ba-section fade d2" style="margin-top:48px;">
+  <div class="section-head">
+    <span class="section-tag">// BEFORE → AFTER</span>
+    <h2 class="section-title">このコースで何が変わるか</h2>
   </div>
-
-  <div class="prereq-grid">
-    <div class="prereq-card required">
-      <div class="prereq-type req-label">// 必須スキル・環境</div>
-      <div class="prereq-title">PCの基本操作・ターミナル</div>
-      <div class="prereq-desc">ファイルの移動・コピー、フォルダ構成の理解。<br>Macのターミナルまたは WindowsのコマンドプロンプトでコマンドをEnterで実行できること。</div>
+  <div class="ba-grid">
+    <div class="ba-card ba-before">
+      <div class="ba-label">❌ コース受講前</div>
+      <div class="ba-item"><span class="ba-icon">😓</span>動画編集ソフトを1本ずつ手作業で編集</div>
+      <div class="ba-item"><span class="ba-icon">⏰</span>1本作るのに数時間〜数日かかる</div>
+      <div class="ba-item"><span class="ba-icon">🔁</span>パターンを変えるたびに全部やり直し</div>
+      <div class="ba-item"><span class="ba-icon">💸</span>高額な編集ソフトのサブスク費用</div>
+      <div class="ba-item"><span class="ba-icon">🧑‍🎨</span>センスやスキルが必要で再現性がない</div>
     </div>
-    <div class="prereq-card required">
-      <div class="prereq-type req-label">// 必須インストール（CH.02）</div>
-      <div class="prereq-title">Node.js（v18以上）</div>
-      <div class="prereq-desc"><strong>nodejs.org</strong> からLTS版をダウンロード・インストール済みであること。<br>ターミナルで <code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">node -v</code> を実行してバージョンが表示されること。</div>
+    <div class="ba-card ba-after">
+      <div class="ba-label">✅ コース受講後</div>
+      <div class="ba-item"><span class="ba-icon">⚡</span>プロンプト1行で動画コードが自動生成</div>
+      <div class="ba-item"><span class="ba-icon">🚀</span>コマンド1本でMP4が数秒〜数分で出力</div>
+      <div class="ba-item"><span class="ba-icon">📊</span>CSVを流すだけで何百本も自動量産</div>
+      <div class="ba-item"><span class="ba-icon">🆓</span>Remotion個人利用は完全無料</div>
+      <div class="ba-item"><span class="ba-icon">🤖</span>AIが企画→制作→改善を自動で繰り返す</div>
     </div>
-    <div class="prereq-card required">
-      <div class="prereq-type req-label">// 必須インストール（CH.04）</div>
-      <div class="prereq-title">Python 3.8以上</div>
-      <div class="prereq-desc"><strong>python.org</strong> からPython 3をダウンロード・インストール済みであること。<br>ターミナルで <code style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;">python3 --version</code> が表示されること。<br>pipも合わせてインストールされていること。</div>
-    </div>
-    <div class="prereq-card required">
-      <div class="prereq-type req-label">// 必須インストール（CH.03）</div>
-      <div class="prereq-title">Adobe After Effects</div>
-      <div class="prereq-desc">Adobe Creative Cloudよりインストール済みであること。<br>バージョンは2022以降を推奨。<br>（7日間無料トライアルあり）</div>
-    </div>
-    <div class="prereq-card optional">
-      <div class="prereq-type opt-label">// あると望ましい</div>
-      <div class="prereq-title">AIコーディングエージェント</div>
-      <div class="prereq-desc">Codex・Cursorなどのいずれか1つ。<br>CH.02〜05で活用する。有料プランが必要な場合あり。</div>
-    </div>
-    <div class="prereq-card optional">
-      <div class="prereq-type opt-label">// あると望ましい</div>
-      <div class="prereq-title">テキストエディタ（VS Code推奨）</div>
-      <div class="prereq-desc"><strong>code.visualstudio.com</strong> より無料でインストール可能。<br>コードの確認・編集に使用する。</div>
-    </div>
-  </div>
-
-  <a href="setup-guide.html" style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.25);padding:16px 20px;margin-bottom:12px;text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,230,118,.6)'" onmouseout="this.style.borderColor='rgba(0,230,118,.25)'">
-    <div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#00e676;letter-spacing:2px;margin-bottom:4px;">📋 SETUP GUIDE</div>
-      <div style="font-size:13px;color:#f0f2f8;font-weight:700;">受講前セットアップガイドを見る</div>
-      <div style="font-size:12px;color:#a8b4cc;margin-top:3px;">注意点・.envの作り方・CLAUDE.md生成・事前チェックリスト</div>
-    </div>
-    <span style="color:#00e676;font-size:20px;">→</span>
-  </a>
-
-  <div class="notice-box">
-    <div class="notice-label">🚫 このコースで扱わないこと</div>
-    <div class="notice-text">以下の内容はこのコースの範囲外です。事前に各自でご準備ください。</div>
-    <ul class="notice-list">
-      <li>Node.js・Pythonのインストール方法・バージョン管理の詳細説明</li>
-      <li>pip・npmなどパッケージマネージャーの基礎説明</li>
-      <li>Adobe Creative Cloudのアカウント作成・インストール手順</li>
-      <li>プログラミング言語（JavaScript・Python）の基礎文法</li>
-      <li>PCのOS設定・ネットワーク環境の構築</li>
-    </ul>
   </div>
 </div>
 
-<!-- ─── COURSE CHAPTERS ─── -->
-<div class="sec-label fade d4">// COURSE CHAPTERS</div>
-<div class="grid">
+<!-- ─── PIPELINE DIAGRAM ─── -->
+<div class="pipeline-section fade d3">
+  <div class="section-head">
+    <span class="section-tag">// LEARNING FLOW</span>
+    <h2 class="section-title">コースの流れと使うツール</h2>
+  </div>
+  <div class="pipeline-diagram">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">各チャプターで1つのツールをマスターし、最終的に全部を繋いだ<strong style="color:var(--text);">自動動画制作パイプライン</strong>を作る。</p>
+    <div class="pipe-flow">
+      <div class="pipe-node active">
+        <div class="pipe-box">
+          <span class="pipe-icon">⚛️</span>
+          <div class="pipe-ch">CH.02</div>
+          <div class="pipe-name">REMOTION</div>
+          <div class="pipe-output">React→MP4</div>
+        </div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-node">
+        <div class="pipe-box">
+          <span class="pipe-icon">🎬</span>
+          <div class="pipe-ch">CH.03</div>
+          <div class="pipe-name">AFTER EFFECTS</div>
+          <div class="pipe-output">Expression自動化</div>
+        </div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-node">
+        <div class="pipe-box">
+          <span class="pipe-icon">🐍</span>
+          <div class="pipe-ch">CH.04</div>
+          <div class="pipe-name">MOVIEPY</div>
+          <div class="pipe-output">Python量産</div>
+        </div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-node">
+        <div class="pipe-box">
+          <span class="pipe-icon">🤖</span>
+          <div class="pipe-ch">CH.05</div>
+          <div class="pipe-name">AI AGENT</div>
+          <div class="pipe-output">全自動化</div>
+        </div>
+      </div>
+      <div class="pipe-arrow">→</div>
+      <div class="pipe-node">
+        <div class="pipe-final">
+          <span class="pipe-icon">📹</span>
+          <div class="pipe-ch">OUTPUT</div>
+          <div class="pipe-name">自動量産MP4</div>
+        </div>
+      </div>
+    </div>
 
-  <a href="chapter2.html" class="card card-featured fade">
-    <div class="card-badge">⚡ まずここから</div>
-    <div class="card-num">CHAPTER 02</div>
-    <span class="card-icon">⚛️</span>
-    <div class="card-title">
-      <span class="card-title-dark">REMOTION</span>
-      <span class="card-title-outline"> × CODEX</span>
+    <!-- What you build at each stage: illustrated -->
+    <svg viewBox="0 0 760 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-top:16px;min-width:600px;">
+      <!-- CH02 output -->
+      <rect x="0" y="10" width="130" height="70" rx="2" fill="#060c18" stroke="#00d4ff" stroke-width=".6" stroke-opacity=".4"/>
+      <text x="65" y="32" text-anchor="middle" font-size="8" fill="#00d4ff" font-family="monospace">src/Composition.tsx</text>
+      <text x="65" y="52" text-anchor="middle" font-size="18" fill="#f0f2f8">⚛️</text>
+      <text x="65" y="72" text-anchor="middle" font-size="8" fill="#a8b4cc" font-family="monospace">→ video.mp4</text>
+      <!-- arrow -->
+      <text x="148" y="50" text-anchor="middle" font-size="14" fill="#334" >→</text>
+      <!-- CH03 output -->
+      <rect x="162" y="10" width="130" height="70" rx="2" fill="#060c18" stroke="#ff6b35" stroke-width=".6" stroke-opacity=".4"/>
+      <text x="227" y="32" text-anchor="middle" font-size="8" fill="#ff6b35" font-family="monospace">Expression</text>
+      <text x="215" y="55" text-anchor="middle" font-size="10" fill="#a8b4cc" font-family="monospace">wiggle(3,30)</text>
+      <text x="227" y="72" text-anchor="middle" font-size="8" fill="#a8b4cc" font-family="monospace">→ アニメ自動化</text>
+      <!-- arrow -->
+      <text x="310" y="50" text-anchor="middle" font-size="14" fill="#334">→</text>
+      <!-- CH04 output -->
+      <rect x="324" y="10" width="130" height="70" rx="2" fill="#060c18" stroke="#a78bfa" stroke-width=".6" stroke-opacity=".4"/>
+      <text x="389" y="32" text-anchor="middle" font-size="8" fill="#a78bfa" font-family="monospace">data.csv → loop</text>
+      <text x="375" y="55" text-anchor="middle" font-size="10" fill="#a8b4cc" font-family="monospace">×100本</text>
+      <text x="389" y="72" text-anchor="middle" font-size="8" fill="#a8b4cc" font-family="monospace">→ 量産MP4</text>
+      <!-- arrow -->
+      <text x="472" y="50" text-anchor="middle" font-size="14" fill="#334">→</text>
+      <!-- CH05 output -->
+      <rect x="486" y="10" width="130" height="70" rx="2" fill="#060c18" stroke="#00e676" stroke-width=".6" stroke-opacity=".4"/>
+      <text x="551" y="32" text-anchor="middle" font-size="8" fill="#00e676" font-family="monospace">Claude API</text>
+      <text x="551" y="52" text-anchor="middle" font-size="9" fill="#a8b4cc" font-family="monospace">企画→制作→改善</text>
+      <text x="551" y="72" text-anchor="middle" font-size="8" fill="#a8b4cc" font-family="monospace">→ 完全自動化</text>
+      <!-- arrow -->
+      <text x="634" y="50" text-anchor="middle" font-size="14" fill="#334">→</text>
+      <!-- Final -->
+      <rect x="648" y="4" width="112" height="82" rx="3" fill="rgba(0,230,118,.08)" stroke="#00e676" stroke-width="1"/>
+      <text x="704" y="30" text-anchor="middle" font-size="22">📹</text>
+      <text x="704" y="52" text-anchor="middle" font-size="10" fill="#00e676" font-family="'Bebas Neue', sans-serif" letter-spacing="1">DONE</text>
+      <text x="704" y="70" text-anchor="middle" font-size="8" fill="#00e676" font-family="monospace">寝てても量産</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ─── CHAPTER CARDS ─── -->
+<div class="chapters-section fade d4">
+  <div class="section-head">
+    <span class="section-tag">// COURSE CHAPTERS</span>
+    <h2 class="section-title">チャプター一覧</h2>
+  </div>
+  <div class="ch-grid">
+
+    <!-- CH02 featured -->
+    <a href="chapter2.html" class="ch-card ch-card-featured">
+      <div class="ch-card-top" style="background:linear-gradient(90deg,var(--accent),#00ffcc);"></div>
+      <div class="ch-card-body">
+        <div class="ch-badge">⚡ まずここから</div>
+        <div class="ch-meta">
+          <span class="ch-num">CHAPTER 02</span>
+          <span class="ch-done-badge" id="done-ch2">✓ DONE</span>
+        </div>
+        <div class="ch-tool">remotion · react · typescript · codex</div>
+        <div class="ch-title">REMOTION × CODEX</div>
+
+        <!-- What you build visual -->
+        <div class="ch-goal-vis">
+          <div class="ch-goal-label">🎯 このチャプターが終わると…</div>
+          <div class="goal-flow">
+            <span class="gf-item">💬 プロンプトを書く</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-item">🤖 AIがコード生成</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-item">⚡ コマンド1本</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-result">📹 video.mp4 完成！</span>
+          </div>
+        </div>
+
+        <svg viewBox="0 0 600 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-bottom:12px;">
+          <!-- code editor mock -->
+          <rect width="270" height="95" rx="3" fill="#070d1a" stroke="#00d4ff" stroke-width=".5" stroke-opacity=".4"/>
+          <rect width="270" height="18" rx="3" fill="#0c1525"/>
+          <text x="10" y="13" font-size="8" fill="#a8b4cc" font-family="monospace">Composition.tsx</text>
+          <text x="10" y="34" font-size="8" fill="#ff79c6" font-family="monospace">const</text>
+          <text x="42" y="34" font-size="8" fill="#50fa7b" font-family="monospace">frame</text>
+          <text x="78" y="34" font-size="8" fill="#f0f2f8" font-family="monospace">= useCurrentFrame()</text>
+          <text x="10" y="48" font-size="8" fill="#ff79c6" font-family="monospace">const</text>
+          <text x="42" y="48" font-size="8" fill="#50fa7b" font-family="monospace">opacity</text>
+          <text x="90" y="48" font-size="8" fill="#f0f2f8" font-family="monospace">= interpolate(...</text>
+          <text x="10" y="62" font-size="8" fill="#ff79c6" font-family="monospace">return</text>
+          <text x="46" y="62" font-size="8" fill="#f1fa8c" font-family="monospace">&lt;div style={{opacity}}&gt;</text>
+          <text x="20" y="76" font-size="8" fill="#f0f2f8" font-family="monospace">Hello AI 👋</text>
+          <text x="10" y="90" font-size="8" fill="#f1fa8c" font-family="monospace">&lt;/div&gt;</text>
+          <!-- arrow -->
+          <text x="290" y="55" font-size="20" fill="#00d4ff" text-anchor="middle">→</text>
+          <!-- Remotion Studio mock -->
+          <rect x="310" y="0" width="145" height="95" rx="3" fill="#070d1a" stroke="#00d4ff" stroke-width=".5" stroke-opacity=".3"/>
+          <rect x="310" y="0" width="145" height="14" rx="3" fill="#0a0e1a"/>
+          <text x="318" y="10" font-size="7" fill="#a8b4cc" font-family="monospace">Remotion Studio :3000</text>
+          <rect x="316" y="18" width="133" height="52" fill="#000" rx="2"/>
+          <text x="382" y="38" text-anchor="middle" font-size="14" fill="#f0f2f8">Hello AI 👋</text>
+          <rect x="316" y="72" width="80" height="2" fill="#00d4ff" opacity=".5"/>
+          <rect x="316" y="70" width="133" height="6" fill="#111a2e" rx="1"/>
+          <rect x="316" y="70" width="80" height="6" fill="#00d4ff" opacity=".3" rx="1"/>
+          <text x="318" y="86" font-size="7" fill="#a8b4cc" font-family="monospace">frame 48 / 150</text>
+          <!-- arrow -->
+          <text x="472" y="55" font-size="20" fill="#00e676" text-anchor="middle">→</text>
+          <!-- MP4 file -->
+          <rect x="490" y="20" width="105" height="60" rx="3" fill="#070d1a" stroke="#00e676" stroke-width="1"/>
+          <text x="542" y="48" text-anchor="middle" font-size="22">📹</text>
+          <text x="542" y="65" text-anchor="middle" font-size="9" fill="#00e676" font-family="monospace">video.mp4</text>
+          <text x="542" y="76" text-anchor="middle" font-size="7" fill="#a8b4cc" font-family="monospace">1920×1080 30fps</text>
+        </svg>
+
+        <p class="ch-desc">Reactのコードで動画を作る革命的フレームワーク「Remotion」をマスター。AIエージェントと連携して最初のMP4動画を出力する。</p>
+        <div class="ch-prereq">
+          <span class="prereq-tag pt-req">Node.js必須</span>
+          <span class="prereq-tag pt-opt">Codex推奨</span>
+        </div>
+      </div>
+      <div class="ch-arrow">→</div>
+    </a>
+
+    <!-- CH03 -->
+    <a href="chapter3.html" class="ch-card">
+      <div class="ch-card-top" style="background:linear-gradient(90deg,var(--accent2),var(--gold));"></div>
+      <div class="ch-card-body">
+        <div class="ch-meta">
+          <span class="ch-num">CHAPTER 03</span>
+          <span class="ch-done-badge" id="done-ch3">✓ DONE</span>
+        </div>
+        <div class="ch-tool">expression · extendscript · javascript</div>
+        <div class="ch-title">AFTER EFFECTS</div>
+
+        <div class="ch-goal-vis">
+          <div class="ch-goal-label">🎯 このチャプターが終わると…</div>
+          <div class="goal-flow">
+            <span class="gf-item">💬 「こう動かして」</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-item">🤖 コード生成</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-result">🎬 AEで即アニメ</span>
+          </div>
+        </div>
+
+        <!-- AE Expression visual -->
+        <svg viewBox="0 0 280 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-bottom:12px;">
+          <rect width="280" height="90" rx="3" fill="#070d1a"/>
+          <!-- AE timeline mock -->
+          <rect x="0" y="0" width="280" height="20" rx="3" fill="#0a0e1a"/>
+          <text x="8" y="14" font-size="8" fill="#ff6b35" font-family="monospace">After Effects — Timeline</text>
+          <!-- layers -->
+          <rect x="8" y="26" width="90" height="14" rx="1" fill="#111"/>
+          <text x="12" y="36" font-size="7" fill="#a8b4cc" font-family="monospace">📝 テキストレイヤー</text>
+          <rect x="104" y="26" width="168" height="14" rx="1" fill="rgba(0,212,255,.15)" stroke="#00d4ff" stroke-width=".4"/>
+          <!-- expression input -->
+          <rect x="8" y="46" width="264" height="36" rx="1" fill="#060c18" stroke="#ff6b35" stroke-width=".6"/>
+          <text x="12" y="58" font-size="7" fill="#ff6b35" font-family="monospace">式 :</text>
+          <text x="30" y="58" font-size="8" fill="#50fa7b" font-family="monospace">wiggle(3, 30)</text>
+          <text x="12" y="72" font-size="7" fill="#4a5870" font-family="monospace">// ← これだけでランダムなアニメが動く！</text>
+        </svg>
+
+        <p class="ch-desc">AEのエクスプレッション・ExtendScriptをAIが自動生成。コードを書けなくても「こう動かして」の一言でプロ品質のアニメが完成。</p>
+        <div class="ch-prereq">
+          <span class="prereq-tag pt-req">After Effects必須</span>
+        </div>
+      </div>
+      <div class="ch-arrow">→</div>
+    </a>
+
+    <!-- CH04 -->
+    <a href="chapter4.html" class="ch-card">
+      <div class="ch-card-top" style="background:linear-gradient(90deg,#a78bfa,#c084fc);"></div>
+      <div class="ch-card-body">
+        <div class="ch-meta">
+          <span class="ch-num">CHAPTER 04</span>
+          <span class="ch-done-badge" id="done-ch4">✓ DONE</span>
+        </div>
+        <div class="ch-tool">python · moviepy · whisper · csv</div>
+        <div class="ch-title">PYTHON MOVIEPY</div>
+
+        <div class="ch-goal-vis">
+          <div class="ch-goal-label">🎯 このチャプターが終わると…</div>
+          <div class="goal-flow">
+            <span class="gf-item">📊 data.csv</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-item">🐍 Python実行</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-result">📹 ×100本 自動生成！</span>
+          </div>
+        </div>
+
+        <!-- Bulk gen visual -->
+        <svg viewBox="0 0 280 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-bottom:12px;">
+          <rect width="280" height="90" rx="3" fill="#070d1a"/>
+          <!-- CSV -->
+          <rect x="6" y="8" width="70" height="74" rx="2" fill="#060c18" stroke="#a78bfa" stroke-width=".5"/>
+          <text x="41" y="24" text-anchor="middle" font-size="7" fill="#a78bfa" font-family="monospace">data.csv</text>
+          <text x="10" y="36" font-size="6.5" fill="#a8b4cc" font-family="monospace">田中様</text>
+          <text x="10" y="47" font-size="6.5" fill="#a8b4cc" font-family="monospace">鈴木様</text>
+          <text x="10" y="58" font-size="6.5" fill="#a8b4cc" font-family="monospace">佐藤様</text>
+          <text x="10" y="69" font-size="6.5" fill="#4a5870" font-family="monospace">…×100</text>
+          <!-- arrow -->
+          <text x="92" y="50" font-size="12" fill="#a78bfa" text-anchor="middle">→</text>
+          <!-- python script -->
+          <rect x="104" y="8" width="90" height="74" rx="2" fill="#060c18" stroke="#a78bfa" stroke-width=".5"/>
+          <text x="149" y="22" text-anchor="middle" font-size="7" fill="#a78bfa" font-family="monospace">script.py</text>
+          <text x="108" y="34" font-size="6.5" fill="#ff79c6" font-family="monospace">for</text>
+          <text x="123" y="34" font-size="6.5" fill="#f0f2f8" font-family="monospace">row in rows:</text>
+          <text x="108" y="44" font-size="6.5" fill="#50fa7b" font-family="monospace">  TextClip(</text>
+          <text x="108" y="54" font-size="6.5" fill="#f1fa8c" font-family="monospace">    row['name']</text>
+          <text x="108" y="64" font-size="6.5" fill="#50fa7b" font-family="monospace">  ).write()</text>
+          <!-- arrow -->
+          <text x="210" y="50" font-size="12" fill="#00e676" text-anchor="middle">→</text>
+          <!-- output files stacked -->
+          <rect x="222" y="14" width="50" height="30" rx="2" fill="#070d1a" stroke="#00e676" stroke-width=".5" opacity=".6" transform="translate(4,4)"/>
+          <rect x="222" y="14" width="50" height="30" rx="2" fill="#070d1a" stroke="#00e676" stroke-width=".5" opacity=".8" transform="translate(2,2)"/>
+          <rect x="222" y="14" width="50" height="30" rx="2" fill="#070d1a" stroke="#00e676" stroke-width=".8"/>
+          <text x="247" y="28" text-anchor="middle" font-size="8" fill="#00e676" font-family="monospace">📹</text>
+          <text x="247" y="40" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">×100本</text>
+          <text x="247" y="78" text-anchor="middle" font-size="7" fill="#00e676" font-family="monospace">✅ 完了</text>
+        </svg>
+
+        <p class="ch-desc">編集ソフト不要。PythonでCSVデータを流し込んで動画を量産。Whisperで自動字幕生成まで。SNSマーケの核心スキル。</p>
+        <div class="ch-prereq">
+          <span class="prereq-tag pt-req">Python 3.8以上必須</span>
+          <span class="prereq-tag pt-req">pip必須</span>
+        </div>
+      </div>
+      <div class="ch-arrow">→</div>
+    </a>
+
+    <!-- CH05 -->
+    <a href="chapter5.html" class="ch-card">
+      <div class="ch-card-top" style="background:linear-gradient(90deg,var(--green),#69f0ae);"></div>
+      <div class="ch-card-body">
+        <div class="ch-meta">
+          <span class="ch-num">CHAPTER 05</span>
+          <span class="ch-done-badge" id="done-ch5">✓ DONE</span>
+        </div>
+        <div class="ch-tool">claude api · codex · pipeline · automation</div>
+        <div class="ch-title">AI AGENT SYSTEM</div>
+
+        <div class="ch-goal-vis">
+          <div class="ch-goal-label">🎯 このチャプターが終わると…</div>
+          <div class="goal-flow">
+            <span class="gf-item">😴 寝てる間に</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-item">🤖 AIが企画・制作</span>
+            <span class="gf-arrow">→</span>
+            <span class="gf-result">📹 動画が自動納品！</span>
+          </div>
+        </div>
+
+        <!-- 3 agent flow visual -->
+        <svg viewBox="0 0 280 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;margin-bottom:12px;">
+          <rect width="280" height="90" rx="3" fill="#070d1a"/>
+          <!-- Agent 1 -->
+          <rect x="6" y="10" width="74" height="70" rx="2" fill="#060c18" stroke="#00d4ff" stroke-width=".6"/>
+          <text x="43" y="26" text-anchor="middle" font-size="12">📡</text>
+          <text x="43" y="38" text-anchor="middle" font-size="6.5" fill="#00d4ff" font-family="monospace">企画Agent</text>
+          <text x="43" y="50" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">トレンド分析</text>
+          <text x="43" y="60" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">台本生成</text>
+          <text x="43" y="75" text-anchor="middle" font-size="6" fill="#00d4ff" font-family="monospace">GPT-4o</text>
+          <!-- arrow -->
+          <text x="94" y="50" font-size="12" fill="#00e676" text-anchor="middle">↓</text>
+          <!-- Agent 2 -->
+          <rect x="104" y="10" width="74" height="70" rx="2" fill="#060c18" stroke="#00e676" stroke-width=".6"/>
+          <text x="141" y="26" text-anchor="middle" font-size="12">⚙️</text>
+          <text x="141" y="38" text-anchor="middle" font-size="6.5" fill="#00e676" font-family="monospace">実行Agent</text>
+          <text x="141" y="50" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">コード生成</text>
+          <text x="141" y="60" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">動画出力</text>
+          <text x="141" y="75" text-anchor="middle" font-size="6" fill="#00e676" font-family="monospace">Codex</text>
+          <!-- arrow -->
+          <text x="192" y="50" font-size="12" fill="#00e676" text-anchor="middle">↓</text>
+          <!-- Agent 3 -->
+          <rect x="202" y="10" width="74" height="70" rx="2" fill="#060c18" stroke="#f5c518" stroke-width=".6"/>
+          <text x="239" y="26" text-anchor="middle" font-size="12">🔍</text>
+          <text x="239" y="38" text-anchor="middle" font-size="6.5" fill="#f5c518" font-family="monospace">品質Agent</text>
+          <text x="239" y="50" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">エラーチェック</text>
+          <text x="239" y="60" text-anchor="middle" font-size="6" fill="#a8b4cc" font-family="monospace">改善指示</text>
+          <text x="239" y="75" text-anchor="middle" font-size="6" fill="#f5c518" font-family="monospace">Codex</text>
+        </svg>
+
+        <p class="ch-desc">企画・実行・品質管理の3エージェントが連携する自律型動画制作パイプライン。人が寝ている間にAIが動画を作り続ける仕組みを構築。</p>
+        <div class="ch-prereq">
+          <span class="prereq-tag pt-req">CH.02〜04修了推奨</span>
+          <span class="prereq-tag pt-req">Anthropic APIキー必須</span>
+        </div>
+      </div>
+      <div class="ch-arrow">→</div>
+    </a>
+
+  </div><!-- /ch-grid -->
+
+  <!-- setup guide link -->
+  <a href="setup-guide.html" style="display:flex;align-items:center;justify-content:space-between;background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.25);padding:16px 20px;margin-top:3px;text-decoration:none;transition:border-color .2s;" onmouseover="this.style.borderColor='rgba(0,230,118,.6)'" onmouseout="this.style.borderColor='rgba(0,230,118,.25)'">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#00e676;letter-spacing:2px;margin-bottom:4px;">📋 SETUP GUIDE</div>
+      <div style="font-size:13px;color:#f0f2f8;font-weight:700;">受講前セットアップガイドを見る</div>
+      <div style="font-size:12px;color:#a8b4cc;margin-top:3px;">.env作成 · AGENTS.md生成 · 注意事項 · 事前チェックリスト</div>
     </div>
-    <div class="card-tech">remotion · react · typescript · css animation</div>
-    <div class="card-goal">Reactコードで動画を作る仕組みを理解し、自然言語の指示だけでオリジナルのMP4動画を1本出力できる</div>
-    <div class="card-desc">Web技術で動画を作る革命的フレームワーク。セットアップからAIエージェント接続、最初の動画出力まで一緒にやる。</div>
-    <div class="card-prereq">
-      <span class="prereq-tag pt-req">Node.js必須</span>
-      <span class="prereq-tag pt-opt">Codex推奨</span>
-    </div>
-    <div class="card-arrow">→</div>
+    <span style="color:#00e676;font-size:20px;">→</span>
   </a>
-
-  <a href="chapter3.html" class="card fade">
-    <div class="card-num">CHAPTER 03</div>
-    <span class="card-icon">🎬</span>
-    <div class="card-title">
-      <span class="card-title-dark">AFTER</span>
-      <span class="card-title-outline">EFFECTS</span>
-    </div>
-    <div class="card-tech">expression · extendscript · javascript</div>
-    <div class="card-goal">AEのエクスプレッションをゼロから理解し、AIが生成したコードを貼り付けてプロ品質のアニメーションを作れる</div>
-    <div class="card-desc">エクスプレッションとExtendScriptをAI生成で自動化。AE未経験者向けの丁寧な操作ガイド付き。</div>
-    <div class="card-prereq">
-      <span class="prereq-tag pt-req">After Effects必須</span>
-    </div>
-    <div class="card-arrow">→</div>
-  </a>
-
-  <a href="chapter4.html" class="card fade">
-    <div class="card-num">CHAPTER 04</div>
-    <span class="card-icon">🐍</span>
-    <div class="card-title">
-      <span class="card-title-dark">PYTHON</span>
-      <span class="card-title-outline">MOVIEPY</span>
-    </div>
-    <div class="card-tech">python · moviepy · whisper · csv</div>
-    <div class="card-goal">編集ソフト不要でPythonスクリプトを実行し、テキスト付き動画・自動字幕・CSV連携による動画の量産ができる</div>
-    <div class="card-desc">大量生成・SNS自動化。サーバーサイドで動画を量産するワークフローを構築する。</div>
-    <div class="card-prereq">
-      <span class="prereq-tag pt-req">Python 3.8以上必須</span>
-      <span class="prereq-tag pt-req">pip必須</span>
-    </div>
-    <div class="card-arrow">→</div>
-  </a>
-
-  <a href="chapter5.html" class="card fade">
-    <div class="card-num">CHAPTER 05</div>
-    <span class="card-icon">🤖</span>
-    <div class="card-title">
-      <span class="card-title-dark">AI AGENT</span>
-      <span class="card-title-outline">SYSTEM</span>
-    </div>
-    <div class="card-tech">claude api · codex · pipeline · automation</div>
-    <div class="card-goal">複数のAIを連携させた「自律型動画制作パイプライン」の設計図を描き、実際に動くプロトタイプを作れる</div>
-    <div class="card-desc">企画・実行・品質管理の3エージェントを連携させ、動画制作の全工程を自動化するアーキテクチャを構築する。</div>
-    <div class="card-prereq">
-      <span class="prereq-tag pt-req">CH.02〜04修了推奨</span>
-      <span class="prereq-tag pt-req">OpenAI APIキー必須</span>
-    </div>
-    <div class="card-arrow">→</div>
-  </a>
-
 </div>
 
 <footer>
@@ -298,19 +602,10 @@
 <script>
 (function(){
   const p=JSON.parse(localStorage.getItem('videoCourseProgress')||'{}');
-  const map={ch2:'chapter2',ch3:'chapter3',ch4:'chapter4',ch5:'chapter5'};
-  Object.entries(map).forEach(([k,page])=>{
-    if(p[k]){
-      const a=document.querySelector('a[href="'+page+'.html"]');
-      if(a){
-        const b=document.createElement('div');
-        b.style.cssText='position:absolute;top:10px;right:10px;background:#00e676;color:#000;font-family:"JetBrains Mono",monospace;font-size:9px;padding:2px 7px;font-weight:700;letter-spacing:1px;z-index:2;';
-        b.textContent='✓ DONE';
-        a.style.position='relative';
-        a.appendChild(b);
-      }
-    }
-  });
+  if(p.ch2) document.getElementById('done-ch2').style.display='inline-block';
+  if(p.ch3) document.getElementById('done-ch3').style.display='inline-block';
+  if(p.ch4) document.getElementById('done-ch4').style.display='inline-block';
+  if(p.ch5) document.getElementById('done-ch5').style.display='inline-block';
   if(p.completed){
     const tag=document.createElement('a');
     tag.href='completion.html';
