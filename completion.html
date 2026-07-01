@@ -1,6 +1,55 @@
 <!DOCTYPE html>
 <html lang="ja" style="background:#060810;">
 <head>
+<script>
+(function() {
+  function hasToken() {
+    try {
+      var t = JSON.parse(localStorage.getItem('token_video') || 'null');
+      return t && t.expires > Date.now();
+    } catch(e) { return false; }
+  }
+
+  if (hasToken()) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0d0d14;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:24px"><div style="background:#16161f;border:1px solid #2a2a3a;border-radius:16px;padding:40px;max-width:400px;width:100%;text-align:center"><div style="font-size:48px;margin-bottom:16px">🔒</div><h1 style="font-size:20px;font-weight:800;color:#fff;margin-bottom:8px">AI動画制作コース</h1><p style="color:#8b8b9e;font-size:14px;margin-bottom:24px">受講者パスワードを入力してください</p><input type="password" id="gate-pw" placeholder="パスワード" style="width:100%;padding:12px 16px;border-radius:8px;border:1px solid #2a2a3a;background:#0d0d14;color:#fff;font-size:15px;margin-bottom:12px;box-sizing:border-box" onkeydown="if(event.key===&quot;Enter&quot;)window._gateUnlock()"><button onclick="window._gateUnlock()" id="gate-btn" style="width:100%;padding:12px;border-radius:8px;border:none;background:#7c3aed;color:#fff;font-weight:700;font-size:15px;cursor:pointer">解錠する</button><p id="gate-err" style="color:#ef4444;font-size:13px;margin-top:12px;display:none">パスワードが違います</p></div></div>';
+
+    window._gateUnlock = async function() {
+      var input = document.getElementById('gate-pw');
+      var btn = document.getElementById('gate-btn');
+      var err = document.getElementById('gate-err');
+      var pw = input.value.trim();
+      if (!pw) return;
+      btn.textContent = '確認中...';
+      btn.disabled = true;
+      err.style.display = 'none';
+      try {
+        var res = await fetch('https://pieymoavogfyzfdwxbuq.supabase.co/functions/v1/verify-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ target: 'video', password: pw })
+        });
+        var data = await res.json();
+        if (data.ok) {
+          localStorage.setItem('token_video', JSON.stringify({token: data.token, expires: data.expires}));
+          location.reload();
+        } else {
+          err.style.display = 'block';
+          input.value = '';
+          btn.textContent = '解錠する';
+          btn.disabled = false;
+        }
+      } catch(e) {
+        err.textContent = '通信エラーが発生しました';
+        err.style.display = 'block';
+        btn.textContent = '解錠する';
+        btn.disabled = false;
+      }
+    };
+  });
+})();
+</script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="color-scheme" content="dark">
 <title>修了証 | AI VIDEO MASTER COURSE</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@300;400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
